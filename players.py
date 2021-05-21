@@ -1,5 +1,5 @@
 import random
-from game import Deck
+from game import Deck, DeckEmpty
 
 class Player:
 
@@ -14,106 +14,110 @@ class Player:
             return "Dealer"
         return self.title
 
+    def __repr__(self):
+        return str(self)
+
+    @property
     def score(self):
-        score = sum([i.value for i in self.hand])
-        if score > 21 and "ace" in [i.suit for i in self.hand]: 
-            score = sum([i.value if i != "ace" else 1 for i in self.hand])
-        return score
-    
+        return sum(card.value for card in self.hand)
+
     def add_card(self,card):
         self.hand.append(card)
-    
+
+    @property
     def hit(self):
         return True
-    
+
+    @property
     def stay(self):
         return False
-    
-    def hit_stay(self,faceup):
-        print("Your hand " + str([str(i) for i in self.hand]))
-        print("Your Score " + str(self.score()))
-        print("Dealer's Faceup Card:" + str(faceup))
-        if self.score() <= 21:
-            i = input("(1)Hit or (2)Stay")
-            if i == 1:
-                return self.hit()
-        return self.stay()
 
+    def show_hand(self):
+        print(self,self.hand,self.score)
+
+    def hit_stay(self,faceup):
+        print("Faceup:" + str(faceup))
+        self.show_hand()
+        if self.score <= 21:
+            if int(input("Hit[1] or Stay[2]?\n")) == 1:
+                return self.hit
+            return self.stay
+        print(self, " Broke: ", self.score)
 
 class Dealer(Player):
 
-    def __init__(self):
+    def __init__(self,num_players=1):
         super().__init__(0)
-        self._deck = Deck()
-        self.players = []
-        self._faceup = None
+        self.deck = Deck()
+        self.players = None
+        self.faceup = []
+        self.active = False
+        for i in range(num_players):
+            player = Player(i+1)
+            self.add_player(player)
 
-    @property
-    def faceup(self):
-        return self._faceup
+    def shuffle(self):
+        self.deck.shuffle()
 
-    @faceup.setter
-    def faceup(self,card):
-        self._faceup = card
+    def play(self):
+        try:
+            while len(self.deck) > 0:
+                self.new_deal()
+                self.start_round()
+                self.end_round()
+        except DeckEmpty:
+            print("New Deck")
+            self.deck = Deck()
+            self.play()
 
-    @property
-    def deck(self):
-        return self._deck
-
-    def deal_table(self):
+    def new_deal(self):
+        self.active = True
         for player in self.players:
             self.deal_card(player)
         self.deal_self()
         for player in self.players:
             self.deal_card(player)
-        self.deal_self()
+        self.deal_self(True)
 
-    def deal_self(self):
+    def deal_self(self,faceup=False):
         card = self.deck.pop()
+        if faceup:
+            self.faceup.append(card)
         self.add_card(card)
-        if not self.faceup:
-            self.faceup = card
 
     def deal_card(self,player):
         card = self.deck.pop()
         player.add_card(card)
-        return
-    
+
     def add_player(self,player):
-        self.players.append(player)
-    
-    def ask_table(self):
-        stays = 0
+        if not self.players:
+            self.players = (player,)
+            return self.players
+        players = list(self.players)
+        players.append(player)
+        self.players = tuple(players)
+
+    def start_round(self):
         for player in self.players:
-            if player.hit_stay(self.faceup):
-                card = self.deck.pop()
-                player.add_card(card)
-            else:
-                stays += 1
-        if stays == len(self.players):
+            while player.hit_stay(self.faceup):
+                self.deal_card(player)
+        while self.score < 16:
             self.show_hand()
+            self.deal_self(True)
+        self.show_hand()
+        if self.score > 21:
+            print("Dealer Broke", self.score)
 
-    def show_hand(self):
-        print(str(self.hand))
-
-    def self_ask(self):
-        if self.calculate_hand < 16:
-            self.deal_self()
-        else:
-            self.stay()
-
-if __name__ == "__main__":
-    num_players = 1
-    d = Dealer()
-    p = Player(num_players)
-    d.add_player(p)
-    print("shuffling...")
-    d.deck.shuffle()
-    print("Table is set. Time to deal cards.")
-    d.deal_table()
-    d.ask_table()
-
-    
-
-
-
+    def end_round(self):
+        self.faceup = []
+        self.active = False
+        for player in self.players:
+            player.show_hand()
+            if player.score <= 21:
+                if player.score > self.score:
+                    print(player, "Winner")
+                elif player.score < self.score:
+                    print(player, "Lost")
+                else:
+                    print(player, "Tie")
+                player.hand = []
