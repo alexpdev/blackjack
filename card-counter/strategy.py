@@ -13,9 +13,3 @@ table = [
     [S, S, S, S, S, S, H, H, H, H, H],
     [H, H, S, S, S, S, H, H, H, H, H],
 ]
-
-class Deck:
-
-
-    @classmethod
-    def deal(cls):

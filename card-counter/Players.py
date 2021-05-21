@@ -1,4 +1,6 @@
-from Deck import Deck, DeckEmpty
+#! /usr/bin/python3
+# -*- coding: utf-8 -*-
+from .Deck import Deck, DeckEmpty
 
 class Player:
 
@@ -41,7 +43,11 @@ class Player:
             return self.stay
         print(self, " Broke: ", self.score)
 
+
 class Dealer(Player):
+    """
+        Dealer Object. Controls game.
+    """
 
     def __init__(self,num_players=1):
         super().__init__(0)
@@ -85,6 +91,9 @@ class Dealer(Player):
     def deal_card(self,player):
         card = self.deck.pop()
         player.add_card(card)
+        Stats.counts[card.value] -= 1
+        print((Stats.counts[card.value] / len(self.deck)) * 100,"%")
+        print(card, "score: ", player.score)
 
     def add_player(self,player):
         if not self.players:
@@ -117,4 +126,22 @@ class Dealer(Player):
                     print(player, "Lost")
                 else:
                     print(player, "Tie")
-                player.hand = []
+            player.hand = []
+
+
+class Stats:
+
+    counts = {
+        2: 4, 3: 4,
+        4: 4, 5: 4,
+        6: 4, 7: 4,
+        8: 4, 9: 4,
+        10: 16, 11: 4}
+
+    refresh = lambda: [counts.__setitem__(k,4) for k in counts]
+
+    @classmethod
+    def probability(cls,val):
+        total = sum(cls.counts.values())
+        p = cls.counts[val]
+        return p/total

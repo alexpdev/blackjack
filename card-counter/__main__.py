@@ -1,12 +1,18 @@
 import sys
-from os.path import join, dirname, abspath
-from utils import start_game
+from os.path import dirname, abspath
+from .Players import Dealer
 
-__version__ = "0.2.1"
 
 src_dir = dirname(abspath(__file__))
 project_dir = dirname(src_dir)
 NUMBER_PLAYERS = 2
+
+def start_game(n):
+    dealer = Dealer(n)
+    dealer.deck.shuffle()
+    dealer.play()
+
+
 
 if __name__ == "__main__":
     print(sys.argv)
