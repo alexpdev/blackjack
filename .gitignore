@@ -1,2 +1,6 @@
 *.pyc
 __pycache__/
+env/
+node_modules/
+activate.bat
+autostart.bat

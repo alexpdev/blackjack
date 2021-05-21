@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
-from .Deck import Deck, DeckEmpty
+from card_counter.Deck import Deck, DeckEmpty
 
 class Player:
 

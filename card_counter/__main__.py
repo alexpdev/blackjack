@@ -1,18 +1,15 @@
 import sys
 from os.path import dirname, abspath
-from .Players import Dealer
+if __name__ == "__main__":
+    sys.path.append(dirname(dirname(abspath(__file__))))
+from card_counter.Players import Dealer
 
-
-src_dir = dirname(abspath(__file__))
-project_dir = dirname(src_dir)
 NUMBER_PLAYERS = 2
 
 def start_game(n):
     dealer = Dealer(n)
     dealer.deck.shuffle()
     dealer.play()
-
-
 
 if __name__ == "__main__":
     print(sys.argv)
