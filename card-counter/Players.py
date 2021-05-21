@@ -6,12 +6,10 @@ class Player:
         self.hand = []
         self.turn = False
         self.id = id
-        self.title = "Player " + str(id)
+        self.title = "P" + str(id)
 
     def __str__(self):
-        if self.id == 0:
-            return "Dealer"
-        return self.title
+        return self.title if self.id > 0 else "Dealer"
 
     def __repr__(self):
         return str(self)
@@ -35,10 +33,10 @@ class Player:
         print(self,self.hand,self.score)
 
     def hit_stay(self,faceup):
-        print("Faceup:" + str(faceup))
         self.show_hand()
+        print("Dealer Card:" + str(faceup))
         if self.score <= 21:
-            if int(input("Hit[1] or Stay[2]?\n")) == 1:
+            if int(input("Hit[1] or Stay[2]?\t")) == 1:
                 return self.hit
             return self.stay
         print(self, " Broke: ", self.score)
@@ -49,7 +47,7 @@ class Dealer(Player):
         super().__init__(0)
         self.deck = Deck()
         self.players = None
-        self.faceup = []
+        self.faceup = None
         self.active = False
         for i in range(num_players):
             player = Player(i+1)
@@ -81,7 +79,7 @@ class Dealer(Player):
     def deal_self(self,faceup=False):
         card = self.deck.pop()
         if faceup:
-            self.faceup.append(card)
+            self.faceup = card
         self.add_card(card)
 
     def deal_card(self,player):
@@ -108,7 +106,7 @@ class Dealer(Player):
             print("Dealer Broke", self.score)
 
     def end_round(self):
-        self.faceup = []
+        self.faceup = None
         self.active = False
         for player in self.players:
             player.show_hand()

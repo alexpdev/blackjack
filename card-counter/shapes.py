@@ -1,6 +1,9 @@
 from turtle import Screen, RawTurtle
 import math
 
+hx = "#FeeFFF"
+
+
 def main(screen,t):
     lst = [diamond,heart,spade,club]
     for i in range(-360,640,250):
