@@ -1,5 +1,4 @@
-import random
-from game import Deck, DeckEmpty
+from Deck import Deck, DeckEmpty
 
 class Player:
 
