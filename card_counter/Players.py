@@ -1,47 +1,47 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
-from card_counter.Deck import Deck, DeckEmpty
+from card_counter.Deck import Deck
+from card_counter.Window import CardWidget
 
 class Player:
 
-    def __init__(self,id):
+    def __init__(self,window,id_):
+        self.id = id_
+        self.window = window
+        self.title = "Player " + str(self.id)
         self.hand = []
         self.turn = False
-        self.id = id
-        self.title = "P" + str(id)
+        self.widgets = None
 
     def __str__(self):
-        return self.title if self.id > 0 else "Dealer"
+        return self.title
 
     def __repr__(self):
-        return str(self)
+        return self.title
 
     @property
     def score(self):
         return sum(card.value for card in self.hand)
 
-    def add_card(self,card):
+    def setWidgets(self, widgets):
+        self.widgets = widgets
+
+    def add_card(self,card,img):
         self.hand.append(card)
+        self.add_card_image(img)
 
-    @property
-    def hit(self):
-        return True
+    def add_card_image(self,img):
+        if hlen := len(self.hand) <= 2:
+            ncard = self.widgets["cards"][hlen - 1]
+            return ncard.setImg(img)
+        new_card = CardWidget(self.window)
+        new_card.setImg(img)
+        self.widgets["cards"].append(new_card)
+        self.widgets["layout"].addWidget(new_card)
 
-    @property
-    def stay(self):
-        return False
-
-    def show_hand(self):
+    def show_hand(self, output):
+        output.append(str(self) + " "  + str(self.hand) + " " + str(self.score) + "\n")
         print(self,self.hand,self.score)
-
-    def hit_stay(self,faceup):
-        self.show_hand()
-        print("Dealer Card:" + str(faceup))
-        if self.score <= 21:
-            if int(input("Hit[1] or Stay[2]?\t")) == 1:
-                return self.hit
-            return self.stay
-        print(self, " Broke: ", self.score)
 
 
 class Dealer(Player):
@@ -49,84 +49,67 @@ class Dealer(Player):
         Dealer Object. Controls game.
     """
 
-    def __init__(self,num_players=1):
-        super().__init__(0)
+    def __init__(self,window,id_=0):
+        super().__init__(window,id_=id_)
         self.deck = Deck()
-        self.players = None
-        self.faceup = None
-        self.active = False
-        for i in range(num_players):
-            player = Player(i+1)
-            self.add_player(player)
+        self.title="Dealer"
 
-    def shuffle(self):
-        self.deck.shuffle()
+    def new_deal(self, players):
+        for _ in range(2):
+            for player in players:
+                self.deal_card(player)
+            self.deal_self()
 
-    def play(self):
-        try:
-            while len(self.deck) > 0:
-                self.new_deal()
-                self.start_round()
-                self.end_round()
-        except DeckEmpty:
-            print("New Deck")
-            self.deck = Deck()
-            self.play()
+    def deal_self(self):
+        self.deal_card(self)
 
-    def new_deal(self):
-        self.active = True
-        for player in self.players:
-            self.deal_card(player)
-        self.deal_self()
-        for player in self.players:
-            self.deal_card(player)
-        self.deal_self(True)
-
-    def deal_self(self,faceup=False):
-        card = self.deck.pop()
-        if faceup:
-            self.faceup = card
-        self.add_card(card)
+    def add_card(self,card,img):
+        if not len(self.hand):
+            return self.hand.append(card)
+        super().add_card(card,img)
 
     def deal_card(self,player):
         card = self.deck.pop()
-        player.add_card(card)
-        Stats.counts[card.value] -= 1
-        print((Stats.counts[card.value] / len(self.deck)) * 100,"%")
-        print(card, "score: ", player.score)
+        img = card.getImage()
+        player.add_card(card,img)
 
-    def add_player(self,player):
-        if not self.players:
-            self.players = (player,)
-            return self.players
-        players = list(self.players)
-        players.append(player)
-        self.players = tuple(players)
+    def start_round(self,players):
+        self.new_deal(players)
 
-    def start_round(self):
-        for player in self.players:
-            while player.hit_stay(self.faceup):
-                self.deal_card(player)
-        while self.score < 16:
-            self.show_hand()
-            self.deal_self(True)
-        self.show_hand()
-        if self.score > 21:
-            print("Dealer Broke", self.score)
+    def new_game(self,players):
+        self.deck = Deck()
+        self.deck.shuffle()
+        self.new_deal(players)
 
-    def end_round(self):
-        self.faceup = None
-        self.active = False
-        for player in self.players:
-            player.show_hand()
-            if player.score <= 21:
-                if player.score > self.score:
-                    print(player, "Winner")
-                elif player.score < self.score:
-                    print(player, "Lost")
-                else:
-                    print(player, "Tie")
-            player.hand = []
+    # def start_round(self):
+    #     for player in self.players:
+    #         if player.score <= 21:
+    #             if int(input("Hit[1] or Stay[2]?\t")) == 1:
+    #                 return self.hit
+    #             return self.stay
+    #         print(self, " Broke: ", self.score)
+    #         while player.hit_stay(self.faceup):
+    #             self.deal_card(player)
+    #     while self.score < 16:
+    #         self.show_hand(self.output)
+    #         self.deal_self(True)
+    #     self.show_hand(self.output)
+    #     if self.score > 21:
+    #         self.output.append(f"Dealer Broke: {self.score}\n")
+
+    # def end_round(self):
+    #     self.faceup = None
+    #     self.active = False
+    #     for player in self.players:
+    #         player.show_hand(self.output)
+    #         if player.score <= 21:
+    #             if player.score > self.score:
+    #                 self.output.append(f"{player} Won!\n")
+    #             elif player.score < self.score:
+    #                 self.output.append(f"{player} Lost!\n")
+    #             else:
+    #                 self.output.append(f"{player} Tie!\n")
+    #         player.hand = []
 
 
 class Stats:

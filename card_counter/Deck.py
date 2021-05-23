@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 import random
+import os
 
 class InvalidType(Exception):
     pass
@@ -27,9 +28,8 @@ class Deck(list):
         return super().__init__(cls,*args,**kwargs)
 
     def pop(self,x=0):
-        if not len(self):
-            raise DeckEmpty
-        return super().pop(x)
+        try: return super().pop(x)
+        except: raise DeckEmpty
 
     def swap(self, i1, i2):
         val = self[i1]
@@ -46,11 +46,20 @@ class Card:
 
     def __init__(self,suit,name,value):
         self.suit = suit
-        self.value = value
         self.name = name
+        self.value = value
+
+    def getImage(self):
+        val = str(self.value)
+        faces = {"ace": 1,"jack": 11,"queen": 12,"king": 13}
+        if self.name in faces:
+            val = str(faces.get(self.name))
+        filename = ''.join([self.suit , "_", val])
+        print(filename)
+        return os.path.join(os.environ["IMG_DIR"], filename)
 
     def __str__(self):
-        return "<" + self.name.title() + ": " + self.suit.title() + ">"
+        return "<" + self.name.title() + ":" + self.suit.title() + ">"
 
     def __repr__(self):
         return str(self)
