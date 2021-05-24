@@ -10,9 +10,10 @@ from card_counter.Deck import Deck
 
 class TestDeck:
 
-    def test_deck_setup(self,capsys):
-        lst = [1,2,3,4,5,6]
-        a = Deck(lst)
-        print(a)
-        capsys.readouterr()
-        assert a and True
+    def test_deck_setup(self):
+        for i in range(1,6):
+            deck = Deck.times(i)
+            assert len(deck) == i * 52
+            for card in deck:
+                assert (card.name,card.value) in deck.values
+                assert card.suit in deck.suits

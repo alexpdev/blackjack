@@ -56,13 +56,13 @@ class Dealer(Player):
         Dealer Object. Controls game.
     """
 
-    def __init__(self,limit=26,deck_count=1,players=[],**kwargs):
+    def __init__(self,deck_count=1,players=[],**kwargs):
         super().__init__(**kwargs)
         self.title = "Dealer"
         self.deck_count = deck_count
-        self.limit = limit
         self.players = players
         self.deck = Deck.times(deck_count)
+        self.limit = len(self.deck)//2
 
     def start_deal(self):
         for _ in range(2):

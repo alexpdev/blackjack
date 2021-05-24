@@ -17,18 +17,14 @@ from card_counter.Window import Window
 
 PLAYERS=2
 DECKS=1
-LIMIT=(.5 * DECKS * 52)
 
 
 class Config:
     def __init__(self):
         window = Window(parent=None)
         args = {
-            "pos" : 0,
-            "limit" : LIMIT ,
             "window" : window,
             "deck_count" : DECKS,
-            "num_players" : PLAYERS,
         }
         dealer = Dealer(**args)
         window.setDealer(dealer)
