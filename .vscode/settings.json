@@ -1,13 +1,4 @@
 {
-    "python.linting.enabled": false,
-    "emeraldwalk.runonsave": {
-        "commands": [
-            {
-                "match": "*.py",
-                "cmd": "python card_counter/Game.py"
-            }
-        ]
-    },
     "python.testing.pytestArgs": [
         "tests"
     ],

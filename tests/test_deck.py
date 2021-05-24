@@ -15,5 +15,7 @@ class TestDeck:
             deck = Deck.times(i)
             assert len(deck) == i * 52
             for card in deck:
-                assert (card.name,card.value) in deck.values
                 assert card.suit in deck.suits
+
+
+TestDeck().test_deck_setup()

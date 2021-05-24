@@ -2,7 +2,7 @@ import os
 import sys
 import pytest
 from os.path import abspath, dirname, join
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QApplication
 proj_dir = dirname(dirname(abspath(__file__)))
 IMG_DIR = join(proj_dir,"img")
 sys.path.append(proj_dir)
@@ -10,6 +10,7 @@ os.environ["IMG_DIR"] = IMG_DIR
 from card_counter.Players import Player, Dealer
 
 class TestPlayer:
+    app = QApplication(sys.argv)
     window = QMainWindow()
 
     def test_player_setup(self):
@@ -28,8 +29,6 @@ class TestPlayer:
             dealer = Dealer(**args)
             assert dealer is not None
             assert dealer.window == self.window
-            assert len(dealer.deck) == ((num % 3) + 1)*52
             assert dealer.limit == len(dealer.deck)//2
             assert len(dealer.deck) >= 52
             assert dealer.title == "Dealer"
-            assert dealer.pos == 0
