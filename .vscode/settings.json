@@ -1,3 +1,17 @@
 {
-    "python.linting.enabled": false
+    "python.linting.enabled": false,
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "*.py",
+                "cmd": "python card_counter/Game.py"
+            }
+        ]
+    },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true
 }

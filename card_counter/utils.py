@@ -1,9 +1,8 @@
-from turtle import Screen, RawTurtle
-import math
+
+
+
 
 hx = "#FeeFFF"
-
-
 def main(screen,t):
     lst = [diamond,heart,spade,club]
     for i in range(-360,640,250):
@@ -82,12 +81,3 @@ def reset(t):
     t.home()
     t.clear()
     return
-
-
-
-if __name__ == "__main__":
-    screen = Screen()
-    t = RawTurtle(screen)
-    t.speed(9)
-    main(screen,t)
-    screen.mainloop()

@@ -1,3 +1,6 @@
+#! /usr/bin/python3
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 from PyQt6.QtWidgets import *
@@ -7,10 +10,9 @@ from PyQt6.QtGui import *
 CARDCOVER = os.path.join(os.environ["IMG_DIR"],"card_cover.png")
 
 class Window(QMainWindow):
-    def __init__(self,parent=None):
+    def __init__(self,parent=None,**kwargs):
         super().__init__(parent=parent)
-        self.dealer = None
-        self.game = None
+        self.players = []
         self.setWindowTitle("BlackJack")
         self.setupUi()
 
@@ -31,66 +33,96 @@ class Window(QMainWindow):
         self.centLayout.addLayout(self.horiz1)
         self.centLayout.addLayout(self.horiz2)
         self.centLayout.addWidget(self.textBrowser)
-        self.player_widgets = {}
+        self.boxes = []
 
     def addPlayer(self,player):
-        groupbox = QGroupBox(self.central)
-        self.horiz1.addWidget(groupbox)
-        groupbox.setTitle(player.title)
+        self.players.append(player)
         hlayout = QHBoxLayout()
-        card1 = CardWidget(self)
-        card2 = CardWidget(self)
-        hlayout.addWidget(card1)
-        hlayout.addWidget(card2)
-        widgets = { "cards":[card1,card2], "box":groupbox, "layout":hlayout }
-        self.player_widgets[str(player)] = widgets
-        player.setWidgets(widgets)
+        cards = []
+        for _ in range(2):
+            card = CardWidget(parent=self.central)
+            hlayout.addWidget(card)
+            cards.append(card)
+        groupbox = PlayerBox(player.title,**{
+            "parent": self.central,
+            "player": player
+        })
         groupbox.setLayout(hlayout)
+        self.horiz1.addWidget(groupbox)
+        self.boxes.append(groupbox)
+        player.set_widgets(**{
+            "cards" : cards,
+            "box" : groupbox,
+        })
 
-    def setDealer(self,dealer,game):
-        self.game = game
+
+    def setDealer(self,dealer):
         self.dealer = dealer
         self.addPlayer(dealer)
 
-class CardWidget(QLabel):
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
-        self.parent = parent
-        self.path = CARDCOVER
-        pixmap = QPixmap(self.path)
-        self.setPixmap(pixmap)
 
-    def setImg(self,path):
+class PlayerBox(QGroupBox):
+
+    def __init__(self,title,parent=None,player=None):
+        super().__init__(title,parent=parent)
+        self.player = player
+
+class CardWidget(QLabel):
+
+    def __init__(self, parent=None,cover=True,path=CARDCOVER):
+        super().__init__(parent=parent)
+        self.cover = cover
         self.path = path
         pixmap = QPixmap(self.path)
         self.setPixmap(pixmap)
 
+    def reset(self,path):
+        if self.path is CARDCOVER:
+            pixmap = QPixmap(path)
+            self.setPixmap(pixmap)
+            self.path = path
+            self.cover = False
 
 class HitButton(QPushButton):
-    def __init__(self, parent=None):
+
+    stylesheet = """QPushButton{ background-color: #1259ff;
+                font: bold 20pt black; padding: px; margin: 2px;}"""
+
+    def __init__(self, parent=None,window=None,dealer=None,**kwargs):
         super().__init__(parent=parent)
+        self.window = window
+        self.dealer = dealer
         self.setText("Hit")
+        self.setStyleSheet(self.stylesheet)
+        self.pressed.connect(self.hit)
+
+    def hit(self):
+        for player in self.window.players:
+            if player.isturn():
+                self.dealer.deal_card(player)
 
 class StandButton(QPushButton):
-    def __init__(self, parent=None):
+
+    stylesheet = """QPushButton{ background-color: #1259ff;
+                    font: bold 20pt black; padding: px; margin: 2px;}"""
+
+    def __init__(self, parent=None,**kwargs):
         super().__init__(parent=parent)
         self.setText("Stand")
+        self.setStyleSheet(self.stylesheet)
 
 class NewGameButton(QPushButton):
-    def __init__(self, parent=None):
+
+    stylesheet = """QPushButton{ background-color: #1259ff;
+                    font: bold 20pt black; padding: px; margin: 2px;}"""
+
+    def __init__(self, parent=None,window=None, **kwargs):
         super().__init__(parent=parent)
+        self.window = window
         self.parent = parent
         self.setText("New Game")
         self.pressed.connect(self.start_new_game)
+        self.setStyleSheet(self.stylesheet)
 
     def start_new_game(self):
-        window = self.parent.parent()
-        window.game.new_game()
-
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    win = Window()
-    win.show()
-    sys.exit(app.exec())
+        self.window.dealer.new_game()

@@ -1,47 +1,54 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
+
 from card_counter.Deck import Deck
 from card_counter.Window import CardWidget
 
 class Player:
 
-    def __init__(self,window,id_):
-        self.id = id_
-        self.window = window
-        self.title = "Player " + str(self.id)
+    def __init__(self,pos=None,window=None,**kwargs):
+        self.pos = pos
         self.hand = []
-        self.turn = False
-        self.widgets = None
+        self.window = window
+        self._turn = False
+        self.cards = None
+        self.box = None
+        self.title = "Player " + str(pos)
 
-    def __str__(self):
-        return self.title
-
-    def __repr__(self):
-        return self.title
 
     @property
-    def score(self):
-        return sum(card.value for card in self.hand)
+    def score(self): return sum(card.value for card in self.hand)
 
-    def setWidgets(self, widgets):
-        self.widgets = widgets
+    def __str__(self): return self.title
 
-    def add_card(self,card,img):
+    def __repr__(self): return self.title
+
+    def isturn(self): return self._turn
+
+    def turn(self): self._turn = not self._turn
+
+
+    def set_widgets(self,cards=None,box=None):
+        self.cards = cards
+        self.box = box
+
+    def add_card(self,card):
+        card_img = card.getPath()
         self.hand.append(card)
-        self.add_card_image(img)
+        cover = False
+        for c in self.cards:
+            if c.cover == True:
+                c.reset(card_img)
+                cover = True; break
+        if not cover:
+            cWidget = CardWidget(cover=False,path=card_img)
+            self.box.layout().addWidget(cWidget)
+            self.cards.append(cWidget)
 
-    def add_card_image(self,img):
-        if hlen := len(self.hand) <= 2:
-            ncard = self.widgets["cards"][hlen - 1]
-            return ncard.setImg(img)
-        new_card = CardWidget(self.window)
-        new_card.setImg(img)
-        self.widgets["cards"].append(new_card)
-        self.widgets["layout"].addWidget(new_card)
-
-    def show_hand(self, output):
-        output.append(str(self) + " "  + str(self.hand) + " " + str(self.score) + "\n")
+    def show_hand(self):
+        output = str(self) + " "  + str(self.hand) + " " + str(self.score) + "\n"
         print(self,self.hand,self.score)
+        self.window.textBrowser.append(output)
 
 
 class Dealer(Player):
@@ -49,67 +56,33 @@ class Dealer(Player):
         Dealer Object. Controls game.
     """
 
-    def __init__(self,window,id_=0):
-        super().__init__(window,id_=id_)
-        self.deck = Deck()
-        self.title="Dealer"
+    def __init__(self,limit=26,deck_count=1,players=[],**kwargs):
+        super().__init__(**kwargs)
+        self.title = "Dealer"
+        self.deck_count = deck_count
+        self.limit = limit
+        self.players = players
+        self.deck = Deck.times(deck_count)
 
-    def new_deal(self, players):
+    def start_deal(self):
         for _ in range(2):
-            for player in players:
+            for player in self.players:
                 self.deal_card(player)
-            self.deal_self()
-
-    def deal_self(self):
-        self.deal_card(self)
-
-    def add_card(self,card,img):
-        if not len(self.hand):
-            return self.hand.append(card)
-        super().add_card(card,img)
+            self.deal_card(self)
 
     def deal_card(self,player):
         card = self.deck.pop()
-        img = card.getImage()
-        player.add_card(card,img)
+        player.add_card(card)
+        self.window.update()
 
-    def start_round(self,players):
-        self.new_deal(players)
+    def round(self):
+        for player in self.players:
+            player.turn()
 
-    def new_game(self,players):
-        self.deck = Deck()
+    def new_game(self):
         self.deck.shuffle()
-        self.new_deal(players)
-
-    # def start_round(self):
-    #     for player in self.players:
-    #         if player.score <= 21:
-    #             if int(input("Hit[1] or Stay[2]?\t")) == 1:
-    #                 return self.hit
-    #             return self.stay
-    #         print(self, " Broke: ", self.score)
-    #         while player.hit_stay(self.faceup):
-    #             self.deal_card(player)
-    #     while self.score < 16:
-    #         self.show_hand(self.output)
-    #         self.deal_self(True)
-    #     self.show_hand(self.output)
-    #     if self.score > 21:
-    #         self.output.append(f"Dealer Broke: {self.score}\n")
-
-    # def end_round(self):
-    #     self.faceup = None
-    #     self.active = False
-    #     for player in self.players:
-    #         player.show_hand(self.output)
-    #         if player.score <= 21:
-    #             if player.score > self.score:
-    #                 self.output.append(f"{player} Won!\n")
-    #             elif player.score < self.score:
-    #                 self.output.append(f"{player} Lost!\n")
-    #             else:
-    #                 self.output.append(f"{player} Tie!\n")
-    #         player.hand = []
+        self.start_deal()
+        self.round()
 
 
 class Stats:

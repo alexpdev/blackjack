@@ -25,7 +25,15 @@ class Deck(list):
                     card = Card(suit,name,value)
                     cards.append(card)
             return super().__init__(cards)
-        return super().__init__(cls,*args,**kwargs)
+        return super().__init__(*args,**kwargs)
+
+    @classmethod
+    def times(cls,num):
+        deck = []
+        for _ in range(num):
+            for card in Deck():
+                deck.append(card)
+        return cls(deck)
 
     def pop(self,x=0):
         try: return super().pop(x)
@@ -49,13 +57,12 @@ class Card:
         self.name = name
         self.value = value
 
-    def getImage(self):
+    def getPath(self):
         val = str(self.value)
         faces = {"ace": 1,"jack": 11,"queen": 12,"king": 13}
         if self.name in faces:
             val = str(faces.get(self.name))
         filename = ''.join([self.suit , "_", val])
-        print(filename)
         return os.path.join(os.environ["IMG_DIR"], filename)
 
     def __str__(self):
