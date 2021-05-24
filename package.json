@@ -1,15 +1,12 @@
 {
   "name": "card-counting",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.3.0",
+  "description": "blackjack app",
   "main": "index.js",
   "scripts": {
     "start": "python card_counter/config.py"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "nodemon": "^2.0.7"
-  }
+  "keywords": ["gui", "game", "blackjack"],
+  "author": "alexpdev",
+  "license": "ISC"
 }

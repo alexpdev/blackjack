@@ -15,18 +15,24 @@ class Player:
         self.box = None
         self.title = "Player " + str(pos)
 
-
     @property
-    def score(self): return sum(card.value for card in self.hand)
+    def score(self):
+        return sum(card.value for card in self.hand)
 
-    def __str__(self): return self.title
+    def __str__(self):
+        return self.title
 
-    def __repr__(self): return self.title
+    def __repr__(self):
+        return self.title
 
-    def isturn(self): return self._turn
+    def isturn(self):
+        return self._turn
 
-    def turn(self): self._turn = not self._turn
+    def turn(self):
+        self._turn = not self._turn
 
+    def output(self,line):
+        self.window.textBrowser.append(line)
 
     def set_widgets(self,cards=None,box=None):
         self.cards = cards
@@ -48,8 +54,7 @@ class Player:
     def show_hand(self):
         output = str(self) + " "  + str(self.hand) + " " + str(self.score) + "\n"
         print(self,self.hand,self.score)
-        self.window.textBrowser.append(output)
-
+        self.output(output)
 
 class Dealer(Player):
     """
@@ -61,6 +66,7 @@ class Dealer(Player):
         self.title = "Dealer"
         self.deck_count = deck_count
         self.players = players
+        self.current = 0
         self.deck = Deck.times(deck_count)
         self.limit = len(self.deck)//2
 
@@ -76,14 +82,43 @@ class Dealer(Player):
         self.window.update()
 
     def round(self):
-        for player in self.players:
+        stylesheet = """QGroupBox {border: 2px red solid; font-weight: bold;}"""
+        player = self.players[self.current]
+        player.turn()
+        player.show_hand()
+        player.box.setStyleSheet(stylesheet)
+
+    def dealer_round(self):
+        while self.score < 16:
+            self.deal_card(self)
+            self.show_hand()
+        if self.score > 21:
+            self.output("Dealer Busts")
+
+    def player_hit(self,player):
+        self.deal_card(player)
+        player.show_hand()
+        if player.score > 21:
+            self.output(player.title + " Broke")
             player.turn()
+            self.current += 1
+
+
+    def next_round(self):
+        for player in self.players:
+            player.cards = []
+            player.hand = []
+            player.box.reset()
+            for _ in range(2):
+                card = CardWidget(parent=self.central)
+                player.box.layout().addWidget(card)
+                player.cards.append(card)
 
     def new_game(self):
         self.deck.shuffle()
         self.start_deal()
+        self.current = 0
         self.round()
-
 
 class Stats:
 

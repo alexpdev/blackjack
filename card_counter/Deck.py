@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
+from pathlib import Path
 import random
 import os
 
@@ -10,7 +11,7 @@ class DeckEmpty(Exception):
     pass
 
 class Deck(list):
-    suits = ("clubs","spades","hearts","diamonds")
+    suits = ("clubs", "spade", "hearts", "diamonds")
     values = {"two":2, "three":3, "four":4,
             "five":5, "six":6, "seven":7,
             "eight":8, "nine":9, "ten":10,
@@ -44,7 +45,7 @@ class Deck(list):
         self[i1] = self[i2]
         self[i2] = val
 
-    def shuffle(self,t=4):
+    def shuffle(self,t=8):
         for _ in range(len(self) * t):
             i1 = random.choice(range(len(self)))
             i2 = random.choice(range(len(self)))
@@ -58,12 +59,12 @@ class Card:
         self.value = value
 
     def getPath(self):
-        val = str(self.value)
+        img_dir = os.environ.get("IMG_DIR")
         faces = {"ace": 1,"jack": 11,"queen": 12,"king": 13}
-        if self.name in faces:
-            val = str(faces.get(self.name))
-        filename = ''.join([self.suit , "_", val])
-        return os.path.join(os.environ["IMG_DIR"], filename)
+        val = str(self.value) if self.name not in faces  else str(faces.get(self.name))
+        filename = ''.join([self.suit, "_", val, ".png"])
+        img_path = os.path.join(img_dir, filename)
+        return img_path
 
     def __str__(self):
         return "<" + self.name.title() + ":" + self.suit.title() + ">"
