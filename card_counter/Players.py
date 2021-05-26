@@ -11,7 +11,7 @@ class Player:
         self.hand = []
         self.window = window
         self._turn = False
-        self.cards = None
+        self.cards = []
         self.box = None
         self.title = "Player " + str(pos)
 
@@ -30,31 +30,27 @@ class Player:
 
     def turn(self):
         self._turn = not self._turn
+        self.box.turn()
 
     def output(self,line):
         self.window.textBrowser.append(line)
 
-    def set_widgets(self,cards=None,box=None):
-        self.cards = cards
-        self.box = box
-
     def add_card(self,card):
-        card_img = card.getPath()
         self.hand.append(card)
-        cover = False
-        for c in self.cards:
-            if c.cover == True:
-                c.reset(card_img)
-                c.setCard(card)
-                card.setWidget(c)
-                cover = True; break
-        if not cover:
-            cWidget = CardWidget(cover=False,card=card,path=card_img)
-            card.setWidget(cWidget)
-            self.box.layout().addWidget(cWidget)
-            self.cards.append(cWidget)
+        for widg in self.cards:
+            if widg.cover == True:
+                widg.setCard(card)
+                return self.show_hand()
+        widget = CardWidget(cover=False,card=card,path=card.path)
+        self.box.hbox.addWidget(widget)
+        self.cards.append(widget)
+        return self.show_hand()
+
+    def show_score(self):
+        self.box.scorebox.display(self.score)
 
     def show_hand(self):
+        self.show_score()
         output = str(self) + " "  + str(self.hand) + " " + str(self.score) + "\n"
         print(self,self.hand,self.score)
         self.output(output)
@@ -85,21 +81,13 @@ class Dealer(Player):
         self.window.update()
 
     def round(self):
-        stylesheet = """QGroupBox {
-            color: red;
-            padding: 6px;
-            margin: 3px;
-            border: 3px solid red;
-            border-radius: 3px;}"""
-        if self.current >= len(self.players):
-            player = self
-        else:
-            player = self.players[self.current]
+        player = self.players[self.current]
+        print("round",player)
         player.turn()
         player.show_hand()
-        player.box.setStyleSheet(stylesheet)
 
     def dealer_round(self):
+        self.turn()
         while self.score < 16:
             self.deal_card(self)
             self.show_hand()
@@ -112,16 +100,16 @@ class Dealer(Player):
         if player.score > 21:
             self.output(player.title + " Broke")
             player.turn()
-            self.current += 1
-        return player.score
+            return False
+        return True
 
     def next_player(self):
-        if self.current == len(self.players)-1:
+        self.current += 1
+        if self.current < len(self.players):
+            self.round()
+        else:
             self.current = 0
             self.dealer_round()
-        else:
-            self.current += 1
-            self.round()
 
     def next_round(self):
         for player in self.players:

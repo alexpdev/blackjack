@@ -58,9 +58,7 @@ class Card:
         self.name = name
         self.value = value
         self.widget = None
-
-    def setWidget(self,widget):
-        self.widget = widget
+        self.path = self.getPath()
 
     def getPath(self):
         img_dir = os.environ.get("IMG_DIR")
