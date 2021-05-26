@@ -1,0 +1,54 @@
+{
+	"files": [
+		{
+			"path": "card_counter/Window.py",
+			"bookmarks": [
+				{
+					"line": 68,
+					"column": 15,
+					"label": "PlayerBox"
+				},
+				{
+					"line": 163,
+					"column": 8,
+					"label": ""
+				},
+				{
+					"line": 182,
+					"column": 12,
+					"label": "stay"
+				},
+				{
+					"line": 202,
+					"column": 22,
+					"label": "start_new_game"
+				}
+			]
+		},
+		{
+			"path": "card_counter/Players.py",
+			"bookmarks": [
+				{
+					"line": 68,
+					"column": 17,
+					"label": "show_hand"
+				},
+				{
+					"line": 88,
+					"column": 18,
+					"label": "start_deal"
+				},
+				{
+					"line": 122,
+					"column": 19,
+					"label": "next_player"
+				},
+				{
+					"line": 130,
+					"column": 18,
+					"label": "next_round"
+				}
+			]
+		}
+	]
+}
