@@ -1,12 +1,12 @@
 {
   "name": "card-counting",
   "version": "0.3.0",
-  "description": "blackjack app",
+  "description": "blackjack card counting gui app",
   "main": "index.js",
   "scripts": {
     "start": "python card_counter/config.py"
   },
   "keywords": ["gui", "game", "blackjack"],
   "author": "alexpdev",
-  "license": "ISC"
+  "license": "GNU GPL v3"
 }
