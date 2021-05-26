@@ -45,9 +45,12 @@ class Player:
         for c in self.cards:
             if c.cover == True:
                 c.reset(card_img)
+                c.setCard(card)
+                card.setWidget(c)
                 cover = True; break
         if not cover:
-            cWidget = CardWidget(cover=False,path=card_img)
+            cWidget = CardWidget(cover=False,card=card,path=card_img)
+            card.setWidget(cWidget)
             self.box.layout().addWidget(cWidget)
             self.cards.append(cWidget)
 
@@ -82,8 +85,16 @@ class Dealer(Player):
         self.window.update()
 
     def round(self):
-        stylesheet = """QGroupBox {border: 2px red solid; font-weight: bold;}"""
-        player = self.players[self.current]
+        stylesheet = """QGroupBox {
+            color: red;
+            padding: 6px;
+            margin: 3px;
+            border: 3px solid red;
+            border-radius: 3px;}"""
+        if self.current >= len(self.players):
+            player = self
+        else:
+            player = self.players[self.current]
         player.turn()
         player.show_hand()
         player.box.setStyleSheet(stylesheet)
@@ -102,7 +113,15 @@ class Dealer(Player):
             self.output(player.title + " Broke")
             player.turn()
             self.current += 1
+        return player.score
 
+    def next_player(self):
+        if self.current == len(self.players)-1:
+            self.current = 0
+            self.dealer_round()
+        else:
+            self.current += 1
+            self.round()
 
     def next_round(self):
         for player in self.players:
@@ -119,20 +138,3 @@ class Dealer(Player):
         self.start_deal()
         self.current = 0
         self.round()
-
-class Stats:
-
-    counts = {
-        2: 4, 3: 4,
-        4: 4, 5: 4,
-        6: 4, 7: 4,
-        8: 4, 9: 4,
-        10: 16, 11: 4}
-
-    refresh = lambda: [counts.__setitem__(k,4) for k in counts]
-
-    @classmethod
-    def probability(cls,val):
-        total = sum(cls.counts.values())
-        p = cls.counts[val]
-        return p/total

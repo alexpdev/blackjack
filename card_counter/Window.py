@@ -57,22 +57,37 @@ class Window(QMainWindow):
 
 
 class PlayerBox(QGroupBox):
+    stylesheet = """QGroupBox {
+        padding: 4px;
+        margin: 2px;
+        color: black;
+        border: 2px solid grey;} """
 
     def __init__(self,title,parent=None,player=None):
         super().__init__(title,parent=parent)
         self.player = player
+        self.setStyleSheet(self.stylesheet)
 
     def reset(self):
-        self.clear()
+        for card in self.player.cards:
+            self.layout().removeWidget(card)
+            del card
+        self.update()
+        self.repaint()
 
 
 
 class CardWidget(QLabel):
+    stylesheet = """QLabel {
+        margin: 3px;
+        padding: 3px;}"""
 
-    def __init__(self, parent=None,cover=True,path=CARDCOVER):
+    def __init__(self, parent=None,card=None,cover=True,path=CARDCOVER):
         super().__init__(parent=parent)
+        self.setStyleSheet(self.stylesheet)
         self.cover = cover
         self.path = path
+        self.card = card
         pixmap = QPixmap(self.path)
         self.setPixmap(pixmap)
 
@@ -82,6 +97,9 @@ class CardWidget(QLabel):
             self.setPixmap(pixmap)
             self.path = path
             self.cover = False
+
+    def setCard(self,card):
+        self.card = card
 
 
 class HitButton(QPushButton):
@@ -99,8 +117,14 @@ class HitButton(QPushButton):
     def hit(self):
         for player in self.window.players:
             if player.isturn():
-                self.window.dealer.player_hit(player)
-
+                print(player.score)
+                if player.score > 21:
+                    stylesheet = """QGroupBox { padding: 4px; margin: 2px;
+                                    color: black; border: 2px solid grey;}"""
+                    player.box.setStyleSheet(stylesheet)
+                    self.window.dealer.next_player()
+                else:
+                    self.window.dealer.player_hit(player)
 
 class StandButton(QPushButton):
 
@@ -119,16 +143,11 @@ class StandButton(QPushButton):
             if player.isturn():
                 player.show_hand()
                 player.turn()
-                player.box.setStyleSheet("""
-                    QGroupBox {border-width: 0px; font-style: normal;}
-                """)
-        current = self.window.dealer.current
-        if current == len(self.window.players) - 1:
-            self.window.dealer.dealer_round()
-        else:
-            self.window.dealer.current += 1
-            self.window.dealer.round()
-
+                stylesheet = """QGroupBox { padding: 4px; margin: 2px;
+                                color: black; border: 2px solid grey;}"""
+                player.box.setStyleSheet(stylesheet)
+                break
+        self.window.dealer.next_player()
 
 class NewGameButton(QPushButton):
 
@@ -145,6 +164,7 @@ class NewGameButton(QPushButton):
 
     def start_new_game(self):
         for player in self.window.players:
-            for card in player.cards:
-                card.cover = True
+            player.box.reset()
+            player.hand = []
+            player.cards = []
         self.window.dealer.new_game()
