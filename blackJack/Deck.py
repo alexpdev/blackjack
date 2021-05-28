@@ -18,12 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
-from pathlib import Path
+
 import random
 import os
 
 class InvalidType(Exception):
-    pass
+    def __init__(self,other):
+        print(type(other))
 
 class DeckEmpty(Exception):
     pass
@@ -52,7 +53,9 @@ class Deck(list):
         for _ in range(num):
             for card in Deck():
                 deck.append(card)
-        return cls(deck)
+        new_deck = cls(deck)
+        new_deck.shuffle()
+        return new_deck
 
     def pop(self,x=0):
         try: return super().pop(x)
@@ -75,16 +78,14 @@ class Card:
         self.suit = suit
         self.name = name
         self.value = value
-        self.widget = None
         self.path = self.getPath()
 
     def getPath(self):
-        img_dir = os.environ.get("IMG_DIR")
         faces = {"ace": 1,"jack": 11,"queen": 12,"king": 13}
+        img_dir = os.environ.get("IMG_DIR")
         val = str(self.value) if self.name not in faces  else str(faces.get(self.name))
         filename = ''.join([self.suit, "_", val, ".png"])
-        img_path = os.path.join(img_dir, filename)
-        return img_path
+        return os.path.join(img_dir, filename)
 
     def __str__(self):
         return "<" + self.name.title() + ":" + self.suit.title() + ">"
@@ -135,4 +136,4 @@ class Card:
 
     def __typecheck__(self,other):
         if not isinstance(other,type(self)):
-            raise Exception
+            raise InvalidType(other)

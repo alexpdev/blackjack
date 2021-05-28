@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
+
 from card_counter.Deck import Deck
 from card_counter.Window import CardWidget
 
@@ -25,9 +26,9 @@ class Player:
 
     def __init__(self,pos=None,window=None,**kwargs):
         self.pos = pos
-        self.hand = []
         self.window = window
         self._turn = False
+        self.hand = []
         self.cards = []
         self.box = None
         self.title = "Player " + str(pos)
@@ -48,6 +49,7 @@ class Player:
     def turn(self):
         self._turn = not self._turn
         self.box.turn()
+        return self.isturn()
 
     def output(self,line):
         self.window.textBrowser.append(line)
@@ -56,20 +58,18 @@ class Player:
         self.hand.append(card)
         for widg in self.cards:
             if widg.cover == True:
-                widg.setCard(card)
-                return self.show_hand()
+                return widg.setCard(card)
         widget = CardWidget(cover=False,card=card,path=card.path)
         self.box.hbox.addWidget(widget)
-        self.cards.append(widget)
-        return self.show_hand()
+        return self.cards.append(widget)
 
-    def show_score(self):
-        self.box.scorebox.display(self.score)
+    def show_score(self,score):
+        self.box.scorelabel.setText(str(score))
 
     def show_hand(self):
-        self.show_score()
-        output = str(self) + " "  + str(self.hand) + " " + str(self.score) + "\n"
-        print(self,self.hand,self.score)
+        score = self.score
+        self.show_score(score)
+        output = ''.join([str(self) , " ", str(self.hand), " ", str(score), "\n"])
         self.output(output)
 
 class Dealer(Player):
@@ -77,14 +77,33 @@ class Dealer(Player):
         Dealer Object. Controls game.
     """
 
-    def __init__(self,deck_count=1,players=[],**kwargs):
+    def __init__(self,deck_count=1,player_count=2,**kwargs):
         super().__init__(**kwargs)
         self.title = "Dealer"
         self.deck_count = deck_count
-        self.players = players
+        self.player_count = player_count
         self.current = 0
+        self.players = []
         self.deck = Deck.times(deck_count)
         self.limit = len(self.deck)//2
+        self.setup_window_labels()
+
+    def setup_window_labels(self):
+        self.window.ncards_val.setText(str(self.deck_count * 52))
+        self.window.ndecks_val.setText(str(self.deck_count))
+        self.window.nplayers_val.setText(str(self.player_count))
+
+    @property
+    def score(self):
+        if self.isturn():
+            return super().score
+        else:
+            return self.hand[0].value
+
+    def add_card(self,card):
+        super().add_card(card)
+        if len(self.cards) == 2:
+            self.cards[-1].faceDown()
 
     def start_deal(self):
         for _ in range(2):
@@ -94,30 +113,32 @@ class Dealer(Player):
 
     def deal_card(self,player):
         card = self.deck.pop()
+        self.window.ncards_val.setText(str(len(self.deck)))
         player.add_card(card)
+        player.show_hand()
         self.window.update()
+        self.window.repaint()
 
     def round(self):
         player = self.players[self.current]
-        print("round",player)
         player.turn()
-        player.show_hand()
 
     def dealer_round(self):
         self.turn()
+        for card in self.cards:
+            card.faceUp()
+        self.show_hand()
         while self.score < 16:
             self.deal_card(self)
-            self.show_hand()
         if self.score > 21:
             self.output("Dealer Busts")
+        self.turn()
 
     def player_hit(self,player):
         self.deal_card(player)
-        player.show_hand()
         if player.score > 21:
-            self.output(player.title + " Broke")
-            player.turn()
-            return False
+            self.output(player.title + " Bust")
+            return player.turn()
         return True
 
     def next_player(self):
@@ -128,18 +149,17 @@ class Dealer(Player):
             self.current = 0
             self.dealer_round()
 
-    def next_round(self):
-        for player in self.players:
-            player.cards = []
-            player.hand = []
-            player.box.reset()
-            for _ in range(2):
-                card = CardWidget(parent=self.central)
-                player.box.layout().addWidget(card)
-                player.cards.append(card)
-
     def new_game(self):
-        self.deck.shuffle()
+        if len(self.deck) <= self.limit:
+            del self.deck
+            self.deck = Deck.times(self.deck_count)
         self.start_deal()
         self.current = 0
         self.round()
+
+    def add_players(self):
+        for num in range(1, self.player_count+1):
+            args = { "pos" : num, "window" : self.window }
+            player = Player(**args)
+            self.window.addPlayer(player)
+            self.players.append(player)

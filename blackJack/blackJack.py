@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
+
 import os
 import sys
 from os.path import dirname, abspath, join
@@ -29,31 +30,23 @@ sys.path.append(PROJ_DIR)
 IMG_DIR = join(PROJ_DIR,"img")
 os.environ["IMG_DIR"] = IMG_DIR
 
-from card_counter.Players import Dealer, Player
-from card_counter.Window import Window
-
 PLAYERS=2
 DECKS=1
 
+from card_counter.Players import Dealer
+from card_counter.Window import Window
 
 class Config:
-    def __init__(self):
-        window = Window(parent=None)
-        args = {
-            "window" : window,
-            "deck_count" : DECKS,
-        }
+    def __init__(self,app):
+        window = Window(parent=None,players=PLAYERS,decks=DECKS,app=app)
+        window.show()
+        args = { "window" : window, "deck_count" : DECKS, "player_count" : PLAYERS , "pos" : 0}
         dealer = Dealer(**args)
         window.setDealer(dealer)
-        for num in range(1, PLAYERS+1):
-            args["pos"] = num
-            player = Player(**args)
-            window.addPlayer(player)
-            dealer.players.append(player)
-        window.show()
+        dealer.add_players()
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    Config()
+    Config(app)
     sys.exit(app.exec())

@@ -4,22 +4,17 @@
 			"path": "card_counter/Window.py",
 			"bookmarks": [
 				{
-					"line": 68,
-					"column": 15,
-					"label": "PlayerBox"
-				},
-				{
-					"line": 163,
+					"line": 130,
 					"column": 8,
 					"label": ""
 				},
 				{
-					"line": 182,
+					"line": 149,
 					"column": 12,
 					"label": "stay"
 				},
 				{
-					"line": 202,
+					"line": 169,
 					"column": 22,
 					"label": "start_new_game"
 				}
@@ -34,19 +29,14 @@
 					"label": "show_hand"
 				},
 				{
-					"line": 88,
+					"line": 107,
 					"column": 18,
 					"label": "start_deal"
 				},
 				{
-					"line": 122,
+					"line": 143,
 					"column": 19,
 					"label": "next_player"
-				},
-				{
-					"line": 130,
-					"column": 18,
-					"label": "next_round"
 				}
 			]
 		}

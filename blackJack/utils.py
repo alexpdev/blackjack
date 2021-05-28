@@ -18,6 +18,32 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import *
+from PyQt6.QtCore import *
+
+widgets = [
+    QApplication,
+    QMainWindow,
+    QLabel,
+    QDialog,
+    QPushButton,
+    QGroupBox,
+    QHBoxLayout,
+    QVBoxLayout,
+    QSpacerItem,
+    QMenuBar,
+    QAction,
+    QMenu,
+    QSpinBox,
+    Qt,
+    QWidget,
+    QIcon,
+    QPixmap,
+    QTextBrowser,
+    QFont
+]
+
 hx = "#FeeFFF"
 
 def main(screen,t):

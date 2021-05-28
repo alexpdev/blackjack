@@ -18,19 +18,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
-import os
-import sys
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
 
-CARDCOVER = os.path.join(os.environ["IMG_DIR"],"card_cover.png")
+import os
+
+from card_counter.MenuBar import MenuBar
+from card_counter.PlayerBox import PlayerBox
+from card_counter.utils import (QMainWindow,
+                                QHBoxLayout,
+                                QVBoxLayout,
+                                QPushButton,
+                                QLabel,
+                                Qt,
+                                QIcon,
+                                QWidget,
+                                QTextBrowser)
+
+
 
 class Window(QMainWindow):
+    ssheet = """ QMainWindow {margin: 8px; padding: 6px; background-color: #e9e9e9}"""
     def __init__(self,parent=None,**kwargs):
         super().__init__(parent=parent)
         self.players = []
+        self.setStyleSheet(self.ssheet)
         self.setWindowTitle("BlackJack")
+        self.setObjectName("MainWindow")
+        icon = QIcon(os.path.join(os.environ["IMG_DIR"],"blackjackicon.png"))
+        self.setWindowIcon(icon)
         self.setupUi()
 
     def setupUi(self):
@@ -38,6 +52,23 @@ class Window(QMainWindow):
         self.centLayout = QVBoxLayout()
         self.central.setLayout(self.centLayout)
         self.setCentralWidget(self.central)
+        self.horiztop = QHBoxLayout()
+        self.ncards_label = QLabel("Cards in Deck: ")
+        self.ncards_val = QLabel("0")
+        self.ndecks_label = QLabel("Number of Decks: ")
+        self.ndecks_val = QLabel("0")
+        self.nplayers_label = QLabel("Number of Players: ")
+        self.nplayers_val = QLabel("0")
+        for label,val in [
+            (self.ncards_label,self.ncards_val),
+            (self.ndecks_label,self.ndecks_val),
+            (self.nplayers_label,self.nplayers_val)
+            ]:
+            for widg in [label,val]:
+                self.horiztop.addWidget(widg)
+                widg.setStyleSheet("""QLabel {font-weight: bold; color: black;}""")
+            label.setAlignment(Qt.AlignmentFlag.AlignRight)
+            val.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.horiz1 = QHBoxLayout()
         self.horiz2 = QHBoxLayout()
         kwargs = {"window":self, "parent": self}
@@ -48,9 +79,13 @@ class Window(QMainWindow):
         self.horiz2.addWidget(self.button3)
         self.horiz2.addWidget(self.button1)
         self.horiz2.addWidget(self.button2)
+        self.centLayout.addLayout(self.horiztop)
         self.centLayout.addLayout(self.horiz1)
         self.centLayout.addLayout(self.horiz2)
         self.centLayout.addWidget(self.textBrowser)
+        self.mainMenuBar = MenuBar(parent=self,window=self)
+        self.setMenuBar(self.mainMenuBar)
+        self.mainMenuBar.setNativeMenuBar(False)
         self.boxes = []
 
     def addPlayer(self,player):
@@ -65,88 +100,20 @@ class Window(QMainWindow):
             button.dealer = self.dealer
         self.addPlayer(dealer)
 
-
-class PlayerBox(QGroupBox):
-    offsheet = """QGroupBox {
-        padding: 4px;
-        margin: 2px;
-        color: black;
-        border: 2px solid grey;} """
-    onsheet = """QGroupBox {
-            color: red;
-            padding: 6px;
-            margin: 3px;
-            border: 3px solid red;
-            border-radius: 3px;}"""
-
-    def __init__(self,title,parent=None,player=None):
-        super().__init__(title,parent=parent)
-        self.player = player
-        self.setStyleSheet(self.offsheet)
-        self.vbox = QVBoxLayout()
-        self.hbox = QHBoxLayout()
-        self.setLayout(self.vbox)
-        self.scorebox = QLCDNumber(parent=self)
-        self.vbox.addWidget(self.scorebox)
-        self.vbox.addLayout(self.hbox)
-        self._turn = False
-        for _ in range(2):
-            card = CardWidget(parent=self)
-            self.hbox.addWidget(card)
-            self.addCard(card)
-        self.player.box = self
-
-    @property
-    def cards(self):
-        return self.player.cards
-
-    def addCard(self,card):
-        self.player.cards.append(card)
-
-    def deleteCard(self):
-        self.player.cards = self.player.cards[1:]
-
-    def reset(self):
-        while len(self.cards):
-            card = self.cards[0]
-            card.destroy(True,True)
-            self.hbox.removeWidget(card)
-            self.deleteCard()
-            del card
-
-    def isTurn(self):
-        return self._turn
-
-    def turn(self):
-        if self.isTurn():
-            self._turn = False
-            self.setStyleSheet(self.offsheet)
-        else:
-            self._turn = True
-            self.setStyleSheet(self.onsheet)
-
-class CardWidget(QLabel):
-    stylesheet = """QLabel {
-        margin: 3px;
-        padding: 3px;}"""
-
-    def __init__(self, parent=None,card=None,cover=True,path=CARDCOVER):
-        super().__init__(parent=parent)
-        self.setStyleSheet(self.stylesheet)
-        self.cover = cover
-        self.path = path
-        self.card = card
-        self.setImage()
-
-    def setCard(self,card):
-        self.cover = False
-        self.card = card
-        self.path = card.path
-        self.setImage()
-
-    def setImage(self):
-        pixmap = QPixmap(self.path)
-        self.setPixmap(pixmap)
+    def clearPlayers(self):
+        for player in self.players[1:]:
+            self.horiz1.removeWidget(player.box)
+            player.box.reset()
+            player.box.destroy()
+            player.box.setVisible(False)
+            player.box.hide()
+            del player.box
+            self.players.remove(player)
+            self.dealer.players.remove(player)
+            del player
+            self.update()
+            self.repaint()
+        self.players = self.players[:1]
 
 class HitButton(QPushButton):
 
@@ -155,7 +122,7 @@ class HitButton(QPushButton):
 
     def __init__(self, parent=None,window=None,**kwargs):
         super().__init__(parent=parent)
-        self.window = parent
+        self.window = window
         self.dealer = None
         self.setText("Hit")
         self.setStyleSheet(self.ssheet)
@@ -163,9 +130,9 @@ class HitButton(QPushButton):
 
     def hit(self):
         for player in self.window.players:
-            if not player.isturn(): continue
-            if not self.dealer.player_hit(player):
-                self.dealer.next_player()
+            if player.isturn():
+                if self.dealer.player_hit(player): return
+                return self.dealer.next_player()
 
 class StandButton(QPushButton):
 
@@ -174,7 +141,7 @@ class StandButton(QPushButton):
 
     def __init__(self, parent=None,window=None,**kwargs):
         super().__init__(parent=parent)
-        self.window = parent
+        self.window = window
         self.dealer = None
         self.setText("Stand")
         self.setStyleSheet(self.stylesheet)
@@ -194,17 +161,21 @@ class NewGameButton(QPushButton):
 
     def __init__(self, parent=None,window=None, **kwargs):
         super().__init__(parent=parent)
-        self.window = parent
+        self.window = window
         self.dealer = None
         self.setText("New Game")
         self.pressed.connect(self.start_new_game)
         self.setStyleSheet(self.stylesheet)
 
     def start_new_game(self):
-        for player in self.window.players:
-            if player.isturn():
-                player.turn()
-            player.box.reset()
-            player.hand = []
-            player.cards = []
-        self.window.dealer.new_game()
+        if len(self.window.players) < self.dealer.player_count + 1:
+            self.window.clearPlayers()
+            self.dealer.add_players()
+        else:
+            for player in self.window.players:
+                if player.isturn():
+                    player.turn()
+                player.box.reset()
+                player.hand = []
+                player.cards = []
+            self.window.dealer.new_game()
