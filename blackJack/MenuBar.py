@@ -21,15 +21,9 @@
 
 import sys
 
-from card_counter.utils import (QMenuBar,
-                                QMenu,
-                                QAction,
-                                QDialog,
-                                QLabel,
-                                QSpinBox,
-                                QHBoxLayout,
-                                QVBoxLayout,
-                                QPushButton)
+from blackJack.utils import (QAction, QDialog, QHBoxLayout, QLabel, QMenu,
+                             QMenuBar, QPushButton, QSpinBox, QVBoxLayout)
+
 
 class MenuBar(QMenuBar):
     def __init__(self,parent=None,window=None):

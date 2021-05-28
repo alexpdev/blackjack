@@ -1,0 +1,34 @@
+doc-warnings: true
+test-warnings: true
+autodetect: true
+member-warnings: true
+pep257:
+  run: true
+
+ignore-patterns:
+  - ^env.*
+  - ^img.*
+  - ^node_modules.*
+  - ^\.vscode.*
+  - ^\.pytest_cache.*
+
+pep8:
+  run: true
+
+mccabe:
+  run: true
+
+pyroma:
+  run: true
+
+vulture:
+  run: true
+
+frosted:
+  run: true
+
+mypy:
+  run: true
+
+bandit:
+  run: true

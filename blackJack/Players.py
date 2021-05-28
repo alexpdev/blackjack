@@ -19,8 +19,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
 
-from card_counter.Deck import Deck
-from card_counter.Window import CardWidget
+from blackJack.Deck import Deck
+from blackJack.PlayerBox import CardWidget
+
 
 class Player:
 
@@ -28,6 +29,7 @@ class Player:
         self.pos = pos
         self.window = window
         self._turn = False
+        self.kwargs = kwargs
         self.hand = []
         self.cards = []
         self.box = None
@@ -57,7 +59,7 @@ class Player:
     def add_card(self,card):
         self.hand.append(card)
         for widg in self.cards:
-            if widg.cover == True:
+            if widg.cover:
                 return widg.setCard(card)
         widget = CardWidget(cover=False,card=card,path=card.path)
         self.box.hbox.addWidget(widget)
@@ -86,7 +88,7 @@ class Dealer(Player):
         self.players = []
         self.deck = Deck.times(deck_count)
         self.limit = len(self.deck)//2
-        self.setup_window_labels()
+
 
     def setup_window_labels(self):
         self.window.ncards_val.setText(str(self.deck_count * 52))
@@ -97,8 +99,7 @@ class Dealer(Player):
     def score(self):
         if self.isturn():
             return super().score
-        else:
-            return self.hand[0].value
+        return self.hand[0].value
 
     def add_card(self,card):
         super().add_card(card)
@@ -138,8 +139,9 @@ class Dealer(Player):
         self.deal_card(player)
         if player.score > 21:
             self.output(player.title + " Bust")
-            return player.turn()
-        return True
+            player.turn()
+            self.next_player()
+
 
     def next_player(self):
         self.current += 1
@@ -150,6 +152,7 @@ class Dealer(Player):
             self.dealer_round()
 
     def new_game(self):
+        self.setup_window_labels()
         if len(self.deck) <= self.limit:
             del self.deck
             self.deck = Deck.times(self.deck_count)

@@ -19,8 +19,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
 
-import random
 import os
+import random
+
 
 class InvalidType(Exception):
     def __init__(self,other):
@@ -44,8 +45,9 @@ class Deck(list):
                 for name,value in cls.values.items():
                     card = Card(suit,name,value)
                     cards.append(card)
-            return super().__init__(cards)
-        return super().__init__(*args,**kwargs)
+            super().__init__(cards)
+        else:
+            super().__init__(*args,**kwargs)
 
     @classmethod
     def times(cls,num):
@@ -58,8 +60,10 @@ class Deck(list):
         return new_deck
 
     def pop(self,x=0):
-        try: return super().pop(x)
-        except: raise DeckEmpty
+        try:
+            return super().pop(x)
+        except IndexError:
+            raise DeckEmpty
 
     def swap(self, i1, i2):
         val = self[i1]

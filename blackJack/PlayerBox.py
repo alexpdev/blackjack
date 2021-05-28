@@ -21,12 +21,8 @@
 
 import os
 
-from card_counter.utils import (QGroupBox,
-                                QVBoxLayout,
-                                QHBoxLayout,
-                                QLabel,
-                                QSpacerItem,
-                                QPixmap)
+from blackJack.utils import (QGroupBox, QHBoxLayout, QLabel, QPixmap,
+                             QSpacerItem, QVBoxLayout)
 
 IMG_DIR = os.environ.get("IMG_DIR")
 CARDCOVER = os.path.join(IMG_DIR,"card_cover.png")
@@ -52,9 +48,19 @@ class PlayerBox(QGroupBox):
         self.hbox = QHBoxLayout()
         self.hbox2 = QHBoxLayout()
         self.label = QLabel("Score: ")
-        self.label.setStyleSheet("""QLabel {color: black; font-weight: bold; font-size: 14pt; font-style: italic;}""")
+        self.label.setStyleSheet("""QLabel {
+                                    color: black;
+                                    font-weight: bold;
+                                    font-size: 14pt;
+                                    font-style: italic;}""")
         self.scorelabel = QLabel("0")
-        self.scorelabel.setStyleSheet("""QLabel {border: 1px solid black; padding: 3px; color: black; font-weight: bold; font-size: 16pt; font-style: italic;}""")
+        self.scorelabel.setStyleSheet("""QLabel {
+                                        border: 1px solid black;
+                                        padding: 3px;
+                                        color: black;
+                                        font-weight: bold;
+                                        font-size: 16pt;
+                                        font-style: italic;}""")
         self.hbox2.addWidget(self.label)
         self.hbox2.addWidget(self.scorelabel)
         self.hbox2.addSpacerItem(QSpacerItem(80,0))
@@ -79,7 +85,7 @@ class PlayerBox(QGroupBox):
         self.player.cards = self.player.cards[1:]
 
     def reset(self):
-        while len(self.cards):
+        while len(self.cards) > 0:
             card = self.cards[0]
             card.destroy(True,True)
             self.hbox.removeWidget(card)

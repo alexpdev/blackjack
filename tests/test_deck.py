@@ -6,7 +6,7 @@ proj_dir = dirname(dirname(abspath(__file__)))
 IMG_DIR = join(proj_dir,"img")
 sys.path.append(proj_dir)
 os.environ["IMG_DIR"] = IMG_DIR
-from card_counter.Deck import Deck
+from blackJack.Deck import Deck
 
 class TestDeck:
 
@@ -16,6 +16,3 @@ class TestDeck:
             assert len(deck) == i * 52
             for card in deck:
                 assert card.suit in deck.suits
-
-
-TestDeck().test_deck_setup()

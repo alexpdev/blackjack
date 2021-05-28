@@ -21,25 +21,21 @@
 
 import os
 
-from card_counter.MenuBar import MenuBar
-from card_counter.PlayerBox import PlayerBox
-from card_counter.utils import (QMainWindow,
-                                QHBoxLayout,
-                                QVBoxLayout,
-                                QPushButton,
-                                QLabel,
-                                Qt,
-                                QIcon,
-                                QWidget,
-                                QTextBrowser)
-
+from blackJack.MenuBar import MenuBar
+from blackJack.PlayerBox import PlayerBox
+from blackJack.utils import (QHBoxLayout, QIcon, QLabel, QMainWindow,
+                             QPushButton, Qt, QTextBrowser, QVBoxLayout,
+                             QWidget)
 
 
 class Window(QMainWindow):
     ssheet = """ QMainWindow {margin: 8px; padding: 6px; background-color: #e9e9e9}"""
-    def __init__(self,parent=None,**kwargs):
+    def __init__(self,parent=None,players=None,decks=None,app=None):
         super().__init__(parent=parent)
         self.players = []
+        self.players_count = players
+        self.deck_count = decks
+        self.app = app
         self.setStyleSheet(self.ssheet)
         self.setWindowTitle("BlackJack")
         self.setObjectName("MainWindow")
@@ -120,7 +116,7 @@ class HitButton(QPushButton):
     ssheet = """QPushButton{ background-color: #1259ff;
                 font: bold 20pt black; padding: px; margin: 2px;}"""
 
-    def __init__(self, parent=None,window=None,**kwargs):
+    def __init__(self, parent=None,window=None):
         super().__init__(parent=parent)
         self.window = window
         self.dealer = None
@@ -131,15 +127,14 @@ class HitButton(QPushButton):
     def hit(self):
         for player in self.window.players:
             if player.isturn():
-                if self.dealer.player_hit(player): return
-                return self.dealer.next_player()
+                self.dealer.player_hit(player)
 
 class StandButton(QPushButton):
 
     stylesheet = """QPushButton{ background-color: #1259ff;
                     font: bold 20pt black; padding: px; margin: 2px;}"""
 
-    def __init__(self, parent=None,window=None,**kwargs):
+    def __init__(self, parent=None,window=None):
         super().__init__(parent=parent)
         self.window = window
         self.dealer = None
@@ -159,7 +154,7 @@ class NewGameButton(QPushButton):
     stylesheet = """QPushButton{ background-color: #1259ff;
                     font: bold 20pt black; padding: px; margin: 2px;}"""
 
-    def __init__(self, parent=None,window=None, **kwargs):
+    def __init__(self, parent=None,window=None):
         super().__init__(parent=parent)
         self.window = window
         self.dealer = None

@@ -1,10 +1,10 @@
 {
-  "name": "card-counting",
+  "name": "blackjack",
   "version": "0.3.0",
   "description": "blackjack card counting gui app",
   "main": "index.js",
   "scripts": {
-    "start": "python card_counter/config.py"
+    "start": "python blackJack/__init__.py"
   },
   "keywords": ["gui", "game", "blackjack"],
   "author": "alexpdev",
