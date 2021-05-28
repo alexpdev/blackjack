@@ -22,9 +22,21 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction, QFont, QIcon, QPixmap
 from PyQt6.QtWidgets import (
-    QApplication, QDialog, QGroupBox, QHBoxLayout, QLabel, QMainWindow, QMenu,
-    QMenuBar, QPushButton, QSpacerItem, QSpinBox, QTextBrowser, QVBoxLayout,
-    QWidget)
+    QApplication,
+    QDialog,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QMenu,
+    QMenuBar,
+    QPushButton,
+    QSpacerItem,
+    QSpinBox,
+    QTextBrowser,
+    QVBoxLayout,
+    QWidget,
+)
 
 widgets = [
     QApplication,
@@ -45,32 +57,27 @@ widgets = [
     QIcon,
     QPixmap,
     QTextBrowser,
-    QFont
+    QFont,
 ]
 
-class ShapeVectors:
 
+class ShapeVectors:
     def __init__(self):
         self.drawn = []
         t = dict()
         self.reset(t)
 
-    def main(self,t):
-        lst = [
-            self.diamond,
-            self.heart,
-            self.spade,
-            self.club
-        ]
-        for i in range(-360,640,250):
+    def main(self, t):
+        lst = [self.diamond, self.heart, self.spade, self.club]
+        for i in range(-360, 640, 250):
             t.up()
-            t.goto(i,t.ycor())
+            t.goto(i, t.ycor())
             t.down()
             a = lst.pop()
-            a(t,100,"red")
+            a(t, 100, "red")
 
-    def diamond(self,t,d,color):
-        d = d*1.4
+    def diamond(self, t, d, color):
+        d = d * 1.4
         t.color(color)
         t.begin_fill()
         t.seth(65)
@@ -83,57 +90,57 @@ class ShapeVectors:
         t.fd(d)
         t.end_fill()
 
-    def heart(self,t,d,color):
-        d = d*1.4
-        t.goto(t.xcor(),t.ycor() - (d*.5))
+    def heart(self, t, d, color):
+        d = d * 1.4
+        t.goto(t.xcor(), t.ycor() - (d * 0.5))
         t.color(color)
         t.begin_fill()
         t.seth(40)
         t.fd(d)
-        t.circle(d/2,200)
+        t.circle(d / 2, 200)
         t.seth(120)
-        t.circle(d/2,200)
+        t.circle(d / 2, 200)
         t.fd(d)
         t.end_fill()
 
-    def spade(self,t,d,color):
+    def spade(self, t, d, color):
         t.color(color)
         t.seth(90)
         f = t.pos()
-        t.circle(d/2,-200)
-        s,sh = t.pos(),t.heading()
-        t.circle(d/2,200)
+        t.circle(d / 2, -200)
+        s, sh = t.pos(), t.heading()
+        t.circle(d / 2, 200)
         t.begin_fill()
-        t.circle(-d/2,-200)
-        t.goto(f[0],f[1]+d+d*.25)
+        t.circle(-d / 2, -200)
+        t.goto(f[0], f[1] + d + d * 0.25)
         t.goto(s)
         t.seth(sh)
-        t.circle(d/2,200)
+        t.circle(d / 2, 200)
         t.end_fill()
-        stem = d*.25
+        stem = d * 0.25
         t.begin_fill()
-        t.goto(t.xcor()-stem/2,t.ycor())
-        t.goto(t.xcor(),t.ycor()-d*3/4)
-        t.goto(t.xcor()+stem,t.ycor())
-        t.goto(t.xcor(),t.ycor()+d*3/4)
+        t.goto(t.xcor() - stem / 2, t.ycor())
+        t.goto(t.xcor(), t.ycor() - d * 3 / 4)
+        t.goto(t.xcor() + stem, t.ycor())
+        t.goto(t.xcor(), t.ycor() + d * 3 / 4)
         t.end_fill()
 
-    def club(self,t,d,color):
+    def club(self, t, d, color):
         t.color(color)
         t.seth(90)
         t.begin_fill()
-        t.circle(-d/2,-300)
-        t.circle(d/2,300)
-        t.circle(-d/2,-300)
+        t.circle(-d / 2, -300)
+        t.circle(d / 2, 300)
+        t.circle(-d / 2, -300)
         t.end_fill()
-        stem = d*.25
+        stem = d * 0.25
         t.begin_fill()
-        t.goto(t.xcor()-stem/2,t.ycor())
-        t.goto(t.xcor(),t.ycor()-d*3/4)
-        t.goto(t.xcor()+stem,t.ycor())
-        t.goto(t.xcor(),t.ycor()+d*3/4)
+        t.goto(t.xcor() - stem / 2, t.ycor())
+        t.goto(t.xcor(), t.ycor() - d * 3 / 4)
+        t.goto(t.xcor() + stem, t.ycor())
+        t.goto(t.xcor(), t.ycor() + d * 3 / 4)
         t.end_fill()
 
-    def reset(self,t):
+    def reset(self, t):
         t.home()
         t.clear()

@@ -21,20 +21,29 @@
 
 import sys
 
-from blackJack.utils import (QAction, QDialog, QHBoxLayout, QLabel, QMenu,
-                             QMenuBar, QPushButton, QSpinBox, QVBoxLayout)
+from blackJack.utils import (
+    QAction,
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QMenu,
+    QMenuBar,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+)
 
 
 class MenuBar(QMenuBar):
-    def __init__(self,parent=None,window=None):
+    def __init__(self, parent=None, window=None):
         super().__init__(parent=parent)
         self.window = window
         self.setNativeMenuBar(False)
         self.window.setMenuBar(self)
-        self.filemenu = QMenu("File",parent=self)
+        self.filemenu = QMenu("File", parent=self)
         self.addMenu(self.filemenu)
         self.settings = QMenu("Preferences", parent=self)
-        self.settingsdialog = Settings(parent=self,window=self.window)
+        self.settingsdialog = Settings(parent=self, window=self.window)
         self.addMenu(self.settings)
         self.setVisible(True)
         self.exitaction = QAction("Exit")
@@ -56,8 +65,9 @@ class MenuBar(QMenuBar):
     def exit_app(self):
         sys.exit()
 
+
 class Settings(QDialog):
-    def __init__(self,parent=None,window=None):
+    def __init__(self, parent=None, window=None):
         super().__init__(parent=parent)
         self.window = window
         self.setSizeGripEnabled(False)
@@ -66,8 +76,8 @@ class Settings(QDialog):
         self.setModal(True)
         self.vlayout = QVBoxLayout()
         self.setLayout(self.vlayout)
-        self.playersLabel = QLabel("Number of Players",parent=self)
-        self.decksLabel = QLabel("Number of Decks",parent=self)
+        self.playersLabel = QLabel("Number of Players", parent=self)
+        self.decksLabel = QLabel("Number of Decks", parent=self)
         self.playersSpin = QSpinBox(parent=self)
         self.decksSpin = QSpinBox(parent=self)
         self.hLayout1 = QHBoxLayout()
@@ -79,8 +89,8 @@ class Settings(QDialog):
         self.vlayout.addLayout(self.hLayout1)
         self.vlayout.addLayout(self.hLayout2)
         self.hLayout3 = QHBoxLayout()
-        self.okayButton = QPushButton("Submit",parent=self)
-        self.cancelButton = QPushButton("Cancel",parent=self)
+        self.okayButton = QPushButton("Submit", parent=self)
+        self.cancelButton = QPushButton("Cancel", parent=self)
         self.hLayout3.addWidget(self.okayButton)
         self.hLayout3.addWidget(self.cancelButton)
         self.vlayout.addLayout(self.hLayout3)

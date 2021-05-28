@@ -21,13 +21,27 @@
 
 import os
 
-from blackJack.utils import (QGroupBox, QHBoxLayout, QLabel, QPixmap,
-                             QSpacerItem, QVBoxLayout)
+from blackJack.utils import (
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPixmap,
+    QSpacerItem,
+    QVBoxLayout,
+)
 
 IMG_DIR = os.environ.get("IMG_DIR")
-CARDCOVER = os.path.join(IMG_DIR,"card_cover.png")
+# directory containing all png files for cards
+CARDCOVER = os.path.join(IMG_DIR, "card_cover.png")
+# path to png of a card face down
+
 
 class PlayerBox(QGroupBox):
+    """
+    PlayerBox : Subclass of QGroupBox
+    Returns:
+        GroupBoxWidget: data and cards for each player
+    """
     offsheet = """QGroupBox {
         padding: 4px;
         margin: 2px;
@@ -40,30 +54,37 @@ class PlayerBox(QGroupBox):
             border: 3px solid red;
             border-radius: 3px;}"""
 
-    def __init__(self,title,parent=None,player=None):
-        super().__init__(title,parent=parent)
+    def __init__(self, title, parent=None, player=None):
+        """
+        __init__ Constructor for PlayerBox
+        """
+        super().__init__(title, parent=parent)
         self.player = player
         self.setStyleSheet(self.offsheet)
         self.vbox = QVBoxLayout()
         self.hbox = QHBoxLayout()
         self.hbox2 = QHBoxLayout()
         self.label = QLabel("Score: ")
-        self.label.setStyleSheet("""QLabel {
+        self.label.setStyleSheet(
+            """QLabel {
                                     color: black;
                                     font-weight: bold;
                                     font-size: 14pt;
-                                    font-style: italic;}""")
+                                    font-style: italic;}"""
+        )
         self.scorelabel = QLabel("0")
-        self.scorelabel.setStyleSheet("""QLabel {
+        self.scorelabel.setStyleSheet(
+            """QLabel {
                                         border: 1px solid black;
                                         padding: 3px;
                                         color: black;
                                         font-weight: bold;
                                         font-size: 16pt;
-                                        font-style: italic;}""")
+                                        font-style: italic;}"""
+        )
         self.hbox2.addWidget(self.label)
         self.hbox2.addWidget(self.scorelabel)
-        self.hbox2.addSpacerItem(QSpacerItem(80,0))
+        self.hbox2.addSpacerItem(QSpacerItem(80, 0))
         self.setLayout(self.vbox)
         self.vbox.addLayout(self.hbox2)
         self.vbox.addLayout(self.hbox)
@@ -78,7 +99,7 @@ class PlayerBox(QGroupBox):
     def cards(self):
         return self.player.cards
 
-    def addCard(self,card):
+    def addCard(self, card):
         self.player.cards.append(card)
 
     def deleteCard(self):
@@ -87,7 +108,7 @@ class PlayerBox(QGroupBox):
     def reset(self):
         while len(self.cards) > 0:
             card = self.cards[0]
-            card.destroy(True,True)
+            card.destroy(True, True)
             self.hbox.removeWidget(card)
             self.deleteCard()
             del card
@@ -103,12 +124,13 @@ class PlayerBox(QGroupBox):
             self._turn = True
             self.setStyleSheet(self.onsheet)
 
+
 class CardWidget(QLabel):
     stylesheet = """QLabel {
         margin: 4px;
         padding: 5px;}"""
 
-    def __init__(self, parent=None,card=None,cover=True,path=CARDCOVER):
+    def __init__(self, parent=None, card=None, cover=True, path=CARDCOVER):
         super().__init__(parent=parent)
         self.setStyleSheet(self.stylesheet)
         self.cover = cover
@@ -123,7 +145,7 @@ class CardWidget(QLabel):
     def faceUp(self):
         self.setImage()
 
-    def setCard(self,card):
+    def setCard(self, card):
         self.cover = False
         self.card = card
         self.path = card.path

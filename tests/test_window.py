@@ -21,46 +21,9 @@
 
 import os
 import sys
-from pathlib import Path
-
-from PyQt6.QtWidgets import QApplication
-
-__version__ = "0.3.1"
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
-os.environ["IMG_DIR"] = os.path.join(sys.path[0], "img")
-
-PLAYERS = 2
-DECKS = 1
-
-from blackJack.Players import Dealer
-from blackJack.Window import Window
-
-
-def main():
-    """
-    `main()` : Main function to invoke game
-
-    Args:
-        app (QApplication): GUI Application
-    """
-
-    app = QApplication(sys.argv)
-    window = Window(parent=None, players=PLAYERS, decks=DECKS, app=app)
-
-    args = {
-        "window": window,
-        "deck_count": DECKS,
-        "player_count": PLAYERS ,
-        "pos": 0,
-    }
-
-    window.show()
-    dealer = Dealer(**args)
-    window.setDealer(dealer)
-    dealer.add_players()
-    sys.exit(app.exec())
-
-
-if __name__ == "__main__":
-    main()
+import pytest
+from PyQt6.QtWidgets import QMainWindow, QApplication
+proj_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(proj_dir)
+os.environ["IMG_DIR"] = os.path.join(proj_dir,"img")
+from blackJack.Players import Player, Dealer

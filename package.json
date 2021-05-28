@@ -1,12 +1,24 @@
 {
   "name": "blackjack",
-  "version": "0.3.0",
-  "description": "blackjack card counting gui app",
-  "main": "index.js",
+  "displayName": "BlackJack",
+  "version": "0.3.1",
+  "description": "BlackJack GUI application using Qt for GUI",
+  "main": "blackJack/__init__.py",
   "scripts": {
     "start": "python blackJack/__init__.py"
   },
-  "keywords": ["gui", "game", "blackjack"],
+  "keywords": [
+    "GUI",
+    "Game",
+    "BlackJack",
+    "Probability",
+    "Counting",
+    "Cards",
+    "Deck",
+    "Gambling"
+  ],
   "author": "alexpdev",
-  "license": "GNU GPL v3"
+  "license": "GNU GPLv3",
+  "readme": "./README.md",
+  "icon": "./img/blackjackicon.png"
 }
