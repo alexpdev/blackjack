@@ -19,17 +19,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
 
-import os
 import sys
-import pytest
-from PyQt6.QtWidgets import QMainWindow, QApplication
-proj_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(proj_dir)
-os.environ["IMG_DIR"] = os.path.join(proj_dir,"img")
+from tests.context import app
+from PyQt6.QtWidgets import QMainWindow
 from blackJack.Players import Player, Dealer
 
 class TestPlayer:
-    app = QApplication(sys.argv)
+    app = app
     window = QMainWindow()
 
     def test_player_setup(self):

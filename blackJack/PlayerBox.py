@@ -66,21 +66,25 @@ class PlayerBox(QGroupBox):
         self.hbox2 = QHBoxLayout()
         self.label = QLabel("Score: ")
         self.label.setStyleSheet(
-            """QLabel {
-                                    color: black;
-                                    font-weight: bold;
-                                    font-size: 14pt;
-                                    font-style: italic;}"""
+            """
+            QLabel {
+            color: black;
+            font-weight: bold;
+            font-size: 14pt;
+            font-style: italic;}
+            """
         )
         self.scorelabel = QLabel("0")
         self.scorelabel.setStyleSheet(
-            """QLabel {
-                                        border: 1px solid black;
-                                        padding: 3px;
-                                        color: black;
-                                        font-weight: bold;
-                                        font-size: 16pt;
-                                        font-style: italic;}"""
+            """
+            QLabel {
+            border: 1px solid black;
+            padding: 3px;
+            color: black;
+            font-weight: bold;
+            font-size: 16pt;
+            font-style: italic;}
+            """
         )
         self.hbox2.addWidget(self.label)
         self.hbox2.addWidget(self.scorelabel)

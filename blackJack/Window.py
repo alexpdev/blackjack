@@ -92,7 +92,7 @@ class Window(QMainWindow):
 
         # information labels
         self.ncards_label = QLabel("Cards in Deck: ")
-        self.ncards_val = QLabel("0")
+        self.ncards_val = QLabel(str(self.deck_count * 52))
         self.ndecks_label = QLabel("Number of Decks: ")
         self.ndecks_val = QLabel("0")
         self.nplayers_label = QLabel("Number of Players: ")

@@ -19,15 +19,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
 
-import os
 import sys
-from os.path import abspath, dirname, join
 import pytest
-proj_dir = dirname(dirname(abspath(__file__)))
-IMG_DIR = join(proj_dir,"img")
-sys.path.append(proj_dir)
-os.environ["IMG_DIR"] = IMG_DIR
-from blackJack.Deck import Deck
+from tests.context import app
+from blackJack.Deck import Deck, Card, DeckEmpty
 
 class TestDeck:
 
@@ -37,3 +32,25 @@ class TestDeck:
             assert len(deck) == i * 52
             for card in deck:
                 assert card.suit in deck.suits
+
+    def test_shuffle(self):
+        deck = Deck.times(3)
+        assert len(deck) > 0
+        assert len(deck) == 3*52
+        first = deck[1]
+        deck.shuffle()
+        assert first != deck[1]
+
+    def test_pop(self):
+        deck = Deck.times(2)
+        deck.shuffle()
+        c1 = deck[0]
+        card = deck.pop()
+        assert c1 == card
+        assert type(card) == Card
+        for i in range(len(deck)):
+            l = len(deck)
+            c = deck.pop()
+            assert type(c) == Card
+            assert len(deck) == l - 1
+        assert pytest.raises(DeckEmpty, deck.pop())
