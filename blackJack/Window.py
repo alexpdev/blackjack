@@ -23,17 +23,15 @@ import os
 
 from blackJack.MenuBar import MenuBar
 from blackJack.PlayerBox import PlayerBox
-from blackJack.utils import (
-    QHBoxLayout,
-    QIcon,
-    QLabel,
-    QMainWindow,
-    QPushButton,
-    Qt,
-    QTextBrowser,
-    QVBoxLayout,
-    QWidget,
-)
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import (QHBoxLayout,
+                            QLabel,
+                            QMainWindow,
+                            QPushButton,
+                            QTextBrowser,
+                            QVBoxLayout,
+                            QWidget)
 
 
 class Window(QMainWindow):

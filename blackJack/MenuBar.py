@@ -20,18 +20,15 @@
 #########################################################################
 
 import sys
-
-from blackJack.utils import (
-    QAction,
-    QDialog,
-    QHBoxLayout,
-    QLabel,
-    QMenu,
-    QMenuBar,
-    QPushButton,
-    QSpinBox,
-    QVBoxLayout,
-)
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import (QDialog,
+                            QHBoxLayout,
+                            QLabel,
+                            QMenu,
+                            QMenuBar,
+                            QPushButton,
+                            QSpinBox,
+                            QVBoxLayout)
 
 
 class MenuBar(QMenuBar):

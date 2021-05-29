@@ -21,14 +21,12 @@
 
 import os
 
-from blackJack.utils import (
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QPixmap,
-    QSpacerItem,
-    QVBoxLayout,
-)
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import (QGroupBox,
+                            QHBoxLayout,
+                            QLabel,
+                            QSpacerItem,
+                            QVBoxLayout)
 
 IMG_DIR = os.environ.get("IMG_DIR")
 # directory containing all png files for cards
@@ -62,6 +60,7 @@ class PlayerBox(QGroupBox):
         self.player = player
         self.setStyleSheet(self.offsheet)
         self.vbox = QVBoxLayout()
+        self.setLayout(self.vbox)
         self.hbox = QHBoxLayout()
         self.hbox2 = QHBoxLayout()
         self.label = QLabel("Score: ")
@@ -89,7 +88,6 @@ class PlayerBox(QGroupBox):
         self.hbox2.addWidget(self.label)
         self.hbox2.addWidget(self.scorelabel)
         self.hbox2.addSpacerItem(QSpacerItem(80, 0))
-        self.setLayout(self.vbox)
         self.vbox.addLayout(self.hbox2)
         self.vbox.addLayout(self.hbox)
         self._turn = False
@@ -101,15 +99,25 @@ class PlayerBox(QGroupBox):
 
     @property
     def cards(self):
+        # shortcut method accessing
+        # players cards property
         return self.player.cards
 
     def addCard(self, card):
+        # shortcut for adding card widget
+        # to players list of cards
         self.player.cards.append(card)
 
     def deleteCard(self):
+        # removes card from Players list of cards property
         self.player.cards = self.player.cards[1:]
 
     def reset(self):
+        """
+        `self.reset()`
+        Clears PlayerBox of all widgets. Called when cuttent
+        round ends and new deal begins.
+        """
         while len(self.cards) > 0:
             card = self.cards[0]
             card.destroy(True, True)
@@ -118,9 +126,16 @@ class PlayerBox(QGroupBox):
             del card
 
     def isTurn(self):
+        # returns True if currently players Turn
         return self._turn
 
     def turn(self):
+        """
+        flips `self.turn` property as well as change the
+
+        style of PlayerBox to indicate it is or isn't currently
+        players turn
+        """
         if self.isTurn():
             self._turn = False
             self.setStyleSheet(self.offsheet)
@@ -130,11 +145,27 @@ class PlayerBox(QGroupBox):
 
 
 class CardWidget(QLabel):
+    """
+    CardWidget Widget which holds the image of the card it represents.
+
+    Args:
+        QLabel (QPixmap): Either a specific card in deck or
+        back of card for when it is facedown.
+    """
     stylesheet = """QLabel {
         margin: 4px;
         padding: 5px;}"""
 
     def __init__(self, parent=None, card=None, cover=True, path=CARDCOVER):
+        """
+        __init__ Constructor for CardWidget class.
+
+        Args:
+            parent (QWidget, optional): parent widget for CardWidget. Defaults to None.
+            card (Card(), optional): Card object. Defaults to None.
+            cover (bool, optional): If True use Cardcoverpath else use give path.
+            path (str, optional): path to Pixmap Image. Defaults to CARDCOVER.
+        """
         super().__init__(parent=parent)
         self.setStyleSheet(self.stylesheet)
         self.cover = cover
@@ -143,18 +174,27 @@ class CardWidget(QLabel):
         self.setImage()
 
     def faceDown(self):
+        """
+        `self.faceDown()` called for dealers face down card.
+        """
         pixmap = QPixmap(CARDCOVER)
         self.setPixmap(pixmap)
 
     def faceUp(self):
+        # show value of a facedown card
         self.setImage()
 
     def setCard(self, card):
+        """
+        `self.setCard(card)` assign Card objrct to CardWidget
+        Args: card (Card object)
+        """
         self.cover = False
         self.card = card
         self.path = card.path
         self.setImage()
 
     def setImage(self):
+        # assign image path as pixmap
         pixmap = QPixmap(self.path)
         self.setPixmap(pixmap)
