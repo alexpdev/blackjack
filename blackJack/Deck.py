@@ -24,51 +24,47 @@ import random
 
 
 class InvalidType(Exception):
-    """
-    `InvalidType`
-    - 'Tried comparing Card object with some other
-        incompatable datatype'
-    """
+    """Exception Class for Invalid type comparison."""
 
     def __init__(self, other):
-        """
-        `__init__` Initialize Exception and print
-        incompatible datatype compared.
-
-        Args:
-            other (Any): Not Card Object
-        """
+        """Initialize Exception."""
         print(type(other))
 
 
 class DeckEmpty(Exception):
-    """
-    `DeckEmpty`
-    - No more cards in deck to deal.
-    """
+    """Deck Empty when no more cards in deck to deal."""
+
     pass
 
 
 class Deck(list):
-    """
-    # `Deck` of cards.
+    """Deck of cards.
 
-    Args: `list` : subclass of list object
+    Subclass of list object representing a deck of cards.
     """
+
     suits = ("clubs", "spade", "hearts", "diamonds")
 
     values = {
-        "2": 2, "3": 3, "4": 4,
-        "5": 5, "6": 6, "7": 7,
-        "8": 8, "9": 9, "10": 10,
-        "jack": 10, "queen": 10,
-        "king": 10, "ace": 11
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9,
+        "10": 10,
+        "jack": 10,
+        "queen": 10,
+        "king": 10,
+        "ace": 11,
     }
 
     def __init__(cls, *args, **kwargs):
-        """
-        `Deck.__init__` Create Deck Object.
-        - list of 52 Card objects based on Deck of cards.
+        """Create Deck Object.
+
+        List of 52 Card objects based on deck of playing cards.
         """
         if not args and not kwargs:
             cards = []
@@ -82,12 +78,9 @@ class Deck(list):
 
     @classmethod
     def times(cls, num):
-        """
-        ### `Deck.times(num)`
-        - Class method constructor for creating num decks
-        at once.
-        - Args: num (int): Number of decks.
-        - Returns: Deck object
+        """Class method constructor for creating multiple decks.
+
+        Returns: Deck object * number of decks.
         """
         deck = []
         for _ in range(num):
@@ -99,8 +92,8 @@ class Deck(list):
         return new_deck
 
     def pop(self, x=0):
-        """
-        `deck.pop()` remove 1 card from deck at index `x`
+        """Remove 1 card from deck at index `x`.
+
         - Args: x (int, optional): index. Defaults to 0.
         - Raises: DeckEmpty: when no cards left
         - Returns: Card object: removed card.
@@ -111,8 +104,7 @@ class Deck(list):
             raise DeckEmpty
 
     def swap(self, i1, i2):
-        """
-        swap utility for shuffling deck
+        """Swap utility for shuffling deck.
 
         Args:
             i1 (Card): first card for swapping
@@ -123,11 +115,9 @@ class Deck(list):
         self[i2] = val
 
     def shuffle(self, t=8):
-        """
-        shuffle Shuffle Cards in DeckEmpty
+        """Shuffle Cards in deck.
 
-        Args:
-            t (int, optional): number of times to shuffle the deck
+        Args: t (int, optional): number of times to shuffle the deck
         """
         for _ in range(len(self) * t):
             i1 = random.choice(range(len(self)))
@@ -136,18 +126,14 @@ class Deck(list):
 
 
 class Card:
-    """
-     Card Object == contents of Deck Object.
-    """
+    """Card Object == contents of Deck Object."""
 
     def __init__(self, suit, name, value):
-        """
-        __init__ Constructor for Card Objects
+        """Construct instance of Card Objects.
 
-        Args:
-            suit (str): name of suit e.g. Diamonds Hearts
-            name (str): name of card e.g. King 7 Ace
-            value (int): Point value in blackjackicon
+        suit (str): name of suit e.g. Diamonds Hearts
+        name (str): name of card e.g. King 7 Ace
+        value (int): Point value in blackjackicon
         """
         self.suit = suit
         self.name = name
@@ -155,40 +141,38 @@ class Card:
         self.path = self.getPath()
 
     def getPath(self):
-        """
-        getPath retreive filesystem location for self
+        """Get path retreives filesystem location for card.
 
-        Returns:
-            str: absolute path to image file
+        str: absolute path to image file
         """
         faces = {"ace": 1, "jack": 11, "queen": 12, "king": 13}
         img_dir = os.environ.get("IMG_DIR")
         val = str(faces[self.name]) if self.name in faces else str(self.value)
-        filename = ''.join([self.suit, "_", val, ".png"])
+        filename = "".join([self.suit, "_", val, ".png"])
         return os.path.join(img_dir, filename)
 
     def __str__(self):
-        # string representation of object
+        """Representation of an object as a string."""
         return "<" + self.name.title() + ":" + self.suit.title() + ">"
 
     def __repr__(self):
-        # same as string
+        """Act same as string function."""
         return str(self)
 
     def __lt__(self, other):
-        # less than < other
+        """Less than < other."""
         if self.value < other.value:
             return True
         return False
 
     def __ne__(self, other):
-        # not equal != other
+        """Not equal != other."""
         if self.__eq__(other):
             return False
         return True
 
     def __gt__(self, other):
-        # greater than > other
+        """Greater than > other."""
         if isinstance(other, type(self)):
             other = other.value
         if self.value > other:
@@ -196,37 +180,34 @@ class Card:
         return False
 
     def __eq__(self, other):
-        # equal == other
-
+        """Equal == other."""
         if isinstance(other, type(self)):
             return self.value == other.value
-
         if isinstance(other, str):
             return self.suit == other
-
         if isinstance(other, int):
             return self.value == other
         return False
 
     def __le__(self, other):
-        # less than or equel <= other
+        """Less than or equel <= other."""
         if self.__eq__(other) or self.__lt__(other):
             return True
         return False
 
     def __ge__(self, other):
-        # greater than or equal >= other
+        """Greater than or equal >= other."""
         if self.__eq__(other) or self.__gt__(other):
             return True
         return False
 
     def ismatch(self, other):
-        # self.suit == other.suit
+        """Suit matches other suit."""
         if self.suit == other.suit:
             return True
         return False
 
     def __typecheck__(self, other):
-        # check object type to see if it's a Card
+        """Check object type to see if it is a card."""
         if not isinstance(other, type(self)):
             raise InvalidType(other)

@@ -22,11 +22,7 @@
 import os
 
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import (QGroupBox,
-                            QHBoxLayout,
-                            QLabel,
-                            QSpacerItem,
-                            QVBoxLayout)
+from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout
 
 IMG_DIR = os.environ.get("IMG_DIR")
 # Directory containing all png files for cards.

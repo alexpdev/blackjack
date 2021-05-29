@@ -30,7 +30,7 @@ class Player:
     """
 
     def __init__(self, pos=None, window=None, **kwargs):
-        """Player Constructor Function"""
+        """Player Constructor Function."""
         self.pos = pos
         self.window = window
         self._turn = False
@@ -46,7 +46,7 @@ class Player:
         return sum(card.value for card in self.hand)
 
     def __str__(self):
-        """String representation of player.
+        """Player Title.
 
         Returns player's title property.
         """
@@ -57,7 +57,7 @@ class Player:
         return self.title
 
     def isturn(self):
-        """Returns True or False.
+        """Return True or False.
 
         Called by dealer and Window Buttons to
         check who's turn it is.
@@ -80,7 +80,7 @@ class Player:
         self.window.textBrowser.append(line)
 
     def add_card(self, card):
-        """Adds a Card object to Players hand.
+        """Add a Card object to Players hand.
 
         Args: card (Card()): Card object popped off deck
         Takes a card just poped off Deck by dealer.
@@ -98,26 +98,27 @@ class Player:
 
         Args: score (int): self.score
         """
-        self.box.scorelabel.setText(str(score))
+        self.box.scorelabel.setText(score)
 
     def show_hand(self):
         """Wtites logs details about the score and cards in players hand."""
-        score = self.score
+        score = str(self.score)
         self.show_score(score)
-        output = "".join([str(self), " ", str(self.hand), " ", str(score), "\n"])
+        output = "".join([str(self), " ", str(self.hand), " ", score, "\n"])
         self.output(output)
 
 
 class Dealer(Player):
     """Dealer Object. Controls most aspects of the game.
+
     Subclass of Player but requires a few extra keyword args
     """
 
     def __init__(self, deck_count=1, player_count=2, **kwargs):
         """Dealer constructor.
 
-        Args: deck_count (int, optional): Number of decks to use. Defaults to 1.
-        player_count (int, optional): Total players in game. Defaults to 2.
+        Args: deck_count(int, optional): Number of decks to use.
+        player_count (int, optional): Total players in game.
         """
         super().__init__(**kwargs)
         self.title = "Dealer"
@@ -129,7 +130,7 @@ class Dealer(Player):
         self.limit = len(self.deck) // 2
 
     def setup_window_labels(self):
-        """Updates card count and other details displayed in the main window."""
+        """Update card count and other details displayed in the main window."""
         self.window.ncards_val.setText(str(self.deck_count * 52))
         self.window.ndecks_val.setText(str(self.deck_count))
         self.window.nplayers_val.setText(str(self.player_count))
@@ -154,7 +155,7 @@ class Dealer(Player):
             self.cards[-1].faceDown()
 
     def start_deal(self):
-        """Initial deal sequence of 2 cards to each player."""
+        """Initialize deal sequence of 2 cards to each player."""
         for _ in range(2):
             for player in self.players:
                 self.deal_card(player)
@@ -178,7 +179,7 @@ class Dealer(Player):
         player.turn()
 
     def dealer_round(self):
-        """Called when all other players have had their turn at hitting."""
+        """Call when all other players have had their turn at hitting."""
         self.turn()
         for card in self.cards:
             card.faceUp()
@@ -190,7 +191,7 @@ class Dealer(Player):
         self.turn()
 
     def player_hit(self, player):
-        """Called when Player asks dealer to "hit".
+        """Call when Player asks dealer to "hit".
 
         Args: Player (player object instance) the player whos turn it is.
         """
@@ -201,7 +202,7 @@ class Dealer(Player):
             self.next_player()
 
     def next_player(self):
-        """Called when previous players turn ended."""
+        """Call when previous players turn ended."""
         self.current += 1
         if self.current < len(self.players):
             self.round()

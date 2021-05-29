@@ -38,13 +38,10 @@ from blackJack.Window import Window
 
 
 def main():
-    """
-    `main()` : Main function to invoke game
+    """Initialize function to invoke game.
 
-    Args:
-        app (QApplication): GUI Application
+    Args: app (QApplication): GUI Application
     """
-
     app = QApplication(sys.argv)
     window = Window(parent=None, players=PLAYERS, decks=DECKS, app=app)
 

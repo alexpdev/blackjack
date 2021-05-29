@@ -21,14 +21,16 @@
 
 import sys
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import (QDialog,
-                            QHBoxLayout,
-                            QLabel,
-                            QMenu,
-                            QMenuBar,
-                            QPushButton,
-                            QSpinBox,
-                            QVBoxLayout)
+from PyQt6.QtWidgets import (
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QMenu,
+    QMenuBar,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+)
 
 
 class MenuBar(QMenuBar):
@@ -61,7 +63,7 @@ class MenuBar(QMenuBar):
         self.newGameAction.triggered.connect(self.newGame)
 
     def newGame(self):
-        """New Game Action for File Submenu.
+        """Start New Game Action for File Submenu.
 
         Same as pressing NewGameButton.
         """
