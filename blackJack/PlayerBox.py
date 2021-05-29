@@ -29,17 +29,17 @@ from PyQt6.QtWidgets import (QGroupBox,
                             QVBoxLayout)
 
 IMG_DIR = os.environ.get("IMG_DIR")
-# directory containing all png files for cards
+# Directory containing all png files for cards.
 CARDCOVER = os.path.join(IMG_DIR, "card_cover.png")
-# path to png of a card face down
+# Path to png of a card face down.
 
 
 class PlayerBox(QGroupBox):
+    """PlayerBox Subclass of QGroupBox.
+
+    Returns GroupBoxWidget data and cards for each player.
     """
-    PlayerBox : Subclass of QGroupBox
-    Returns:
-        GroupBoxWidget: data and cards for each player
-    """
+
     offsheet = """QGroupBox {
         padding: 4px;
         margin: 2px;
@@ -53,9 +53,7 @@ class PlayerBox(QGroupBox):
             border-radius: 3px;}"""
 
     def __init__(self, title, parent=None, player=None):
-        """
-        __init__ Constructor for PlayerBox
-        """
+        """Construct a PlayerBox Widget."""
         super().__init__(title, parent=parent)
         self.player = player
         self.setStyleSheet(self.offsheet)
@@ -99,24 +97,21 @@ class PlayerBox(QGroupBox):
 
     @property
     def cards(self):
-        # shortcut method accessing
-        # players cards property
+        """Shortcut method accessing players cards property."""
         return self.player.cards
 
     def addCard(self, card):
-        # shortcut for adding card widget
-        # to players list of cards
+        """Shortcut for adding card widget to players list of cards."""
         self.player.cards.append(card)
 
     def deleteCard(self):
-        # removes card from Players list of cards property
+        """Remove card from Players list of cards property."""
         self.player.cards = self.player.cards[1:]
 
     def reset(self):
-        """
-        `self.reset()`
-        Clears PlayerBox of all widgets. Called when cuttent
-        round ends and new deal begins.
+        """Clear PlayerBox of all widgets.
+
+        Called when cuttent round ends and new deal begins.
         """
         while len(self.cards) > 0:
             card = self.cards[0]
@@ -126,15 +121,14 @@ class PlayerBox(QGroupBox):
             del card
 
     def isTurn(self):
-        # returns True if currently players Turn
+        """Return True if currently players turn."""
         return self._turn
 
     def turn(self):
-        """
-        flips `self.turn` property as well as change the
+        """Flip `self.turn` property False or True.
 
-        style of PlayerBox to indicate it is or isn't currently
-        players turn
+        Changes the style of PlayerBox to indicate if it
+        is or isn't currently players turn.
         """
         if self.isTurn():
             self._turn = False
@@ -145,26 +139,22 @@ class PlayerBox(QGroupBox):
 
 
 class CardWidget(QLabel):
-    """
-    CardWidget Widget which holds the image of the card it represents.
+    """CardWidget holds the image of the card it represents.
 
-    Args:
-        QLabel (QPixmap): Either a specific card in deck or
-        back of card for when it is facedown.
+    QLabel (QPixmap) Either a specific card or back of card if it is facedown.
     """
+
     stylesheet = """QLabel {
         margin: 4px;
         padding: 5px;}"""
 
     def __init__(self, parent=None, card=None, cover=True, path=CARDCOVER):
-        """
-        __init__ Constructor for CardWidget class.
+        """Construct new CardWidget instance.
 
-        Args:
-            parent (QWidget, optional): parent widget for CardWidget. Defaults to None.
-            card (Card(), optional): Card object. Defaults to None.
-            cover (bool, optional): If True use Cardcoverpath else use give path.
-            path (str, optional): path to Pixmap Image. Defaults to CARDCOVER.
+        parent (QWidget, optional): parent widget for CardWidget. Defaults to None.
+        card (Card(), optional): Card object. Defaults to None.
+        cover (bool, optional): If True use Cardcoverpath else use give path.
+        path (str, optional): path to Pixmap Image. Defaults to CARDCOVER.
         """
         super().__init__(parent=parent)
         self.setStyleSheet(self.stylesheet)
@@ -174,19 +164,17 @@ class CardWidget(QLabel):
         self.setImage()
 
     def faceDown(self):
-        """
-        `self.faceDown()` called for dealers face down card.
-        """
+        """Call to hide value of dealers facedown card."""
         pixmap = QPixmap(CARDCOVER)
         self.setPixmap(pixmap)
 
     def faceUp(self):
-        # show value of a facedown card
+        """Flip a facedown card to up position."""
         self.setImage()
 
     def setCard(self, card):
-        """
-        `self.setCard(card)` assign Card objrct to CardWidget
+        """Assign Card objrct to a CardWidget.
+
         Args: card (Card object)
         """
         self.cover = False
@@ -195,6 +183,6 @@ class CardWidget(QLabel):
         self.setImage()
 
     def setImage(self):
-        # assign image path as pixmap
+        """Assign image path as pixmap."""
         pixmap = QPixmap(self.path)
         self.setPixmap(pixmap)

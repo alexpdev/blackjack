@@ -32,7 +32,14 @@ from PyQt6.QtWidgets import (QDialog,
 
 
 class MenuBar(QMenuBar):
+    """QMenuBar instance for main window menubar.
+
+    Assigns object instance to as QMainWindow Menubar and creates
+    File and Settings submenu.
+    """
+
     def __init__(self, parent=None, window=None):
+        """Construct MenuBar instance and create submenus."""
         super().__init__(parent=parent)
         self.window = window
         self.setNativeMenuBar(False)
@@ -54,17 +61,29 @@ class MenuBar(QMenuBar):
         self.newGameAction.triggered.connect(self.newGame)
 
     def newGame(self):
+        """New Game Action for File Submenu.
+
+        Same as pressing NewGameButton.
+        """
         self.window.button3.start_new_game()
 
     def open_settings(self):
+        """Create a QDialog with editable options related to gameplay.
+
+        Options include: Number of players, Number of Decks.
+        """
         self.settingsdialog.open()
 
     def exit_app(self):
+        """Quit program."""
         sys.exit()
 
 
 class Settings(QDialog):
+    """Open new window with editable options that effect gameplay."""
+
     def __init__(self, parent=None, window=None):
+        """Construct Settings Dialog."""
         super().__init__(parent=parent)
         self.window = window
         self.setSizeGripEnabled(False)
@@ -96,5 +115,6 @@ class Settings(QDialog):
         self.finished.connect(self.finishedSignal)
 
     def finishedSignal(self):
+        """When Settings Window returns accept or reject signals."""
         self.window.dealer.deck_count = self.decksSpin.value()
         self.window.dealer.player_count = self.playersSpin.value()
