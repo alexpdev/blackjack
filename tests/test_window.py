@@ -22,8 +22,8 @@
 
 import sys
 import os
+from PyQt6.QtWidgets import QLabel
 from tests.context import app
-from blackJack.utils import QLabel
 from blackJack.Window import Window
 
 class TestWindow:

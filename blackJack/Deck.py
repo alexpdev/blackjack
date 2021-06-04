@@ -211,3 +211,4 @@ class Card:
         """Check object type to see if it is a card."""
         if not isinstance(other, type(self)):
             raise InvalidType(other)
+        return True

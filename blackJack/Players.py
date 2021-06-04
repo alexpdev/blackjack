@@ -83,7 +83,7 @@ class Player:
         """Add a Card object to Players hand.
 
         Args: card (Card()): Card object popped off deck
-        Takes a card just poped off Deck by dealer.
+        Takes a card just poped off Deck by dealer and includes it in hand.
         """
         self.hand.append(card)
         for widg in self.cards:
@@ -179,7 +179,7 @@ class Dealer(Player):
         player.turn()
 
     def dealer_round(self):
-        """Call when all other players have had their turn at hitting."""
+        """Call when all other players have had their turn betting."""
         self.turn()
         for card in self.cards:
             card.faceUp()

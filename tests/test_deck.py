@@ -19,10 +19,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
 
-import sys
 import pytest
+from pathlib import Path
 from tests.context import app
-from blackJack.Deck import Deck, Card, DeckEmpty
+from blackJack.Deck import Deck, Card, DeckEmpty, InvalidType
+
+App = app
 
 class TestDeck:
 
@@ -48,9 +50,79 @@ class TestDeck:
         card = deck.pop()
         assert c1 == card
         assert type(card) == Card
-        for i in range(len(deck)):
+        for i in range(51):
             l = len(deck)
             c = deck.pop()
             assert type(c) == Card
             assert len(deck) == l - 1
-        assert pytest.raises(DeckEmpty, deck.pop())
+
+class TestCards:
+
+    suits = ("clubs", "spade", "hearts", "diamonds")
+    values = {
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9,
+        "10": 10,
+        "jack": 10,
+        "queen": 10,
+        "king": 10,
+        "ace": 11,
+    }
+
+    def test_card_setup(self):
+        for suit in self.suits:
+            print(self.values)
+            for k in self.values:
+                v = self.values.get(k)
+                card = Card(suit, k, v)
+                assert card.value == v
+                assert card.name == k
+                assert card.suit == suit
+                assert card.path is not None
+
+    def test_card_paths(self):
+        cards = []
+        for suit in self.suits:
+            for k in self.values:
+                v = self.values.get(k)
+                card = Card(suit, k, v)
+                cards.append(card)
+        assert len(cards) == 52
+        for card in cards:
+            p = Path(card.path)
+            assert p.exists()
+            assert p.is_file()
+            assert p.suffix in [".jpg", ".png", ".bmp", ".tiff"]
+
+    def test_operator_funcs(self):
+        cards = []
+        for suit in self.suits:
+            for k in self.values:
+                v = self.values.get(k)
+                card = Card(suit, k, v)
+                cards.append(card)
+        for i, card in enumerate(cards[1: ]):
+            other = cards[i - 1]
+            assert card == card
+            if other.value != card.value:
+                assert other != card
+                if card.value > other.value:
+                    assert card > other
+                else:
+                    assert card < other
+                if card.value >= other.value:
+                    assert card >= other
+                else:
+                    assert card <= other
+            if card.suit == other.suit:
+                assert card.ismatch(other)
+            else:
+                assert card.ismatch(other) is False
+            assert card.__typecheck__(other)
+            assert pytest.raises(InvalidType,lambda : card.__typecheck__("some string"))

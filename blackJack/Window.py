@@ -121,6 +121,9 @@ class Window(QMainWindow):
 
         # list of groupboxes. one for each player
         self.boxes = []
+        print(self.geometry())
+        print(self.dumpObjectInfo())
+        print(self.dumpObjectTree())
 
     def addPlayer(self, player):
         """Add Player construct groupbox for each player.
@@ -186,7 +189,8 @@ class HitButton(QPushButton):
         """Ask dealer for another card."""
         for player in self.window.players:
             if player.isturn():
-                self.dealer.player_hit(player)
+                return self.dealer.player_hit(player)
+
 
 
 class StandButton(QPushButton):
