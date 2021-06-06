@@ -20,11 +20,15 @@
 #########################################################################
 
 
-import sys
-import os
+import pytest
 from PyQt6.QtWidgets import QLabel
 from tests.context import app
 from blackJack.Window import Window
+
+
+
+
+
 
 class TestWindow:
 
@@ -32,6 +36,7 @@ class TestWindow:
     players = 2
     app = app
     window = Window(parent=None, players=players, decks=decks, app=app)
+
 
     def test_window_params(self):
         assert self.window.players_count == self.players

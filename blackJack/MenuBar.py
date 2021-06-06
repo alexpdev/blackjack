@@ -43,6 +43,7 @@ class MenuBar(QMenuBar):
     def __init__(self, parent=None, window=None):
         """Construct MenuBar instance and create submenus."""
         super().__init__(parent=parent)
+        self.setObjectName("MainMenuBar")
         self.window = window
         self.setNativeMenuBar(False)
         self.window.setMenuBar(self)
@@ -87,10 +88,11 @@ class Settings(QDialog):
     def __init__(self, parent=None, window=None):
         """Construct Settings Dialog."""
         super().__init__(parent=parent)
+        self.setObjectName("Preferences")
         self.window = window
         self.setSizeGripEnabled(False)
         self.setObjectName("Settings")
-        self.setWindowTitle("Settings")
+        self.setWindowTitle("Preferences")
         self.setModal(True)
         self.vlayout = QVBoxLayout()
         self.setLayout(self.vlayout)

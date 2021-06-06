@@ -56,6 +56,8 @@ class TestDeck:
             assert type(c) == Card
             assert len(deck) == l - 1
 
+
+
 class TestCards:
 
     suits = ("clubs", "spade", "hearts", "diamonds")

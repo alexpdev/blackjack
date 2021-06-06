@@ -42,7 +42,13 @@ class Window(QMainWindow):
     Args: QMainWindow (Qt Widget Window): MainWindow
     """
 
-    ssheet = """ QMainWindow {margin: 8px; padding: 6px; background-color: #e9e9e9}"""
+    ssheet = """ QMainWindow {
+                    margin: 8px;
+                    padding: 6px;
+                    background-color: #151a1e;
+                    color: #d3dae3;
+                }
+                """
 
     def __init__(self, parent=None, players=None, decks=None, app=None):
         """Window Constructor.
@@ -55,7 +61,6 @@ class Window(QMainWindow):
         super().__init__(parent=parent)
         self.players = []
         self.players_count = players
-        self.deck_count = decks
         self.app = app
         self.setStyleSheet(self.ssheet)
         self.setWindowTitle("BlackJack")
@@ -87,7 +92,7 @@ class Window(QMainWindow):
 
         # information labels
         self.ncards_label = QLabel("Cards in Deck: ")
-        self.ncards_val = QLabel(str(self.deck_count * 52))
+        self.ncards_val = QLabel("0")
         self.ndecks_label = QLabel("Number of Decks: ")
         self.ndecks_val = QLabel("0")
         self.nplayers_label = QLabel("Number of Players: ")
@@ -101,7 +106,10 @@ class Window(QMainWindow):
 
             for widg in [label, val]:
                 self.horiztop.addWidget(widg)
-                widg.setStyleSheet("""QLabel {font-weight: bold; color: black;}""")
+                widg.setStyleSheet("""QLabel {
+                                    font-size: 12pt;
+                                    font-weight: bold;
+                                    color: #efefff;}""")
             label.setAlignment(Qt.AlignmentFlag.AlignRight)
             val.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
@@ -142,6 +150,9 @@ class Window(QMainWindow):
         responsible for dealing cards and shuffling.
         """
         self.dealer = dealer
+        self.ncards_val.setText(str(self.dealer.decksize))
+        self.ndecks_val.setText(str(self.dealer.deck_count))
+        self.nplayers_val.setText(str(self.players))
         for button in [self.button1, self.button2, self.button3]:
             button.dealer = self.dealer
         self.addPlayer(dealer)
@@ -169,8 +180,15 @@ class HitButton(QPushButton):
     Args: QPushButton (ButtonWidget): Ask dealer for one more card.
     """
 
-    ssheet = """QPushButton{ background-color: #1259ff;
-                font: bold 20pt black; padding: px; margin: 2px;}"""
+    ssheet = """QPushButton{
+                    background-color: #1259ff;
+                    font: bold 20pt black;
+                    padding: px;
+                    margin: 2px;
+                    border: 1px solid #050a0e;
+                    border-radius: 5px;}
+                    """
+                    # color: #d3dae3}
 
     def __init__(self, parent=None, window=None):
         """Construct HitButton Object.
@@ -200,8 +218,14 @@ class StandButton(QPushButton):
     Tell dealer no more cards and allow next player to take turn.
     """
 
-    stylesheet = """QPushButton{ background-color: #1259ff;
-                    font: bold 20pt black; padding: px; margin: 2px;}"""
+    ssheet = """QPushButton{
+                    background-color: #1259ff;
+                    font: bold 20pt black;
+                    padding: px;
+                    margin: 2px;
+                    border: 1px solid #050a0e;
+                    border-radius: 5px;}
+                    """
 
     def __init__(self, parent=None, window=None):
         """Construct Stay Button.
@@ -213,7 +237,7 @@ class StandButton(QPushButton):
         self.window = window
         self.dealer = None
         self.setText("Stand")
-        self.setStyleSheet(self.stylesheet)
+        self.setStyleSheet(self.ssheet)
         self.pressed.connect(self.stay)
 
     def stay(self):
@@ -228,8 +252,14 @@ class StandButton(QPushButton):
 class NewGameButton(QPushButton):
     """New Game Button."""
 
-    stylesheet = """QPushButton{ background-color: #1259ff;
-                    font: bold 20pt black; padding: px; margin: 2px;}"""
+    ssheet = """QPushButton{
+                    background-color: #1259ff;
+                    font: bold 20pt black;
+                    padding: px;
+                    margin: 2px;
+                    border: 1px solid #050a0e;
+                    border-radius: 5px;}
+                    """
 
     def __init__(self, parent=None, window=None):
         """Construct for NewGameButton.
@@ -242,7 +272,7 @@ class NewGameButton(QPushButton):
         self.dealer = None
         self.setText("New Game")
         self.pressed.connect(self.start_new_game)
-        self.setStyleSheet(self.stylesheet)
+        self.setStyleSheet(self.ssheet)
 
     def start_new_game(self):
         """Start new game function.
@@ -259,4 +289,5 @@ class NewGameButton(QPushButton):
                 player.box.reset()
                 player.hand = []
                 player.cards = []
+            self.window.adjustSize()
             self.window.dealer.new_game()

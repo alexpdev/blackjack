@@ -37,16 +37,17 @@ class PlayerBox(QGroupBox):
     """
 
     offsheet = """QGroupBox {
+        font-size: 14pt;
         padding: 4px;
         margin: 2px;
-        color: black;
-        border: 2px solid grey;} """
+        color: #efeefe;
+        border: 3px solid #dfa;} """
     onsheet = """QGroupBox {
             color: red;
-            padding: 6px;
-            margin: 3px;
-            border: 3px solid red;
-            border-radius: 3px;}"""
+            padding: 8px;
+            margin: 5px;
+            border: 5px solid red;
+            border-radius: 9px;}"""
 
     def __init__(self, title, parent=None, player=None):
         """Construct a PlayerBox Widget."""
@@ -61,7 +62,7 @@ class PlayerBox(QGroupBox):
         self.label.setStyleSheet(
             """
             QLabel {
-            color: black;
+            color: #efeefe;
             font-weight: bold;
             font-size: 14pt;
             font-style: italic;}
@@ -71,9 +72,9 @@ class PlayerBox(QGroupBox):
         self.scorelabel.setStyleSheet(
             """
             QLabel {
-            border: 1px solid black;
+            border: 1px solid #efeefe;
             padding: 3px;
-            color: black;
+            color: #efeefe;
             font-weight: bold;
             font-size: 16pt;
             font-style: italic;}

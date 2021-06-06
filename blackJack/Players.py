@@ -114,7 +114,7 @@ class Dealer(Player):
     Subclass of Player but requires a few extra keyword args
     """
 
-    def __init__(self, deck_count=1, player_count=2, **kwargs):
+    def __init__(self, decks=1, players=2, driver=None, **kwargs):
         """Dealer constructor.
 
         Args: deck_count(int, optional): Number of decks to use.
@@ -122,18 +122,18 @@ class Dealer(Player):
         """
         super().__init__(**kwargs)
         self.title = "Dealer"
-        self.deck_count = deck_count
-        self.player_count = player_count
+        self.deck_count = decks
+        self.player_count = players
         self.current = 0
         self.players = []
-        self.deck = Deck.times(deck_count)
-        self.limit = len(self.deck) // 2
+        self.deck = Deck.times(decks)
+        self.limit = 50
+        self.driver = driver
 
-    def setup_window_labels(self):
-        """Update card count and other details displayed in the main window."""
-        self.window.ncards_val.setText(str(self.deck_count * 52))
-        self.window.ndecks_val.setText(str(self.deck_count))
-        self.window.nplayers_val.setText(str(self.player_count))
+
+    @property
+    def decksize(self):
+        return len(self.deck)
 
     @property
     def score(self):
@@ -166,8 +166,8 @@ class Dealer(Player):
 
         Args: player (Player()): instance of Player in game
         """
+        self.driver.update_count()
         card = self.deck.pop()
-        self.window.ncards_val.setText(str(len(self.deck)))
         player.add_card(card)
         player.show_hand()
         self.window.update()
@@ -212,7 +212,6 @@ class Dealer(Player):
 
     def new_game(self):
         """Call after dealer has played their turn."""
-        self.setup_window_labels()
         if len(self.deck) <= self.limit:
             del self.deck
             self.deck = Deck.times(self.deck_count)
