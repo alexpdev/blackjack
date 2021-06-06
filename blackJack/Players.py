@@ -20,7 +20,6 @@
 #########################################################################
 
 from blackJack.Deck import Deck
-from blackJack.PlayerBox import CardWidget
 
 
 class Player:
@@ -89,9 +88,10 @@ class Player:
         for widg in self.cards:
             if widg.cover:
                 return widg.setCard(card)
-        widget = CardWidget(cover=False, card=card, path=card.path)
-        self.box.hbox.addWidget(widget)
-        return self.cards.append(widget)
+        self.box.addWidget(card)
+        self.window.repaint()
+        self.window.update()
+
 
     def show_score(self, score):
         """Write players score to the QTextBrowser Widgit.

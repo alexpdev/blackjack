@@ -20,21 +20,15 @@
 #########################################################################
 
 import os
+from PyQt6.QtGui import QPixmap, QPainter, QPicture
 
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout, QWidget, QGridLayout
 
 IMG_DIR = os.environ.get("IMG_DIR")
 # Directory containing all png files for cards.
 CARDCOVER = os.path.join(IMG_DIR, "card_cover.png")
 # Path to png of a card face down.
 
-class CardWindow(QWidget):
-
-    def __init__(self,parent=None,window=None):
-        super().__init__(parent=parent)
-        self.window = window
-        self.geometry()
 
 class PlayerBox(QGroupBox):
     """PlayerBox Subclass of QGroupBox.
@@ -59,16 +53,18 @@ class PlayerBox(QGroupBox):
         """Construct a PlayerBox Widget."""
         super().__init__(title, parent=parent)
         self.player = player
+        self.cardCount = 0
         self.setStyleSheet(self.offsheet)
         self.vbox = QVBoxLayout()
         self.setLayout(self.vbox)
-        self.hbox = QHBoxLayout()
+        self.grid = QGridLayout()
         self.hbox2 = QHBoxLayout()
         self.label = QLabel("Score: ")
         self.label.setStyleSheet(
             """
             QLabel {
             color: #efeefe;
+            margin-bottom: 8px;
             font-weight: bold;
             font-size: 14pt;
             font-style: italic;}
@@ -80,6 +76,7 @@ class PlayerBox(QGroupBox):
             QLabel {
             border: 1px solid #efeefe;
             padding: 3px;
+            margin-bottom: 8px;
             color: #efeefe;
             font-weight: bold;
             font-size: 16pt;
@@ -88,15 +85,41 @@ class PlayerBox(QGroupBox):
         )
         self.hbox2.addWidget(self.label)
         self.hbox2.addWidget(self.scorelabel)
-        self.hbox2.addSpacerItem(QSpacerItem(80, 0))
+        self.hbox2.addSpacerItem(QSpacerItem(10, 0))
         self.vbox.addLayout(self.hbox2)
-        self.vbox.addLayout(self.hbox)
+        self.vbox.addLayout(self.grid)
         self._turn = False
-        for _ in range(2):
-            card = CardWidget(parent=self)
-            self.hbox.addWidget(card)
-            self.addCard(card)
+        card = CardWidget(parent=self)
+        self.grid.addWidget(card,0,0,-1,-1)
+        card2 = CardWidget(parent=self)
+        self.grid.addWidget(card2,0,1,-1,-1)
+        self.addCard(card)
+        self.cardCount += 1
+        self.addCard(card2)
+        self.cardCount += 1
         self.player.box = self
+
+        # crect = card.rect()
+        # cpixmap = card.pixmap()
+        # startp = crect.left() + (crect.width() // 2)
+        # painter = QPainter()
+        # cardPic = QPicture()
+        # painter.begin(cardPic)
+        # painter.drawPixmap(startp,crect.top(),cpixmap)
+        # painter.end()
+        # # cardPic.show()
+        # # painter.save()
+        # # self.hbox.addItem(cardPic)
+        # # card2p = card2.pixmap()
+        # # card2.hide()
+        # cimage = card.pixmap()
+
+        # cardPic.play(painter)
+        # # self.hbox.addWidget(card)
+        # # self.addCard(card)
+        # # painter = QPainter()
+        # # self.addCard(card2)
+
 
     @property
     def cards(self):
@@ -119,9 +142,22 @@ class PlayerBox(QGroupBox):
         while len(self.cards) > 0:
             card = self.cards[0]
             card.destroy(True, True)
-            self.hbox.removeWidget(card)
+            self.grid.removeWidget(card)
             self.deleteCard()
             del card
+            self.cardCount -= 1
+
+    def addWidget(self,card):
+        pos = self.cardCount
+        widget = CardWidget(cover=False, card=card, path=card.path)
+        if pos:
+            self.grid.addWidget(widget,0,pos,-1,-1)
+        else:
+            self.grid.addWidget(widget,0,0,-1,-1)
+        self.cardCount += 1
+        self.addCard(widget)
+
+
 
     def isTurn(self):
         """Return True if currently players turn."""
@@ -140,7 +176,6 @@ class PlayerBox(QGroupBox):
             self._turn = True
             self.setStyleSheet(self.onsheet)
 
-
 class CardWidget(QLabel):
     """CardWidget holds the image of the card it represents.
 
@@ -148,8 +183,8 @@ class CardWidget(QLabel):
     """
 
     stylesheet = """QLabel {
-        margin: 4px;
-        padding: 5px;}"""
+        margin: 0px;
+        padding: 0px;}"""
 
     def __init__(self, parent=None, card=None, cover=True, path=CARDCOVER):
         """Construct new CardWidget instance.
