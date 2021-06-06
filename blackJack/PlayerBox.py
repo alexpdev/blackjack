@@ -22,7 +22,7 @@
 import os
 from PyQt6.QtGui import QPixmap, QPainter, QPicture
 
-from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout, QWidget, QGridLayout
+from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout, QWidget, QGridLayout, QSizePolicy
 
 IMG_DIR = os.environ.get("IMG_DIR")
 # Directory containing all png files for cards.
@@ -39,15 +39,15 @@ class PlayerBox(QGroupBox):
     offsheet = """QGroupBox {
         font-size: 14pt;
         padding: 4px;
-        margin: 2px;
+        margin: 5px;
         color: #efeefe;
-        border: 3px solid #dfa;} """
+        border: 9px solid #dfa;} """
     onsheet = """QGroupBox {
             color: red;
-            padding: 8px;
+            padding: 4px;
             margin: 5px;
             border: 5px solid red;
-            border-radius: 9px;}"""
+            border-radius: 2px;}"""
 
     def __init__(self, title, parent=None, player=None):
         """Construct a PlayerBox Widget."""
@@ -83,9 +83,12 @@ class PlayerBox(QGroupBox):
             font-style: italic;}
             """
         )
+        expolicy = QSizePolicy.Policy.MinimumExpanding
+        minpolicy = QSizePolicy.Policy.Minimum
         self.hbox2.addWidget(self.label)
+        self.hbox2.addSpacerItem(QSpacerItem(10, 0,minpolicy,minpolicy))
         self.hbox2.addWidget(self.scorelabel)
-        self.hbox2.addSpacerItem(QSpacerItem(10, 0))
+        self.hbox2.addSpacerItem(QSpacerItem(50, 0,expolicy,minpolicy))
         self.vbox.addLayout(self.hbox2)
         self.vbox.addLayout(self.grid)
         self._turn = False
@@ -98,28 +101,6 @@ class PlayerBox(QGroupBox):
         self.addCard(card2)
         self.cardCount += 1
         self.player.box = self
-
-        # crect = card.rect()
-        # cpixmap = card.pixmap()
-        # startp = crect.left() + (crect.width() // 2)
-        # painter = QPainter()
-        # cardPic = QPicture()
-        # painter.begin(cardPic)
-        # painter.drawPixmap(startp,crect.top(),cpixmap)
-        # painter.end()
-        # # cardPic.show()
-        # # painter.save()
-        # # self.hbox.addItem(cardPic)
-        # # card2p = card2.pixmap()
-        # # card2.hide()
-        # cimage = card.pixmap()
-
-        # cardPic.play(painter)
-        # # self.hbox.addWidget(card)
-        # # self.addCard(card)
-        # # painter = QPainter()
-        # # self.addCard(card2)
-
 
     @property
     def cards(self):

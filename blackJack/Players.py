@@ -129,6 +129,7 @@ class Dealer(Player):
         self.deck = Deck.times(self.deck_count)
         self.limit = 50
         self.driver = driver
+        self.add_players
 
     def setPreferences(self,decks=None,players=None):
         del self.deck

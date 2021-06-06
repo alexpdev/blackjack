@@ -60,7 +60,6 @@ class Window(QMainWindow):
         """
         super().__init__(parent=parent)
         self.players = []
-        self.players_count = players
         self.app = app
         self.setStyleSheet(self.ssheet)
         self.setWindowTitle("BlackJack")
@@ -97,21 +96,26 @@ class Window(QMainWindow):
         self.ndecks_val = QLabel("0")
         self.nplayers_label = QLabel("Number of Players: ")
         self.nplayers_val = QLabel("0")
+        labelSheet = """QLabel {
+                        font-size: 12pt;
+                        font-weight: bold;
+                        padding-right: 5px;
+                        color: #9eeeee;}"""
+        valSheet = """QLabel {
+                        font-size: 12pt;
+                        font-weight: bold;
+                        color: #eece9e;}"""
 
         for label, val in [
             (self.ncards_label, self.ncards_val),
             (self.ndecks_label, self.ndecks_val),
-            (self.nplayers_label, self.nplayers_val),
-        ]:
-
-            for widg in [label, val]:
-                self.horiztop.addWidget(widg)
-                widg.setStyleSheet("""QLabel {
-                                    font-size: 12pt;
-                                    font-weight: bold;
-                                    color: #efefff;}""")
+            (self.nplayers_label, self.nplayers_val)]:
+            label.setStyleSheet(labelSheet)
+            val.setStyleSheet(valSheet)
             label.setAlignment(Qt.AlignmentFlag.AlignRight)
             val.setAlignment(Qt.AlignmentFlag.AlignLeft)
+            self.horiztop.addWidget(label)
+            self.horiztop.addWidget(val)
 
         # layout configuration for window
         self.horiz2.addWidget(self.button3)
@@ -147,9 +151,6 @@ class Window(QMainWindow):
         responsible for dealing cards and shuffling.
         """
         self.dealer = dealer
-        self.ncards_val.setText(str(self.dealer.decksize))
-        self.ndecks_val.setText(str(self.dealer.deck_count))
-        self.nplayers_val.setText(str(self.players))
         for button in [self.button1, self.button2, self.button3]:
             button.dealer = self.dealer
         self.addPlayer(dealer)

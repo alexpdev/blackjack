@@ -29,5 +29,15 @@ class Driver:
     def decksize(self):
         return self.dealer.decksize
 
+    @property
+    def players(self):
+        return self.dealer.player_count
+
+    @property
+    def decks(self):
+        return self.dealer.deck_count
+
     def update_count(self):
+        self.window.ndecks_val.setText(str(self.decks))
+        self.window.nplayers_val.setText(str(self.players))
         self.window.ncards_val.setText(str(self.decksize))
