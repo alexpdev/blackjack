@@ -22,13 +22,19 @@
 import os
 
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout
+from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout, QWidget
 
 IMG_DIR = os.environ.get("IMG_DIR")
 # Directory containing all png files for cards.
 CARDCOVER = os.path.join(IMG_DIR, "card_cover.png")
 # Path to png of a card face down.
 
+class CardWindow(QWidget):
+
+    def __init__(self,parent=None,window=None):
+        super().__init__(parent=parent)
+        self.window = window
+        self.geometry()
 
 class PlayerBox(QGroupBox):
     """PlayerBox Subclass of QGroupBox.

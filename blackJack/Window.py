@@ -129,9 +129,6 @@ class Window(QMainWindow):
 
         # list of groupboxes. one for each player
         self.boxes = []
-        print(self.geometry())
-        print(self.dumpObjectInfo())
-        print(self.dumpObjectTree())
 
     def addPlayer(self, player):
         """Add Player construct groupbox for each player.

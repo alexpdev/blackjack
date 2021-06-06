@@ -126,10 +126,19 @@ class Dealer(Player):
         self.player_count = players
         self.current = 0
         self.players = []
-        self.deck = Deck.times(decks)
+        self.deck = Deck.times(self.deck_count)
         self.limit = 50
         self.driver = driver
 
+    def setPreferences(self,decks=None,players=None):
+        del self.deck
+        if decks:
+            self.deck_count = decks
+        if players:
+            self.player_count = players
+            self.add_players()
+        self.deck = Deck.times(self.deck_count)
+        self.new_game()
 
     @property
     def decksize(self):
@@ -166,8 +175,8 @@ class Dealer(Player):
 
         Args: player (Player()): instance of Player in game
         """
-        self.driver.update_count()
         card = self.deck.pop()
+        self.driver.update_count()
         player.add_card(card)
         player.show_hand()
         self.window.update()
@@ -215,6 +224,7 @@ class Dealer(Player):
         if len(self.deck) <= self.limit:
             del self.deck
             self.deck = Deck.times(self.deck_count)
+            self.driver.update_count()
         self.start_deal()
         self.current = 0
         self.round()

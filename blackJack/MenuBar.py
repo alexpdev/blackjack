@@ -20,7 +20,8 @@
 #########################################################################
 
 import sys
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QFont
+from PyQt6.QtCore import QRect, Qt
 from PyQt6.QtWidgets import (
     QDialog,
     QHBoxLayout,
@@ -30,6 +31,8 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QSpinBox,
     QVBoxLayout,
+    QDialogButtonBox,
+    QSizePolicy
 )
 
 
@@ -44,31 +47,65 @@ class MenuBar(QMenuBar):
         """Construct MenuBar instance and create submenus."""
         super().__init__(parent=parent)
         self.setObjectName("MainMenuBar")
-        self.window = window
+        self.setVisible(True)
         self.setNativeMenuBar(False)
+        self.window = window
         self.window.setMenuBar(self)
         self.filemenu = QMenu("File", parent=self)
-        self.addMenu(self.filemenu)
         self.settings = QMenu("Preferences", parent=self)
+        self.help = QMenu("Help",parent=self)
         self.settingsdialog = Settings(parent=self, window=self.window)
+        self.aboutdialog = About(parent=self,window=self.window)
+        self.addMenu(self.filemenu)
         self.addMenu(self.settings)
-        self.setVisible(True)
-        self.exitaction = QAction("Exit")
+        self.addMenu(self.help)
+        self.exitaction = QAction("&Exit")
+        self.settingsaction = QAction("&Settings")
+        self.newGameAction = QAction("&New Game")
+        self.minimize = QAction("&Minimize")
+        self.maximize = QAction("&Maximize")
+        self.aboutQt = QAction("&About Qt")
+        self.aboutSelf = QAction("&About")
+        self.help.addAction(self.aboutQt)
+        self.help.addAction(self.aboutSelf)
+        self.filemenu.addAction(self.minimize)
+        self.filemenu.addAction(self.maximize)
         self.filemenu.addAction(self.exitaction)
-        self.exitaction.triggered.connect(self.exit_app)
-        self.settingsaction = QAction("Settings")
         self.settings.addAction(self.settingsaction)
-        self.settingsaction.triggered.connect(self.open_settings)
-        self.newGameAction = QAction("New Game")
         self.filemenu.addAction(self.newGameAction)
+        self.aboutQt.triggered.connect(self.aboutQtMenu)
+        self.minimize.triggered.connect(self.minimizeWindow)
+        self.maximize.triggered.connect(self.maxamizeWindow)
+        self.exitaction.triggered.connect(self.exit_app)
+        self.settingsaction.triggered.connect(self.open_settings)
         self.newGameAction.triggered.connect(self.newGame)
+        self.aboutSelf.triggered.connect(self.about)
+
+    def aboutQtMenu(self):
+        self.aboutQt()
+
+    def about(self):
+        self.modal = self.aboutDialog()
+        self.modal.show()
+
+    def maxamizeWindow(self):
+        width = self.window.maximumWidth()
+        height = self.window.maximumHeight()
+        self.window.resize(width,height)
+        return
+
+    def minimizeWindow(self):
+        width = self.window.minimumWidth()
+        height = self.window.minimumHeight()
+        self.window.resize(width,height)
+        return
 
     def newGame(self):
         """Start New Game Action for File Submenu.
 
         Same as pressing NewGameButton.
         """
-        self.window.button3.start_new_game()
+        self.window.dealer.setPreferences()
 
     def open_settings(self):
         """Create a QDialog with editable options related to gameplay.
@@ -80,6 +117,67 @@ class MenuBar(QMenuBar):
     def exit_app(self):
         """Quit program."""
         sys.exit()
+
+
+class About(QDialogButtonBox):
+    def __init__(self, parent=None,window=None):
+        super().__init__(parent=parent)
+        self.window = window
+        self.resize(365, 229)
+        self.setObjectName(u"buttonBox")
+        self.setGeometry(QRect(180, 190, 171, 32))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        self.setSizePolicy(sizePolicy)
+        self.setOrientation(Qt.Orientation.Horizontal)
+        self.label_2 = QLabel(self)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(150, 30, 49, 16))
+        self.label_3 = QLabel(self)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setGeometry(QRect(20, 80, 211, 16))
+        font = QFont()
+        font.setPointSize(11)
+        self.label_3.setFont(font)
+        self.label_4 = QLabel(self)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setGeometry(QRect(20, 160, 201, 20))
+        self.label_5 = QLabel(self)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setGeometry(QRect(20, 120, 341, 41))
+        font1 = QFont()
+        font1.setPointSize(12)
+        self.label_5.setFont(font1)
+        self.label = QLabel(self)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(20, 10, 161, 51))
+        font2 = QFont()
+        font2.setPointSize(20)
+        self.label.setFont(font2)
+        self.label_6 = QLabel(self)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setGeometry(QRect(20, 110, 121, 16))
+        self.label_6.setFont(font)
+        self.accepted.connect(self.accept)
+        self.rejected.connect(self.reject)
+        self.setWindowTitle("About")
+        self.label_2.setText("v 0.3")
+        self.label_3.setText("Copyright 2021 AlexPdev Inc.")
+        self.label_4.setText("https://fsf.org/>")
+        self.label_5.setText("License GNU LESSER GENERAL PUBLIC LICENSE")
+        self.label.setText("BlackJack")
+        self.label_6.setText("Creator AlexPdev")
+    # retranslateUi
+
+    def accept(self):
+        pass
+    def reject(self):
+        pass
+
+
+
 
 
 class Settings(QDialog):
@@ -117,6 +215,12 @@ class Settings(QDialog):
         self.okayButton.pressed.connect(self.accept)
         self.cancelButton.pressed.connect(self.reject)
         self.finished.connect(self.finishedSignal)
+
+    def accept(self):
+        dealer = self.window.dealer
+        dealer.setPreferences(self.decksSpin.value(), self.playersSpin.value())
+        super().accept()
+
 
     def finishedSignal(self):
         """When Settings Window returns accept or reject signals."""
