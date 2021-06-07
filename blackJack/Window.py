@@ -316,6 +316,6 @@ class BrokeDialog(QMessageBox):
         """
         super().__init__(parent=parent)
         self.setText("Broke")
-        self.setInformativeText(f"Sorry, you lost. \n Score: {score}.")
+        self.setInformativeText(f"Sorry, {player} lost. \n Score: {score}.")
         self.button = QPushButton("OK")
         self.setDefaultButton(self.button)

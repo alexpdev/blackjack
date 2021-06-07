@@ -40,7 +40,6 @@ class Driver:
         self.dealer.add_players()
         self.dealer.new_game()
 
-
     def output(self, s):
         """
         Output textual information to TextBrowser GUI Widget.

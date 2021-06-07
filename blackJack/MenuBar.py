@@ -21,11 +21,10 @@
 
 import sys
 
-from PyQt6.QtCore import QRect, Qt
+from PyQt6.QtCore import QRect
 from PyQt6.QtGui import QAction, QFont
-from PyQt6.QtWidgets import (QDialog, QDialogButtonBox, QHBoxLayout, QLabel,
-                             QMenu, QMenuBar, QPushButton, QSizePolicy,
-                             QSpinBox, QVBoxLayout, QMessageBox, QDialog)
+from PyQt6.QtWidgets import (QDialog, QHBoxLayout, QLabel, QMenu, QMenuBar,
+                             QPushButton, QSizePolicy, QSpinBox, QVBoxLayout)
 
 
 class MenuBar(QMenuBar):
@@ -83,10 +82,7 @@ class MenuBar(QMenuBar):
     def about(self):
         """Display Program Information."""
         dialog = About(parent=self, window=self.window)
-        try:
-            dialog.exec()
-        except:
-            dialog.show()
+        dialog.show()
 
     def maxamizeWindow(self):
         """Set Window to fill screen."""

@@ -20,6 +20,7 @@
 #########################################################################
 
 from time import sleep
+
 from blackJack.Deck import Deck
 
 
@@ -93,7 +94,7 @@ class Player:
         self.window.textBrowser.append(line)
         scrollbar = self.window.textBrowser.verticalScrollBar()
         distance = scrollbar.maximum() - scrollbar.value()
-        self.window.textBrowser.scroll(0,distance)
+        self.window.textBrowser.scroll(0, distance)
 
     def add_card(self, card):
         """Add a Card object to Players hand.
@@ -238,15 +239,15 @@ class Dealer(Player):
     def dealer_round(self):
         """Call when all other players have had their turn betting."""
         self.turn()
-        sleep(.3)
+        sleep(0.3)
         for card in self.cards:
             card.faceUp()
-            sleep(.3)
+            sleep(0.3)
         while self.score < 16:
             self.deal_card(self)
-            sleep(.3)
+            sleep(0.3)
         if self.score > 21:
-            sleep(.3)
+            sleep(0.3)
             self.output("Dealer Broke")
         self.turn()
 

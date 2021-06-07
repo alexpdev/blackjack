@@ -18,11 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
-import os
-import sys
-from pathlib import Path
 from PyQt6.QtWidgets import QApplication
+
 from blackJack.Game import Driver
+
 Application = QApplication
 
 __version__ = "0.3.1"

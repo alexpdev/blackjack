@@ -26,7 +26,6 @@ from PyQt6.QtWidgets import (QGridLayout, QGroupBox, QHBoxLayout, QLabel,
                              QSizePolicy, QSpacerItem, QVBoxLayout)
 
 
-
 class PlayerBox(QGroupBox):
     """PlayerBox Subclass of QGroupBox.
 
@@ -180,7 +179,8 @@ class PlayerBox(QGroupBox):
             self.setStyleSheet(self.onsheet)
 
 
-CARDBACK = os.path.join(os.environ["IMG_DIR"],"card_cover.png")
+CARDBACK = os.path.join(os.environ["IMG_DIR"], "card_cover.png")
+
 
 class CardWidget(QLabel):
     """Store the image of the card it represents for GUI display.
