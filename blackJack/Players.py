@@ -88,6 +88,7 @@ class Player:
         for widg in self.cards:
             if widg.cover:
                 return widg.setCard(card)
+
         self.box.addWidget(card)
         self.window.repaint()
         self.window.update()
@@ -177,7 +178,7 @@ class Dealer(Player):
         Args: player (Player()): instance of Player in game
         """
         card = self.deck.pop()
-        self.driver.update_count()
+        self.driver.draw(card)
         player.add_card(card)
         player.show_hand()
         self.window.update()
@@ -186,6 +187,8 @@ class Dealer(Player):
     def round(self):
         """Begin new players turn for betting, hitting or staying."""
         player = self.players[self.current]
+        needed = 21 - player.score
+        self.driver.chances_of_x(needed)
         player.turn()
 
     def dealer_round(self):
@@ -199,6 +202,7 @@ class Dealer(Player):
         if self.score > 21:
             self.output("Dealer Busts")
         self.turn()
+        self.driver.chances_of_blackjack()
 
     def player_hit(self, player):
         """Call when Player asks dealer to "hit".
@@ -207,9 +211,11 @@ class Dealer(Player):
         """
         self.deal_card(player)
         if player.score > 21:
-            self.output(player.title + " Bust")
+            self.window.playerBroke(player,player.score)
             player.turn()
             self.next_player()
+        else:
+            self.driver.chances_of_x(21-player.score)
 
     def next_player(self):
         """Call when previous players turn ended."""

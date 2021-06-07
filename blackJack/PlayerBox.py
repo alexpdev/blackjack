@@ -43,64 +43,69 @@ class PlayerBox(QGroupBox):
         color: #efeefe;
         border: 9px solid #dfa;} """
     onsheet = """QGroupBox {
-            color: red;
-            padding: 4px;
-            margin: 5px;
-            border: 5px solid red;
-            border-radius: 2px;}"""
+        color: red;
+        padding: 4px;
+        margin: 5px;
+        border: 5px solid red;
+        border-radius: 2px;}"""
+    labelsheet = """QLabel {
+        color: #efeefe;
+        margin-bottom: 8px;
+        font-weight: bold;
+        font-size: 14pt;
+        font-style: italic;}"""
+    scoresheet = """QLabel {
+        border: 1px solid #efeefe;
+        padding: 3px;
+        margin-bottom: 8px;
+        color: #efeefe;
+        font-weight: bold;
+        font-size: 16pt;
+        font-style: italic;}"""
 
     def __init__(self, title, parent=None, player=None):
         """Construct a PlayerBox Widget."""
         super().__init__(title, parent=parent)
         self.player = player
-        self.cardCount = 0
+        self._turn = False
+        self.player.box = self
         self.setStyleSheet(self.offsheet)
-        self.vbox = QVBoxLayout()
-        self.setLayout(self.vbox)
-        self.grid = QGridLayout()
-        self.hbox2 = QHBoxLayout()
-        self.label = QLabel("Score: ")
-        self.label.setStyleSheet(
-            """
-            QLabel {
-            color: #efeefe;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 14pt;
-            font-style: italic;}
-            """
-        )
-        self.scorelabel = QLabel("0")
-        self.scorelabel.setStyleSheet(
-            """
-            QLabel {
-            border: 1px solid #efeefe;
-            padding: 3px;
-            margin-bottom: 8px;
-            color: #efeefe;
-            font-weight: bold;
-            font-size: 16pt;
-            font-style: italic;}
-            """
-        )
+        self.setupUi()
+
+    def setupLabels(self):
         expolicy = QSizePolicy.Policy.MinimumExpanding
         minpolicy = QSizePolicy.Policy.Minimum
-        self.hbox2.addWidget(self.label)
-        self.hbox2.addSpacerItem(QSpacerItem(10, 0,minpolicy,minpolicy))
-        self.hbox2.addWidget(self.scorelabel)
-        self.hbox2.addSpacerItem(QSpacerItem(50, 0,expolicy,minpolicy))
-        self.vbox.addLayout(self.hbox2)
-        self.vbox.addLayout(self.grid)
-        self._turn = False
+        self.label = QLabel("Score: ")
+        self.label.setStyleSheet(self.labelsheet)
+        self.hbox.addWidget(self.label)
+        self.hbox.addSpacerItem(QSpacerItem(10, 0,minpolicy,minpolicy))
+        self.scorelabel = QLabel("0")
+        self.scorelabel.setStyleSheet(self.scoresheet)
+        self.hbox.addWidget(self.scorelabel)
+        self.hbox.addSpacerItem(QSpacerItem(50, 0,expolicy,minpolicy))
+
+    def setupCards(self):
         card = CardWidget(parent=self)
+        self.addCard(card)
         self.grid.addWidget(card,0,0,-1,-1)
         card2 = CardWidget(parent=self)
-        self.grid.addWidget(card2,0,1,-1,-1)
-        self.addCard(card)
-        self.cardCount += 1
         self.addCard(card2)
-        self.cardCount += 1
-        self.player.box = self
+        self.grid.addWidget(card2,0,1,-1,-1)
+
+    def setupUi(self):
+        self.vbox = QVBoxLayout()
+        self.grid = QGridLayout()
+        self.hbox = QHBoxLayout()
+        self.vbox.addLayout(self.hbox)
+        self.vbox.addLayout(self.grid)
+        self.setLayout(self.vbox)
+        self.setupLabels()
+        self.setupCards()
+
+
+    @property
+    def cardCount(self):
+        return len(self.player.cards)
 
     @property
     def cards(self):
@@ -126,7 +131,6 @@ class PlayerBox(QGroupBox):
             self.grid.removeWidget(card)
             self.deleteCard()
             del card
-            self.cardCount -= 1
 
     def addWidget(self,card):
         pos = self.cardCount
@@ -135,10 +139,7 @@ class PlayerBox(QGroupBox):
             self.grid.addWidget(widget,0,pos,-1,-1)
         else:
             self.grid.addWidget(widget,0,0,-1,-1)
-        self.cardCount += 1
         self.addCard(widget)
-
-
 
     def isTurn(self):
         """Return True if currently players turn."""

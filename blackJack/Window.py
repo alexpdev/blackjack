@@ -33,6 +33,7 @@ from PyQt6.QtWidgets import (
     QTextBrowser,
     QVBoxLayout,
     QWidget,
+    QMessageBox
 )
 
 
@@ -90,12 +91,10 @@ class Window(QMainWindow):
         self.textBrowser = QTextBrowser(self)
 
         # information labels
-        self.ncards_label = QLabel("Cards in Deck: ")
-        self.ncards_val = QLabel("0")
-        self.ndecks_label = QLabel("Number of Decks: ")
-        self.ndecks_val = QLabel("0")
-        self.nplayers_label = QLabel("Number of Players: ")
-        self.nplayers_val = QLabel("0")
+        # self.decks_label = QLabel("Number of Decks: ")
+        # self.decks_val = QLabel("0")
+        # self.nplayers_label = QLabel("Number of Players: ")
+        # self.nplayers_val = QLabel("0")
         labelSheet = """QLabel {
                         font-size: 12pt;
                         font-weight: bold;
@@ -105,17 +104,14 @@ class Window(QMainWindow):
                         font-size: 12pt;
                         font-weight: bold;
                         color: #eece9e;}"""
-
-        for label, val in [
-            (self.ncards_label, self.ncards_val),
-            (self.ndecks_label, self.ndecks_val),
-            (self.nplayers_label, self.nplayers_val)]:
-            label.setStyleSheet(labelSheet)
-            val.setStyleSheet(valSheet)
-            label.setAlignment(Qt.AlignmentFlag.AlignRight)
-            val.setAlignment(Qt.AlignmentFlag.AlignLeft)
-            self.horiztop.addWidget(label)
-            self.horiztop.addWidget(val)
+        self.cards_label = QLabel("Cards in Deck: ")
+        self.cards_val = QLabel("0")
+        self.cards_label.setStyleSheet(labelSheet)
+        self.cards_val.setStyleSheet(valSheet)
+        self.cards_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.cards_val.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.horiztop.addWidget(self.cards_label)
+        self.horiztop.addWidget(self.cards_val)
 
         # layout configuration for window
         self.horiz2.addWidget(self.button3)
@@ -170,6 +166,10 @@ class Window(QMainWindow):
             self.update()
             self.repaint()
         self.players = self.players[:1]
+
+    def playerBroke(self,player,score):
+        self.brokeDialog = BrokeDialog(parent=self,player=player,score=score)
+        self.brokeDialog.exec()
 
 
 class HitButton(QPushButton):
@@ -289,3 +289,12 @@ class NewGameButton(QPushButton):
                 player.cards = []
             self.window.adjustSize()
             self.window.dealer.new_game()
+
+
+class BrokeDialog(QMessageBox):
+    def __init__(self, parent=None, player=None, score=None):
+        super().__init__(parent=parent)
+        self.setText("Broke")
+        self.setInformativeText(f"Sorry, you lost. \n Score: {score}.")
+        self.button = QPushButton("OK")
+        self.setDefaultButton(self.button)
