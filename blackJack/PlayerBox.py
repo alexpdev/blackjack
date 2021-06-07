@@ -25,10 +25,6 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import (QGridLayout, QGroupBox, QHBoxLayout, QLabel,
                              QSizePolicy, QSpacerItem, QVBoxLayout)
 
-IMG_DIR = os.environ.get("IMG_DIR")
-# Directory containing all png files for cards.
-CARDCOVER = os.path.join(IMG_DIR, "card_cover.png")
-# Path to png of a card face down.
 
 
 class PlayerBox(QGroupBox):
@@ -194,7 +190,10 @@ class CardWidget(QLabel):
         margin: 0px;
         padding: 0px;}"""
 
-    def __init__(self, parent=None, card=None, cover=True, path=CARDCOVER):
+    card_back = os.path.join(os.path.dirname(
+                os.path.dirname(__file__)), "img", "card-cover.png")
+
+    def __init__(self, parent=None, card=None, cover=True, path=None):
         """Construct new CardWidget instance.
 
         parent (QWidget, optional): parent widget for CardWidget.
@@ -205,13 +204,15 @@ class CardWidget(QLabel):
         super().__init__(parent=parent)
         self.setStyleSheet(self.stylesheet)
         self.cover = cover
+        if not path and cover:
+            path = self.card_back
         self.path = path
         self.card = card
         self.setImage()
 
     def faceDown(self):
         """Call to hide value of dealers facedown card."""
-        pixmap = QPixmap(CARDCOVER)
+        pixmap = QPixmap(self.card_back)
         self.setPixmap(pixmap)
 
     def faceUp(self):

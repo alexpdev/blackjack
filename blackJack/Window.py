@@ -45,7 +45,7 @@ class Window(QMainWindow):
                 }
                 """
 
-    def __init__(self, parent=None, players=None, decks=None, app=None):
+    def __init__(self, parent=None, app=None):
         """Window Constructor.
 
         Args:
