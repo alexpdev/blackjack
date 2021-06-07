@@ -3,7 +3,7 @@
         "tests"
     ],
     "python.testing.cwd": "${workspaceFolder}",
-    "editor.suggestOnTriggerCharacters": false,
+    "editor.suggestOnTriggerCharacters": true,
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,

@@ -18,18 +18,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
-
 import os
 import sys
 from pathlib import Path
 
+from PyQt6.QtWidgets import QApplication
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from blackJack.Game import Driver
+
+os.environ["IMG_DIR"] = os.path.join(sys.path[0], "img")
+
+
+Application = QApplication
 
 __version__ = "0.3.1"
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-os.environ["IMG_DIR"] = os.path.join(sys.path[0], "img")
-
-if __name__ == "__main__":
-    from blackJack.Game import Driver
-    driver = Driver()
-    sys.exit(driver.app.exec())
+__all__ = [Driver, Application]

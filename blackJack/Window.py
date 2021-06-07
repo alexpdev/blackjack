@@ -21,26 +21,20 @@
 
 import os
 
-from blackJack.MenuBar import MenuBar
-from blackJack.PlayerBox import PlayerBox
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import (
-    QHBoxLayout,
-    QLabel,
-    QMainWindow,
-    QPushButton,
-    QTextBrowser,
-    QVBoxLayout,
-    QWidget,
-    QMessageBox
-)
+from PyQt6.QtWidgets import (QHBoxLayout, QLabel, QMainWindow, QMessageBox,
+                             QPushButton, QTextBrowser, QVBoxLayout, QWidget)
+
+from blackJack.MenuBar import MenuBar
+from blackJack.PlayerBox import PlayerBox
 
 
 class Window(QMainWindow):
     """Window MainWindow for Blackjack UI.
 
-    Args: QMainWindow (Qt Widget Window): MainWindow
+    Args:
+        QMainWindow (Qt Widget Window): MainWindow
     """
 
     ssheet = """ QMainWindow {
@@ -54,10 +48,11 @@ class Window(QMainWindow):
     def __init__(self, parent=None, players=None, decks=None, app=None):
         """Window Constructor.
 
-        Args:parent (QWidget, optional): parent widget. Defaults to None.
-        players (list, optional): list of players. Defaults to None.
-        decks (number of decks): this number * 52 Cards. Defaults to None.
-        app (QApplication, optional): Main Application. Defaults to None.
+        Args:
+            parent (QWidget, optional): parent widget. Defaults to None.
+            players (list, optional): list of players. Defaults to None.
+            decks (number of decks): this number * 52 Cards. Defaults to None.
+            app (QApplication, optional): Main Application. Defaults to None.
         """
         super().__init__(parent=parent)
         self.players = []
@@ -67,9 +62,9 @@ class Window(QMainWindow):
         self.setObjectName("MainWindow")
         icon = QIcon(os.path.join(os.environ["IMG_DIR"], "blackjackicon.png"))
         self.setWindowIcon(icon)
-        self.setupUi()
+        self._setupUi()
 
-    def setupUi(self):
+    def _setupUi(self):
         """Setupui Constructs the internal layout of Window.
 
         Widget contents for the Window.
@@ -133,7 +128,8 @@ class Window(QMainWindow):
     def addPlayer(self, player):
         """Add Player construct groupbox for each player.
 
-        Args: Player (Player Object): One of the Dealers challengers.
+        Args:
+            Player (Player): One of the Dealers challengers.
         """
         self.players.append(player)
         groupbox = PlayerBox(player.title, parent=self, player=player)
@@ -143,8 +139,9 @@ class Window(QMainWindow):
     def setDealer(self, dealer):
         """Set Dealer Assign a dealer to the window.
 
-        Args: dealer (Dealer Object): subtype of Player with more power
-        responsible for dealing cards and shuffling.
+        Args:
+            dealer (Dealer): Subclass of Player with more responsibility.
+                performs all dealing cards and shuffling.
         """
         self.dealer = dealer
         for button in [self.button1, self.button2, self.button3]:
@@ -167,15 +164,23 @@ class Window(QMainWindow):
             self.repaint()
         self.players = self.players[:1]
 
-    def playerBroke(self,player,score):
-        self.brokeDialog = BrokeDialog(parent=self,player=player,score=score)
+    def playerBroke(self, player, score):
+        """
+        Show and alert box to user when they break 21.
+
+        Args:
+            player (Player): The player who broke 21
+            score (int): The score. Will be over 21
+        """
+        self.brokeDialog = BrokeDialog(parent=self, player=player, score=score)
         self.brokeDialog.exec()
 
 
 class HitButton(QPushButton):
     """Hit Button triggered by player wants to be dealt another card.
 
-    Args: QPushButton (ButtonWidget): Ask dealer for one more card.
+    Args:
+        QPushButton (ButtonWidget): Ask dealer for one more card.
     """
 
     ssheet = """QPushButton{
@@ -186,12 +191,12 @@ class HitButton(QPushButton):
                     border: 1px solid #050a0e;
                     border-radius: 5px;}
                     """
-                    # color: #d3dae3}
 
     def __init__(self, parent=None, window=None):
         """Construct HitButton Object.
 
-        Args: parent (Window, optional): mainwindow. Defaults to None.
+        Args:
+            parent (Window, optional): mainwindow. Defaults to None.
             window (Window, optional): mainwindow. Defaults to None.
         """
         super().__init__(parent=parent)
@@ -208,12 +213,12 @@ class HitButton(QPushButton):
                 return self.dealer.player_hit(player)
 
 
-
 class StandButton(QPushButton):
     """Stand Button is for players who want their turn to be over.
 
-    Args: QPushButton (ButtonWidget)
-    Tell dealer no more cards and allow next player to take turn.
+    Args:
+        QPushButton (ButtonWidget)
+        Tell dealer no more cards and allow next player to take turn.
     """
 
     ssheet = """QPushButton{
@@ -228,7 +233,8 @@ class StandButton(QPushButton):
     def __init__(self, parent=None, window=None):
         """Construct Stay Button.
 
-        Args: parent (Window, optional): mainwindow. Defaults to None.
+        Args:
+            parent (Window, optional): mainwindow. Defaults to None.
             window (Window, optional): mainwindow. Defaults to None.
         """
         super().__init__(parent=parent)
@@ -262,8 +268,9 @@ class NewGameButton(QPushButton):
     def __init__(self, parent=None, window=None):
         """Construct for NewGameButton.
 
-        Args: parent (Window, optional): mainwindow. Defaults to None.
-        window (Window, optional): mainwindow. Defaults to None.
+        Args:
+            parent (Window, optional): mainwindow. Defaults to None.
+            window (Window, optional): mainwindow. Defaults to None.
         """
         super().__init__(parent=parent)
         self.window = window
@@ -292,7 +299,22 @@ class NewGameButton(QPushButton):
 
 
 class BrokeDialog(QMessageBox):
+    """
+    BrokeDialog box to show player if their score is over 21.
+
+    Args:
+        QMessageBox (Window): Alerts the user they lost.
+    """
+
     def __init__(self, parent=None, player=None, score=None):
+        """
+        Construct for the Alert box.
+
+        Args:
+            parent (Widget, optional): parent window. Defaults to None.
+            player (player, optional): players title. Defaults to None.
+            score (int, optional): players score. Defaults to None.
+        """
         super().__init__(parent=parent)
         self.setText("Broke")
         self.setInformativeText(f"Sorry, you lost. \n Score: {score}.")

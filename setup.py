@@ -1,3 +1,4 @@
+import setuptools
 from setuptools import setup, find_packages
 import json
 
@@ -20,7 +21,7 @@ setup(
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.9",
-        "OSI Approved :: GNU General Public License v3 (GPLv3)"
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
     ],
     keywords=package.get("keywords"),
     author=package.get("author"),
