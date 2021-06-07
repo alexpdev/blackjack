@@ -51,8 +51,6 @@ class MenuBar(QMenuBar):
         self.filemenu = QMenu("File", parent=self)
         self.settings = QMenu("Preferences", parent=self)
         self.help = QMenu("Help", parent=self)
-        self.settingsdialog = Settings(parent=self, window=self.window)
-        self.aboutdialog = About(parent=self, window=self.window)
         self.addMenu(self.filemenu)
         self.addMenu(self.settings)
         self.addMenu(self.help)
@@ -84,8 +82,11 @@ class MenuBar(QMenuBar):
 
     def about(self):
         """Display Program Information."""
-        self.modal = self.aboutDialog()
-        self.modal.show()
+        dialog = About(parent=self, window=self.window)
+        try:
+            dialog.exec()
+        except:
+            dialog.show()
 
     def maxamizeWindow(self):
         """Set Window to fill screen."""
@@ -113,7 +114,8 @@ class MenuBar(QMenuBar):
 
         Options include: Number of players, Number of Decks.
         """
-        self.settingsdialog.open()
+        dialog = Settings(parent=self, window=self.window)
+        dialog.open()
 
     def exit_app(self):
         """Quit program."""

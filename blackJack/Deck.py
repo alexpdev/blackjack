@@ -124,6 +124,24 @@ class Deck(list):
             i2 = random.choice(range(len(self)))
             self.swap(i1, i2)
 
+IMG_DIR = os.environ["IMG_DIR"]
+
+def get_image_fd(card):
+    """
+    get_image_fd Get the absolute path to the cards image file.
+
+    Args:
+        card (Card): The card object the image will belong to.
+
+    Returns:
+        str: Absolute path to image file.
+    """
+    faces = {"ace": "1", "jack": "11", "queen": "12", "king": "13"}
+    val = card.name if card.name not in faces else faces[card.name]
+    fd = ''.join([card.suit, "_", val, ".png"])
+    path = os.path.join(IMG_DIR, fd)
+    return path
+
 
 class Card:
     """Card Object == contents of Deck Object."""
@@ -145,19 +163,15 @@ class Card:
 
         str: absolute path to image file
         """
-        faces = {"ace": 1, "jack": 11, "queen": 12, "king": 13}
-        img_dir = os.environ.get("IMG_DIR")
-        val = str(faces[self.name]) if self.name in faces else str(self.value)
-        filename = "".join([self.suit, "_", val, ".png"])
-        return os.path.join(img_dir, filename)
+        return get_image_fd(self)
 
     def __str__(self):
         """Representation of an object as a string."""
-        return "<" + self.name.title() + ":" + self.suit.title() + ">"
+        return self.name.title() + "of" + self.suit.title()
 
     def __repr__(self):
         """Act same as string function."""
-        return str(self)
+        return "<" + self.name.title() + ":" + self.suit.title() + ">"
 
     def __lt__(self, other):
         """Less than < other."""

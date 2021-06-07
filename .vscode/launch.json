@@ -16,7 +16,7 @@
             "name": "Python: Program",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/blackJack/__init__.py",
+            "program": "${workspaceFolder}/main.py",
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal"
         }

@@ -21,15 +21,8 @@
 import os
 import sys
 from pathlib import Path
-
 from PyQt6.QtWidgets import QApplication
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
 from blackJack.Game import Driver
-
-os.environ["IMG_DIR"] = os.path.join(sys.path[0], "img")
-
-
 Application = QApplication
 
 __version__ = "0.3.1"

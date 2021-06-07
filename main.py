@@ -2,15 +2,17 @@ import os
 import sys
 from pathlib import Path
 
-from blackJack import Driver, Application
+TOP = Path(__file__).resolve().parent
+IMG_DIR = TOP / "img"
+os.environ["IMG_DIR"] = str(IMG_DIR)
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-os.environ["IMG_DIR"] = os.path.join(sys.path[0], "img")
+from blackJack import Driver, Application
 
 def main():
     app = Application(sys.argv)
-    Driver(app)
-    sys.exit(app.exec_())
+    driver = Driver(app)
+    driver.play()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

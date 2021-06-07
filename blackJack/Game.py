@@ -22,21 +22,24 @@ class Driver:
             players (int, optional): Number of players. Defaults to None
             decks (int, optional): Number of decks. Defaults tp None.
         """
-        self.players = players
-        self.decks = decks
         self.app = app
+        self.drawn = []
         self.window = Window(parent=None, app=self.app)
         # Dealer instance has most power and constrol over gameplay.
         self.dealer = Dealer(
             window=self.window,
-            decks=self.decks,
-            players=self.players,
+            decks=decks,
+            players=players,
             pos=0,
             driver=self,
         )
         self.window.setDealer(self.dealer)
         self.window.show()
-        self.drawn = []
+
+    def play(self):
+        self.dealer.add_players()
+        self.dealer.new_game()
+
 
     def output(self, s):
         """
@@ -53,7 +56,6 @@ class Driver:
         aces = sum([1 for i in self.dealer.deck if i.name == "ace"])
         combinations = math.comb(self.decksize, 2)
         percentage = (tens * aces) / combinations
-        print(percentage)
         s = f"{percentage}% chance of blackjack"
         self.output(s)
 
@@ -66,7 +68,6 @@ class Driver:
         """
         count = sum([1 for i in self.dealer.deck if i.value <= x])
         busting = (count / self.decksize) * 100
-        print(busting)
         s = f"{str(busting)}% chance of not breaking 21"
         self.output(s)
 
