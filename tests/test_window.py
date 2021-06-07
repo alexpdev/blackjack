@@ -35,16 +35,13 @@ class TestWindow:
     decks = 1
     players = 2
     app = app
-    window = Window(parent=None, players=players, decks=decks, app=app)
+    window = Window(parent=None, app=app)
 
 
     def test_window_params(self):
-        assert self.window.players_count == self.players
-        assert self.window.deck_count == self.decks
         assert self.app == self.window.app
 
     def test_window_layouts(self):
-        assert self.window.ncards_val.text() == str(self.window.deck_count * 52)
         assert self.window.objectName() == "MainWindow"
         assert self.window.windowTitle() == "BlackJack"
         assert self.window.central is not None
@@ -52,16 +49,3 @@ class TestWindow:
         assert self.window.horiztop  is not None
         assert self.window.button1 is not None
         assert self.window.textBrowser is not None
-
-    def test_window_labels(self):
-        assert self.window.ncards_label is not None
-        assert type(self.window.ncards_label) == QLabel
-        assert self.window.ncards_label.text() == "Cards in Deck: "
-        assert type(self.window.ncards_val) == QLabel
-        assert self.window.ndecks_label.text() == "Number of Decks: "
-        assert self.window.ndecks_val.text() == "0"
-        assert type(self.window.ndecks_val) == QLabel
-        assert self.window.nplayers_label.text() == "Number of Players: "
-        assert type(self.window.nplayers_label) == QLabel
-        assert self.window.nplayers_val.text() == "0"
-        assert type(self.window.nplayers_val) == QLabel

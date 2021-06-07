@@ -25,7 +25,7 @@ from PyQt6.QtCore import QRect, Qt
 from PyQt6.QtGui import QAction, QFont
 from PyQt6.QtWidgets import (QDialog, QDialogButtonBox, QHBoxLayout, QLabel,
                              QMenu, QMenuBar, QPushButton, QSizePolicy,
-                             QSpinBox, QVBoxLayout)
+                             QSpinBox, QVBoxLayout, QMessageBox, QDialog)
 
 
 class MenuBar(QMenuBar):
@@ -120,7 +120,7 @@ class MenuBar(QMenuBar):
         sys.exit()
 
 
-class About(QDialogButtonBox):
+class About(QDialog):
     """Dialog with information about the Program."""
 
     def __init__(self, parent=None, window=None):
@@ -136,14 +136,13 @@ class About(QDialogButtonBox):
         font2 = QFont()
         font.setPointSize(11)
         font2.setPointSize(20)
-        fixed = QSizePolicy
+        fixed = QSizePolicy.Policy.Fixed
         sizePolicy = QSizePolicy(fixed, fixed)
         self.resize(365, 229)
         self.setWindowTitle("About")
         self.setObjectName("aboutBox")
         self.setGeometry(QRect(180, 190, 171, 32))
         self.setSizePolicy(sizePolicy)
-        self.setOrientation(Qt.Orientation.Horizontal)
         self.label = QLabel(self)
         self.label_2 = QLabel(self)
         self.label_3 = QLabel(self)
@@ -167,12 +166,11 @@ class About(QDialogButtonBox):
         self.label_5.setText("License GNU LESSER GENERAL PUBLIC LICENSE")
         self.label_6.setText("Creator AlexPdev")
         self.button = QPushButton("Ok", parent=self)
-        self.setDefaultButton(self.button)
-        self.button.tiggered.connect(self.okbutton)
+        self.button.pressed.connect(self.okbutton)
 
     def okbutton(self):
         """Close Window."""
-        self.accepted()
+        self.done(self.accept)
 
 
 class Settings(QDialog):

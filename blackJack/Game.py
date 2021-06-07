@@ -25,7 +25,7 @@ class Driver:
         self.players = players
         self.decks = decks
         self.app = app
-        self.window = Window(parent=None, players=self.players, app=self.app)
+        self.window = Window(parent=None, app=self.app)
         # Dealer instance has most power and constrol over gameplay.
         self.dealer = Dealer(
             window=self.window,
