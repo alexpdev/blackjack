@@ -106,7 +106,7 @@ class PlayerBox(QGroupBox):
         self.hbox = QHBoxLayout()
         self.vbox.addLayout(self.hbox)
         self.vbox.addLayout(self.grid)
-        self._setLayout(self.vbox)
+        self.setLayout(self.vbox)
         self._setupLabels()
         self._setupCards()
 
@@ -180,6 +180,8 @@ class PlayerBox(QGroupBox):
             self.setStyleSheet(self.onsheet)
 
 
+CARDBACK = os.path.join(os.environ["IMG_DIR"],"card_cover.png")
+
 class CardWidget(QLabel):
     """Store the image of the card it represents for GUI display.
 
@@ -189,9 +191,6 @@ class CardWidget(QLabel):
     stylesheet = """QLabel {
         margin: 0px;
         padding: 0px;}"""
-
-    card_back = os.path.join(os.path.dirname(
-                os.path.dirname(__file__)), "img", "card-cover.png")
 
     def __init__(self, parent=None, card=None, cover=True, path=None):
         """Construct new CardWidget instance.
@@ -204,15 +203,13 @@ class CardWidget(QLabel):
         super().__init__(parent=parent)
         self.setStyleSheet(self.stylesheet)
         self.cover = cover
-        if not path and cover:
-            path = self.card_back
         self.path = path
         self.card = card
         self.setImage()
 
     def faceDown(self):
         """Call to hide value of dealers facedown card."""
-        pixmap = QPixmap(self.card_back)
+        pixmap = QPixmap(CARDBACK)
         self.setPixmap(pixmap)
 
     def faceUp(self):
@@ -231,5 +228,7 @@ class CardWidget(QLabel):
 
     def setImage(self):
         """Assign image path as pixmap."""
+        if not self.path:
+            self.path = CARDBACK
         pixmap = QPixmap(self.path)
         self.setPixmap(pixmap)

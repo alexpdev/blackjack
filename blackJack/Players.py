@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
 
+from time import sleep
 from blackJack.Deck import Deck
 
 
@@ -79,7 +80,6 @@ class Player:
         """Call at the beginning and end of players turn."""
         self._turn = not self._turn
         self.box.turn()
-        return self.isturn()
 
     def output(self, line):
         """Write output to QTextBrowserWidgit.
@@ -91,6 +91,9 @@ class Player:
             line (str): Content to print to window.
         """
         self.window.textBrowser.append(line)
+        scrollbar = self.window.textBrowser.verticalScrollBar()
+        distance = scrollbar.maximum() - scrollbar.value()
+        self.window.textBrowser.scroll(0,distance)
 
     def add_card(self, card):
         """Add a Card object to Players hand.
@@ -101,6 +104,7 @@ class Player:
             card (Card): Card object popped off deck
         """
         self.hand.append(card)
+        self.show_score(self.score)
         for widg in self.cards:
             if widg.cover:
                 return widg.setCard(card)
@@ -115,12 +119,11 @@ class Player:
         Args:
             score (int): self.score
         """
-        self.box.scorelabel.setText(score)
+        self.box.scorelabel.setText(str(score))
 
     def show_hand(self):
         """Wtites logs details about the score and cards in players hand."""
         score = str(self.score)
-        self.show_score(score)
         output = "".join([str(self), " ", str(self.hand), " ", score, "\n"])
         self.output(output)
 
@@ -145,9 +148,7 @@ class Dealer(Player):
         self.current = 0
         self.players = []
         self.deck = Deck.times(self.deck_count)
-        self.limit = 50
         self.driver = driver
-        self.add_players
 
     def setPreferences(self, decks=None, players=None):
         """
@@ -165,6 +166,18 @@ class Dealer(Player):
             self.add_players()
         self.deck = Deck.times(self.deck_count)
         self.new_game()
+
+    @property
+    def limit(self):
+        """
+        Return the size of the deck needed before deck is reset.
+
+        Returns:
+            int: minimum deck size before reset.
+        """
+        if self.deck_count == 1:
+            return 20
+        return 50
 
     @property
     def decksize(self):
@@ -212,7 +225,6 @@ class Dealer(Player):
         card = self.deck.pop()
         self.driver.draw(card)
         player.add_card(card)
-        player.show_hand()
         self.window.update()
         self.window.repaint()
 
@@ -226,15 +238,17 @@ class Dealer(Player):
     def dealer_round(self):
         """Call when all other players have had their turn betting."""
         self.turn()
+        sleep(.3)
         for card in self.cards:
             card.faceUp()
-        self.show_hand()
+            sleep(.3)
         while self.score < 16:
             self.deal_card(self)
+            sleep(.3)
         if self.score > 21:
-            self.output("Dealer Busts")
+            sleep(.3)
+            self.output("Dealer Broke")
         self.turn()
-        self.driver.chances_of_blackjack()
 
     def player_hit(self, player):
         """Call when Player asks dealer to "hit".
@@ -262,6 +276,7 @@ class Dealer(Player):
     def new_game(self):
         """Call after dealer has played their turn."""
         if len(self.deck) <= self.limit:
+            self.output("Starting Fresh Deck")
             del self.deck
             self.deck = Deck.times(self.deck_count)
             self.driver.update_count()

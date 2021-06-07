@@ -120,7 +120,6 @@ class Window(QMainWindow):
         # adding a MenuBar
         self.mainMenuBar = MenuBar(parent=self, window=self)
         self.setMenuBar(self.mainMenuBar)
-        self.mainMenuBar.setNativeMenuBar(False)
 
         # list of groupboxes. one for each player
         self.boxes = []
