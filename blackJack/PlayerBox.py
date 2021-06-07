@@ -20,9 +20,10 @@
 #########################################################################
 
 import os
-from PyQt6.QtGui import QPixmap, QPainter, QPicture
 
-from PyQt6.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QSpacerItem, QVBoxLayout, QWidget, QGridLayout
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import (QGridLayout, QGroupBox, QHBoxLayout, QLabel,
+                             QSizePolicy, QSpacerItem, QVBoxLayout)
 
 IMG_DIR = os.environ.get("IMG_DIR")
 # Directory containing all png files for cards.
@@ -39,91 +40,96 @@ class PlayerBox(QGroupBox):
     offsheet = """QGroupBox {
         font-size: 14pt;
         padding: 4px;
-        margin: 2px;
+        margin: 5px;
         color: #efeefe;
-        border: 3px solid #dfa;} """
+        border: 9px solid #dfa;} """
+
     onsheet = """QGroupBox {
-            color: red;
-            padding: 8px;
-            margin: 5px;
-            border: 5px solid red;
-            border-radius: 9px;}"""
+        color: red;
+        padding: 4px;
+        margin: 5px;
+        border: 5px solid red;
+        border-radius: 2px;}"""
+
+    labelsheet = """QLabel {
+        color: #efeefe;
+        margin-bottom: 8px;
+        font-weight: bold;
+        font-size: 14pt;
+        font-style: italic;}"""
+
+    scoresheet = """QLabel {
+        border: 1px solid #efeefe;
+        padding: 3px;
+        margin-bottom: 8px;
+        color: #efeefe;
+        font-weight: bold;
+        font-size: 16pt;
+        font-style: italic;}"""
 
     def __init__(self, title, parent=None, player=None):
-        """Construct a PlayerBox Widget."""
+        """Construct a PlayerBox Widget.
+
+        Args:
+            parent (QWidget, optional) Parent widget object. Defaults to None.
+            player (Player) The player this box will be assigned to.
+        """
         super().__init__(title, parent=parent)
         self.player = player
-        self.cardCount = 0
-        self.setStyleSheet(self.offsheet)
-        self.vbox = QVBoxLayout()
-        self.setLayout(self.vbox)
-        self.grid = QGridLayout()
-        self.hbox2 = QHBoxLayout()
-        self.label = QLabel("Score: ")
-        self.label.setStyleSheet(
-            """
-            QLabel {
-            color: #efeefe;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 14pt;
-            font-style: italic;}
-            """
-        )
-        self.scorelabel = QLabel("0")
-        self.scorelabel.setStyleSheet(
-            """
-            QLabel {
-            border: 1px solid #efeefe;
-            padding: 3px;
-            margin-bottom: 8px;
-            color: #efeefe;
-            font-weight: bold;
-            font-size: 16pt;
-            font-style: italic;}
-            """
-        )
-        self.hbox2.addWidget(self.label)
-        self.hbox2.addWidget(self.scorelabel)
-        self.hbox2.addSpacerItem(QSpacerItem(10, 0))
-        self.vbox.addLayout(self.hbox2)
-        self.vbox.addLayout(self.grid)
         self._turn = False
-        card = CardWidget(parent=self)
-        self.grid.addWidget(card,0,0,-1,-1)
-        card2 = CardWidget(parent=self)
-        self.grid.addWidget(card2,0,1,-1,-1)
-        self.addCard(card)
-        self.cardCount += 1
-        self.addCard(card2)
-        self.cardCount += 1
         self.player.box = self
+        self.setStyleSheet(self.offsheet)
+        self._setupUi()
 
-        # crect = card.rect()
-        # cpixmap = card.pixmap()
-        # startp = crect.left() + (crect.width() // 2)
-        # painter = QPainter()
-        # cardPic = QPicture()
-        # painter.begin(cardPic)
-        # painter.drawPixmap(startp,crect.top(),cpixmap)
-        # painter.end()
-        # # cardPic.show()
-        # # painter.save()
-        # # self.hbox.addItem(cardPic)
-        # # card2p = card2.pixmap()
-        # # card2.hide()
-        # cimage = card.pixmap()
+    def _setupLabels(self):
+        """Set up window labels."""
+        expolicy = QSizePolicy.Policy.MinimumExpanding
+        minpolicy = QSizePolicy.Policy.Minimum
+        self.label = QLabel("Score: ")
+        self.label.setStyleSheet(self.labelsheet)
+        self.hbox.addWidget(self.label)
+        self.hbox.addSpacerItem(QSpacerItem(10, 0, minpolicy, minpolicy))
+        self.scorelabel = QLabel("0")
+        self.scorelabel.setStyleSheet(self.scoresheet)
+        self.hbox.addWidget(self.scorelabel)
+        self.hbox.addSpacerItem(QSpacerItem(50, 0, expolicy, minpolicy))
 
-        # cardPic.play(painter)
-        # # self.hbox.addWidget(card)
-        # # self.addCard(card)
-        # # painter = QPainter()
-        # # self.addCard(card2)
+    def _setupCards(self):
+        """Create card covers."""
+        card = CardWidget(parent=self)
+        self.addCard(card)
+        self.grid.addWidget(card, 0, 0, -1, -1)
+        card2 = CardWidget(parent=self)
+        self.addCard(card2)
+        self.grid.addWidget(card2, 0, 1, -1, -1)
 
+    def _setupUi(self):
+        """Create UI elements."""
+        self.vbox = QVBoxLayout()
+        self.grid = QGridLayout()
+        self.hbox = QHBoxLayout()
+        self.vbox.addLayout(self.hbox)
+        self.vbox.addLayout(self.grid)
+        self._setLayout(self.vbox)
+        self._setupLabels()
+        self._setupCards()
+
+    @property
+    def cardCount(self):
+        """Count cards in players hand.
+
+        Returns:
+            int: Total number of cards in players hand.
+        """
+        return len(self.player.cards)
 
     @property
     def cards(self):
-        """Shortcut method accessing players cards property."""
+        """Shortcut method accessing players cards property.
+
+        Returns:
+            list: A list of cards stored in players hand.
+        """
         return self.player.cards
 
     def addCard(self, card):
@@ -137,7 +143,7 @@ class PlayerBox(QGroupBox):
     def reset(self):
         """Clear PlayerBox of all widgets.
 
-        Called when cuttent round ends and new deal begins.
+        Called when current round ends and new deal begins.
         """
         while len(self.cards) > 0:
             card = self.cards[0]
@@ -145,22 +151,23 @@ class PlayerBox(QGroupBox):
             self.grid.removeWidget(card)
             self.deleteCard()
             del card
-            self.cardCount -= 1
 
-    def addWidget(self,card):
+    def addWidget(self, card):
+        """Add another card to Window."""
         pos = self.cardCount
         widget = CardWidget(cover=False, card=card, path=card.path)
         if pos:
-            self.grid.addWidget(widget,0,pos,-1,-1)
+            self.grid.addWidget(widget, 0, pos, -1, -1)
         else:
-            self.grid.addWidget(widget,0,0,-1,-1)
-        self.cardCount += 1
+            self.grid.addWidget(widget, 0, 0, -1, -1)
         self.addCard(widget)
 
-
-
     def isTurn(self):
-        """Return True if currently players turn."""
+        """Return True if currently players turn.
+
+        Returns:
+            bool: True if it's players turn else false.
+        """
         return self._turn
 
     def turn(self):
@@ -176,8 +183,9 @@ class PlayerBox(QGroupBox):
             self._turn = True
             self.setStyleSheet(self.onsheet)
 
+
 class CardWidget(QLabel):
-    """CardWidget holds the image of the card it represents.
+    """Store the image of the card it represents for GUI display.
 
     QLabel (QPixmap) Either a specific card or back of card if it is facedown.
     """
@@ -189,8 +197,8 @@ class CardWidget(QLabel):
     def __init__(self, parent=None, card=None, cover=True, path=CARDCOVER):
         """Construct new CardWidget instance.
 
-        parent (QWidget, optional): parent widget for CardWidget. Defaults to None.
-        card (Card(), optional): Card object. Defaults to None.
+        parent (QWidget, optional): parent widget for CardWidget.
+        card (Card, optional): Card object. Defaults to None.
         cover (bool, optional): If True use Cardcoverpath else use give path.
         path (str, optional): path to Pixmap Image. Defaults to CARDCOVER.
         """

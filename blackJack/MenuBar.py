@@ -20,20 +20,12 @@
 #########################################################################
 
 import sys
-from PyQt6.QtGui import QAction, QFont
+
 from PyQt6.QtCore import QRect, Qt
-from PyQt6.QtWidgets import (
-    QDialog,
-    QHBoxLayout,
-    QLabel,
-    QMenu,
-    QMenuBar,
-    QPushButton,
-    QSpinBox,
-    QVBoxLayout,
-    QDialogButtonBox,
-    QSizePolicy
-)
+from PyQt6.QtGui import QAction, QFont
+from PyQt6.QtWidgets import (QDialog, QDialogButtonBox, QHBoxLayout, QLabel,
+                             QMenu, QMenuBar, QPushButton, QSizePolicy,
+                             QSpinBox, QVBoxLayout)
 
 
 class MenuBar(QMenuBar):
@@ -44,7 +36,12 @@ class MenuBar(QMenuBar):
     """
 
     def __init__(self, parent=None, window=None):
-        """Construct MenuBar instance and create submenus."""
+        """Construct MenuBar instance and create submenus.
+
+        Args:
+            parent (widget, optional) Objects parent widget. Defaults to None.
+            window (widget, optional) Program's main window. Defaults to None.
+        """
         super().__init__(parent=parent)
         self.setObjectName("MainMenuBar")
         self.setVisible(True)
@@ -53,9 +50,9 @@ class MenuBar(QMenuBar):
         self.window.setMenuBar(self)
         self.filemenu = QMenu("File", parent=self)
         self.settings = QMenu("Preferences", parent=self)
-        self.help = QMenu("Help",parent=self)
+        self.help = QMenu("Help", parent=self)
         self.settingsdialog = Settings(parent=self, window=self.window)
-        self.aboutdialog = About(parent=self,window=self.window)
+        self.aboutdialog = About(parent=self, window=self.window)
         self.addMenu(self.filemenu)
         self.addMenu(self.settings)
         self.addMenu(self.help)
@@ -82,26 +79,30 @@ class MenuBar(QMenuBar):
         self.aboutSelf.triggered.connect(self.about)
 
     def aboutQtMenu(self):
+        """Display Qt Information."""
         self.aboutQt()
 
     def about(self):
+        """Display Program Information."""
         self.modal = self.aboutDialog()
         self.modal.show()
 
     def maxamizeWindow(self):
+        """Set Window to fill screen."""
         width = self.window.maximumWidth()
         height = self.window.maximumHeight()
-        self.window.resize(width,height)
+        self.window.resize(width, height)
         return
 
     def minimizeWindow(self):
+        """Set window to hide."""
         width = self.window.minimumWidth()
         height = self.window.minimumHeight()
-        self.window.resize(width,height)
+        self.window.resize(width, height)
         return
 
     def newGame(self):
-        """Start New Game Action for File Submenu.
+        """Start New Game.
 
         Same as pressing NewGameButton.
         """
@@ -120,71 +121,70 @@ class MenuBar(QMenuBar):
 
 
 class About(QDialogButtonBox):
-    def __init__(self, parent=None,window=None):
+    """Dialog with information about the Program."""
+
+    def __init__(self, parent=None, window=None):
+        """Construct Dialog Box.
+
+        Args:
+            parent (QWidget, optional) Parent widget object. Defaults to None.
+            window (QWidget, optional) Program's MainWindow. Defaults to None.
+        """
         super().__init__(parent=parent)
         self.window = window
+        font = QFont()
+        font2 = QFont()
+        font.setPointSize(11)
+        font2.setPointSize(20)
+        fixed = QSizePolicy
+        sizePolicy = QSizePolicy(fixed, fixed)
         self.resize(365, 229)
-        self.setObjectName(u"buttonBox")
+        self.setWindowTitle("About")
+        self.setObjectName("aboutBox")
         self.setGeometry(QRect(180, 190, 171, 32))
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
         self.setOrientation(Qt.Orientation.Horizontal)
-        self.label_2 = QLabel(self)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(150, 30, 49, 16))
-        self.label_3 = QLabel(self)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(20, 80, 211, 16))
-        font = QFont()
-        font.setPointSize(11)
-        self.label_3.setFont(font)
-        self.label_4 = QLabel(self)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(20, 160, 201, 20))
-        self.label_5 = QLabel(self)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(20, 120, 341, 41))
-        font1 = QFont()
-        font1.setPointSize(12)
-        self.label_5.setFont(font1)
         self.label = QLabel(self)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(20, 10, 161, 51))
-        font2 = QFont()
-        font2.setPointSize(20)
-        self.label.setFont(font2)
+        self.label_2 = QLabel(self)
+        self.label_3 = QLabel(self)
+        self.label_4 = QLabel(self)
+        self.label_5 = QLabel(self)
         self.label_6 = QLabel(self)
-        self.label_6.setObjectName(u"label_6")
+        self.label.setGeometry(QRect(20, 10, 161, 51))
+        self.label_2.setGeometry(QRect(150, 30, 49, 16))
+        self.label_3.setGeometry(QRect(20, 80, 211, 16))
+        self.label_4.setGeometry(QRect(20, 160, 201, 20))
+        self.label_5.setGeometry(QRect(20, 120, 341, 41))
         self.label_6.setGeometry(QRect(20, 110, 121, 16))
+        self.label.setFont(font2)
+        self.label_3.setFont(font)
+        self.label_5.setFont(font)
         self.label_6.setFont(font)
-        self.accepted.connect(self.accept)
-        self.rejected.connect(self.reject)
-        self.setWindowTitle("About")
+        self.label.setText("BlackJack")
         self.label_2.setText("v 0.3")
         self.label_3.setText("Copyright 2021 AlexPdev Inc.")
-        self.label_4.setText("https://fsf.org/>")
+        self.label_4.setText("https://fsf.org/")
         self.label_5.setText("License GNU LESSER GENERAL PUBLIC LICENSE")
-        self.label.setText("BlackJack")
         self.label_6.setText("Creator AlexPdev")
-    # retranslateUi
+        self.button = QPushButton("Ok", parent=self)
+        self.setDefaultButton(self.button)
+        self.button.tiggered.connect(self.okbutton)
 
-    def accept(self):
-        pass
-    def reject(self):
-        pass
-
-
-
+    def okbutton(self):
+        """Close Window."""
+        self.accepted()
 
 
 class Settings(QDialog):
     """Open new window with editable options that effect gameplay."""
 
     def __init__(self, parent=None, window=None):
-        """Construct Settings Dialog."""
+        """Construct Settings Dialog.
+
+        Args:
+            parent (QWidget, optional) Parent widget object. Defaults to None.
+            window (QWidget, optional) Program's MainWindow. Defaults to None.
+        """
         super().__init__(parent=parent)
         self.setObjectName("Preferences")
         self.window = window
@@ -217,10 +217,10 @@ class Settings(QDialog):
         self.finished.connect(self.finishedSignal)
 
     def accept(self):
+        """Close Window."""
         dealer = self.window.dealer
         dealer.setPreferences(self.decksSpin.value(), self.playersSpin.value())
         super().accept()
-
 
     def finishedSignal(self):
         """When Settings Window returns accept or reject signals."""

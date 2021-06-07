@@ -29,7 +29,13 @@ class Player:
     """
 
     def __init__(self, pos=None, window=None, **kwargs):
-        """Player Constructor Function."""
+        """Player Constructor Function.
+
+        Args:
+            pos (int): players position at table.
+            window (Window): The program's main window.
+            **kwargs: arbitrary keyword arguements.
+        """
         self.pos = pos
         self.window = window
         self._turn = False
@@ -41,25 +47,31 @@ class Player:
 
     @property
     def score(self):
-        """Total points from sum of card values in hand."""
+        """Total points from sum of card values in hand.
+
+        Returns:
+            int: sum of the cards in players hand.
+        """
         return sum(card.value for card in self.hand)
 
     def __str__(self):
         """Player Title.
 
-        Returns player's title property.
+        Returns:
+            str: Players title attribute.
         """
         return self.title
 
     def __repr__(self):
-        """Return str(self)."""
         return self.title
 
     def isturn(self):
         """Return True or False.
 
-        Called by dealer and Window Buttons to
-        check who's turn it is.
+        Called by dealer and Window Buttons to check who's turn it is.
+
+        Returns:
+            bool: true if it is players turn else false.
         """
         return self._turn
 
@@ -72,31 +84,36 @@ class Player:
     def output(self, line):
         """Write output to QTextBrowserWidgit.
 
-        Args: line (str): Content to print to window.
-        Simple way to keep track of previous hands
-        and cards already dealt by dealer.
+        Simple way to keep track of previous hands and cards
+        already dealt by dealer.
+
+        Args:
+            line (str): Content to print to window.
         """
         self.window.textBrowser.append(line)
 
     def add_card(self, card):
         """Add a Card object to Players hand.
 
-        Args: card (Card()): Card object popped off deck
         Takes a card just poped off Deck by dealer and includes it in hand.
+
+        Args:
+            card (Card): Card object popped off deck
         """
         self.hand.append(card)
         for widg in self.cards:
             if widg.cover:
                 return widg.setCard(card)
+
         self.box.addWidget(card)
         self.window.repaint()
         self.window.update()
 
-
     def show_score(self, score):
         """Write players score to the QTextBrowser Widgit.
 
-        Args: score (int): self.score
+        Args:
+            score (int): self.score
         """
         self.box.scorelabel.setText(score)
 
@@ -117,8 +134,9 @@ class Dealer(Player):
     def __init__(self, decks=1, players=2, driver=None, **kwargs):
         """Dealer constructor.
 
-        Args: deck_count(int, optional): Number of decks to use.
-        player_count (int, optional): Total players in game.
+        Args:
+            decks (int, optional): Number of decks to use.
+            players (int, optional): Total players in game.
         """
         super().__init__(**kwargs)
         self.title = "Dealer"
@@ -129,8 +147,16 @@ class Dealer(Player):
         self.deck = Deck.times(self.deck_count)
         self.limit = 50
         self.driver = driver
+        self.add_players
 
-    def setPreferences(self,decks=None,players=None):
+    def setPreferences(self, decks=None, players=None):
+        """
+        Set preferences for the next game.
+
+        Args:
+            decks (int, optional): Number of decks. Defaults to None.
+            players (int, optional): Number of players. Defaults to None.
+        """
         del self.deck
         if decks:
             self.deck_count = decks
@@ -142,13 +168,19 @@ class Dealer(Player):
 
     @property
     def decksize(self):
+        """Count of cards in the current deck.
+
+        Returns:
+            int: Total number of cards in the deck.
+        """
         return len(self.deck)
 
     @property
     def score(self):
         """Score overloaded function from Player Class.
 
-        Returns: [str]: Dealers score
+        Returns:
+            int: Dealers score
         """
         if self.isturn():
             return super().score
@@ -157,7 +189,8 @@ class Dealer(Player):
     def add_card(self, card):
         """Overload method from player class.
 
-        Args: card (Card()): adds card just pooped from deck to hand.
+        Args:
+            card (Card): adds card just pooped from deck to hand.
         """
         super().add_card(card)
         if len(self.cards) == 2:
@@ -173,10 +206,11 @@ class Dealer(Player):
     def deal_card(self, player):
         """Retreive card from top of deck and deals to player.
 
-        Args: player (Player()): instance of Player in game
+        Args:
+            player (Player): instance of Player in game
         """
         card = self.deck.pop()
-        self.driver.update_count()
+        self.driver.draw(card)
         player.add_card(card)
         player.show_hand()
         self.window.update()
@@ -185,6 +219,8 @@ class Dealer(Player):
     def round(self):
         """Begin new players turn for betting, hitting or staying."""
         player = self.players[self.current]
+        needed = 21 - player.score
+        self.driver.chances_of_x(needed)
         player.turn()
 
     def dealer_round(self):
@@ -198,17 +234,21 @@ class Dealer(Player):
         if self.score > 21:
             self.output("Dealer Busts")
         self.turn()
+        self.driver.chances_of_blackjack()
 
     def player_hit(self, player):
         """Call when Player asks dealer to "hit".
 
-        Args: Player (player object instance) the player whos turn it is.
+        Args:
+            Player (Player) the player whos turn it is.
         """
         self.deal_card(player)
         if player.score > 21:
-            self.output(player.title + " Bust")
+            self.window.playerBroke(player, player.score)
             player.turn()
             self.next_player()
+        else:
+            self.driver.chances_of_x(21 - player.score)
 
     def next_player(self):
         """Call when previous players turn ended."""
