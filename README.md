@@ -44,15 +44,8 @@ python path\to\project\main.py
 
 BlackJack uses the following license: GNU LGPL v3.0
 
-### Features
+### Other
 
-. PyQt6 for GUI
-. 100% written with python
-. settings are set in config.py for now
-. optional number of decks to play with
-. optional number of players in addition to dealer
-. optional limit of cards dealt before reshuffle
-. optional input for guessing probability
-. entry point for execution is main.py
-. card images are stored in img folder
-. requires PyQt
+* Requires PyQt6, Python3, [pytest]
+* entry point for execution is main.py
+* card images are stored in img folder
