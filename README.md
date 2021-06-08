@@ -3,7 +3,7 @@
 ![Random](https://img.shields.io/badge/Random-2355-orange)
 ![License](https://img.shields.io/badge/License-GNU%20LGPL-blue)
 ![GUI](https://img.shields.io/badge/GUI-Qt-green)
-![Logo](./img/logo.png)
+![Logo](./img/blackjackicon.png)
 
 BlackJack is a small graphical tool that I built to help me improve at counting cards.
 
