@@ -7,6 +7,7 @@ from blackJack.Window import Window
 class Driver:
     """
     Responsible for putting pieces together and driving them forward.
+    --------------------------------------------------
 
     Starts the application, creates the window, creates the dealer and allows
     dealer to perform the rest of game setup. Calculates probabilities

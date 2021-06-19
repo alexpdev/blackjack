@@ -76,6 +76,10 @@ class Deck(list):
         else:
             super().__init__(*args, **kwargs)
 
+    @property
+    def range(self):
+        return range(len(self))
+
     @classmethod
     def times(cls, num):
         """Class method constructor for creating multiple decks.
@@ -103,6 +107,19 @@ class Deck(list):
         except IndexError:
             raise DeckEmpty
 
+    def move(self,position):
+        """
+        Move card to another position in the deck.
+
+        Args:
+            position (int): index location for moving the card.
+        """
+        count = 0
+        while count < len(self):
+            card = self.pop(0)
+            self.insert(position, card)
+            count += 1
+
     def swap(self, i1, i2):
         """Swap utility for shuffling deck.
 
@@ -114,15 +131,19 @@ class Deck(list):
         self[i1] = self[i2]
         self[i2] = val
 
-    def shuffle(self, t=8):
+    def shuffle(self, t=3):
         """Shuffle Cards in deck.
 
         Args: t (int, optional): number of times to shuffle the deck
         """
-        for _ in range(len(self) * t):
-            i1 = random.choice(range(len(self)))
-            i2 = random.choice(range(len(self)))
-            self.swap(i1, i2)
+        while t > 0:
+            t -= 1
+            for _ in self.range:
+                i1 = random.choice(self.range)
+                i2 = random.choice(self.range)
+                self.swap(i1, i2)
+                i3 = random.choice(self.range)
+                self.move(i3)
 
 
 IMG_DIR = os.environ["IMG_DIR"]

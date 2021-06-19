@@ -29,6 +29,11 @@ class StatsFrame(QWidget):
         self.vbox1.addLayout(self.under21)
         self.hlayout.addLayout(self.vbox1)
         self.hlayout.addLayout(self.vbox2)
+        self.probabilities.setStyleSheet("""QLabel {font-size: 13pt;
+                                                    font-weight: bold;
+                                                    padding-right: 5px;
+                                                    color: #fca018;
+                                                    alignment: center;}""")
         self.labels = {
             "cards" : self.cardCount,
             "decks" : self.deckCount,
@@ -66,7 +71,6 @@ class HLabels(QHBoxLayout):
     def update_value(self,text):
         self.value.setText(str(text))
 
-    def update_percent(self,text):
-        if float(text) != 0:
-            text = str(round(float(text) * 100, 3))
+    def update_percent(self,var):
+        text = str(round(var * 100, 4))
         self.value.setText(text + "%")

@@ -37,7 +37,7 @@ class PlayerBox(QGroupBox):
         padding: 4px;
         margin: 5px;
         color: #efeefe;
-        border: 9px solid #dfa;} """
+        border: 9px solid #dfa;}"""
 
     onsheet = """QGroupBox {
         color: red;

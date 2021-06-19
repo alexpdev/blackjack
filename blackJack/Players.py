@@ -249,7 +249,7 @@ class Dealer(Player):
             sleep(0.3)
         if self.score > 21:
             sleep(0.3)
-            self.output("Dealer Broke")
+            # self.output("Dealer Broke")
         self.turn()
 
     def player_hit(self, player):

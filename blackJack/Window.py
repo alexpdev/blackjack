@@ -1,23 +1,3 @@
-# # information labels
-# # self.decks_label = QLabel("Number of Decks: ")
-# # self.decks_val = QLabel("0")
-# # self.nplayers_label = QLabel("Number of Players: ")
-# # self.nplayers_val = QLabel("0")
-# labelSheet = """QLabel {
-#                 font-size: 12pt;
-#                 font-weight: bold;
-#                 padding-right: 5px;
-#                 color: #9eeeee;}"""
-# valSheet = """QLabel {
-#                 font-size: 12pt;
-#                 font-weight: bold;
-#                 color: #eece9e;}"""
-# self.cards_label = QLabel("Cards in Deck: ")
-# self.cards_val = QLabel("0")
-# self.cards_label.setStyleSheet(labelSheet)
-# self.cards_val.setStyleSheet(valSheet)
-# self.cards_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-# self.cards_val.setAlignment(Qt.AlignmentFlag.AlignLeft)
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 
@@ -52,25 +32,27 @@ from blackJack.PlayerBox import PlayerBox
 
 
 class Window(QMainWindow):
-    """Window MainWindow for Blackjack UI.
+    """QMainWindow subclass.
 
-    Parent:
-        QMainWindow (Qt Widget Window): MainWindow
+    Main window widget for the program. Holds general layout details
+    for other widgets.
     """
 
-    ssheet = """ QMainWindow {
-                    margin: 8px;
-                    padding: 6px;
-                    background-color: #151a1e;
-                    color: #d3dae3;}
-                """
+    ssheet = """
+        QMainWindow {
+            margin: 8px;
+            padding: 6px;
+            background-color: #151a1e;
+            color: #d3dae3;}
+        """
 
     def __init__(self, parent=None, app=None, driver=None):
         """Window Constructor.
 
         Args:
-            parent (QWidget, optional): parent widget. Defaults to None.
+            parent (QWidget, optional): Parent widget. Defaults to None.
             app (QApplication, optional): Main Application. Defaults to None.
+            driver (Driver, optional):
         """
         super().__init__(parent=parent)
         self.app = app
@@ -84,10 +66,7 @@ class Window(QMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        """Setupui Constructs the internal layout of Window.
-
-        Widget contents for the Window.
-        """
+        """Construct the general layout of Window."""
         self.central = QWidget(parent=self)
         self.centLayout = QVBoxLayout()
         self.central.setLayout(self.centLayout)
@@ -158,11 +137,11 @@ class Window(QMainWindow):
             player.box.hide()
             del player.box
             self.players.remove(player)
-            self.dealer.players.remove(player)
+            # self.dealer.players.remove(player)
             del player
             self.update()
             self.repaint()
-        self.players = self.players[:1]
+        # self.players = self.players[:1]
 
     def playerBroke(self, player, score):
         """
@@ -262,8 +241,7 @@ class NewGameButton(QPushButton):
                     padding: px;
                     margin: 2px;
                     border: 1px solid #050a0e;
-                    border-radius: 5px;}
-                    """
+                    border-radius: 5px;}"""
 
     def __init__(self, parent=None, window=None):
         """Construct for NewGameButton.
@@ -284,18 +262,18 @@ class NewGameButton(QPushButton):
 
         Sets score to zero, and starts a new game.
         """
-        if len(self.window.players) < self.dealer.player_count + 1:
-            self.window.clearPlayers()
-            self.dealer.add_players()
-        else:
-            for player in self.window.players:
-                if player.isturn():
-                    player.turn()
-                player.box.reset()
-                player.hand = []
-                player.cards = []
-            self.window.adjustSize()
-            self.window.dealer.new_game()
+        # if len(self.window.players) < self.dealer.player_count + 1:
+            # self.window.clearPlayers()
+            # self.dealer.add_players()
+        # else:
+        for player in self.window.players:
+            if player.isturn():
+                player.turn()
+            player.box.reset()
+            player.hand = []
+            player.cards = []
+        self.window.adjustSize()
+        self.window.dealer.new_game()
 
 
 class BrokeDialog(QMessageBox):

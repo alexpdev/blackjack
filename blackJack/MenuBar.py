@@ -119,7 +119,7 @@ class About(QDialog):
     def __init__(self, parent=None, window=None):
         """Construct Dialog Box.
 
-        Args:
+        kwargs:
             parent (QWidget, optional) Parent widget object. Defaults to None.
             window (QWidget, optional) Program's MainWindow. Defaults to None.
         """
