@@ -105,7 +105,6 @@ class Player:
             card (Card): Card object popped off deck
         """
         self.hand.append(card)
-        self.show_score(self.score)
         for widg in self.cards:
             if widg.cover:
                 return widg.setCard(card)
@@ -135,7 +134,7 @@ class Dealer(Player):
     Subclass of Player but requires a few extra keyword args
     """
 
-    def __init__(self, decks=1, players=2, driver=None, **kwargs):
+    def __init__(self, decks=2, players=2, driver=None, **kwargs):
         """Dealer constructor.
 
         Args:
@@ -151,7 +150,7 @@ class Dealer(Player):
         self.deck = Deck.times(self.deck_count)
         self.driver = driver
 
-    def setPreferences(self, decks=None, players=None):
+    def resetGame(self, decks=2, players=2):
         """
         Set preferences for the next game.
 
@@ -160,12 +159,12 @@ class Dealer(Player):
             players (int, optional): Number of players. Defaults to None.
         """
         del self.deck
-        if decks:
-            self.deck_count = decks
-        if players:
-            self.player_count = players
-            self.add_players()
+        self.deck_count = decks
+        self.player_count = players
+        self.players = []
+        self.add_players()
         self.deck = Deck.times(self.deck_count)
+        self.driver.update_prefs()
         self.new_game()
 
     @property
@@ -224,16 +223,18 @@ class Dealer(Player):
             player (Player): instance of Player in game
         """
         card = self.deck.pop()
-        self.driver.draw(card)
         player.add_card(card)
+        player.show_score(player.score)
+        self.driver.update_decksize()
         self.window.update()
         self.window.repaint()
 
     def round(self):
         """Begin new players turn for betting, hitting or staying."""
         player = self.players[self.current]
-        needed = 21 - player.score
-        self.driver.chances_of_x(needed)
+        self.driver.chances_of_exactly(player)
+        self.driver.chances_of_breaking(player)
+        self.driver.chances_of_under(player)
         player.turn()
 
     def dealer_round(self):
@@ -258,12 +259,13 @@ class Dealer(Player):
             Player (Player) the player whos turn it is.
         """
         self.deal_card(player)
+        self.driver.chances_of_exactly(player)
+        self.driver.chances_of_breaking(player)
+        self.driver.chances_of_under(player)
         if player.score > 21:
             self.window.playerBroke(player, player.score)
             player.turn()
             self.next_player()
-        else:
-            self.driver.chances_of_x(21 - player.score)
 
     def next_player(self):
         """Call when previous players turn ended."""
@@ -278,9 +280,7 @@ class Dealer(Player):
         """Call after dealer has played their turn."""
         if len(self.deck) <= self.limit:
             self.output("Starting Fresh Deck")
-            del self.deck
-            self.deck = Deck.times(self.deck_count)
-            self.driver.update_count()
+            self.resetGame()
         self.start_deal()
         self.current = 0
         self.round()

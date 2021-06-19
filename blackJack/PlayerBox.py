@@ -189,8 +189,8 @@ class CardWidget(QLabel):
     """
 
     stylesheet = """QLabel {
-        margin: 0px;
-        padding: 0px;}"""
+                        margin: 0px;
+                        padding: 0px;}"""
 
     def __init__(self, parent=None, card=None, cover=True, path=None):
         """Construct new CardWidget instance.

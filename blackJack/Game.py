@@ -23,8 +23,9 @@ class Driver:
             decks (int, optional): Number of decks. Defaults tp None.
         """
         self.app = app
+        self.labels = None
         self.drawn = []
-        self.window = Window(parent=None, app=self.app)
+        self.window = Window(parent=None, app=self.app, driver=self)
         # Dealer instance has most power and constrol over gameplay.
         self.dealer = Dealer(
             window=self.window,
@@ -37,47 +38,85 @@ class Driver:
         self.window.show()
 
     def play(self):
+        """Start the game."""
         self.dealer.add_players()
         self.dealer.new_game()
 
-    def output(self, s):
-        """
-        Output textual information to TextBrowser GUI Widget.
+    def hook(self,labels):
+        """Hook labels to the driver."""
+        self.labels = labels
 
-        Args:
-            s (str): text to be written to TextBrowser Widget.
-        """
-        self.dealer.output(s)
-
-    def chances_of_blackjack(self):
-        """Calculate the odds of being dealt a blackJack."""
-        tens = self.total_tens()
-        aces = sum([1 for i in self.dealer.deck if i.name == "ace"])
-        combinations = math.comb(self.decksize, 2)
-        percentage = (tens * aces) / combinations
-        s = f"{percentage}% chance of blackjack"
-        self.output(s)
-
-    def chances_of_x(self, x):
+    def chances_of_under(self,player):
         """
         Calculate the odds of breaking if player hits.
 
         Args:
-            x (int): 21 minus the current players score.
+            player (obj): The player who's turn it currently is
         """
-        count = sum([1 for i in self.dealer.deck if i.value <= x])
-        busting = (count / self.decksize) * 100
-        s = f"{str(busting)}% chance of not breaking 21"
-        self.output(s)
+        x = 21 - player.score
+        count = sum([1 for i in self.dealer.deck if i.value < x])
+        breaking = count / self.decksize
+        self.labels["under"].update_percent(breaking)
 
-    def total_tens(self):
+    def update_prefs(self):
+        """Update deck count, player count window labels"""
+        self.labels["decks"].update_value(self.decks)
+        self.labels["players"].update_value(self.players)
+        self.labels["cards"].update_value(self.decksize)
+
+    def update_decksize(self):
+        """Update the window with the current card count"""
+        self.labels["cards"].update_value(self.decksize)
+
+    def chances_of_exactly(self,player):
+        """
+        Calculate the odds of breaking if player hits.
+
+        Args:
+            player (obj): The player who's turn it currently is
+        """
+        needed = 21 - player.score
+        count = sum([1 for i in self.deck if i.value == needed])
+        exactly = count / self.decksize
+        self.labels["exactly"].update_percent(exactly)
+
+    def chances_of_blackjack(self):
+        """Calculate the odds of being dealt a blackJack."""
+        tens = self.total_tens()
+        aces = sum([1 for i in self.deck if i.name == "ace"])
+        combinations = math.comb(self.decksize, 2)
+        percentage = (tens * aces) / combinations
+        self.labels["blackjack"].update_percent(percentage)
+
+    def chances_of_breaking(self, player):
+        """
+        Calculate the odds of breaking if player hits.
+
+        Args:
+            player (obj): The player who's turn it currently is
+        """
+        x = 21 - player.score
+        count = sum([1 for i in self.deck if i.value > x])
+        breaking = count / self.decksize
+        self.labels["breaking"].update_percent(breaking)
+
+    def tens_in_deck(self):
         """
         Count number of cards left in the Deck with a value of 10.
 
         Returns:
             int: Total number of cards with the value of 10
         """
-        return sum([1 for i in self.dealer.deck if i.value == 10])
+        return sum([1 for i in self.deck if i.value == 10])
+
+    @property
+    def deck(self):
+        """Get the dealer's deck.
+
+        Returns:
+            obj: The deck actively used by the dealer.
+        """
+        return self.dealer.deck
 
     @property
     def decksize(self):
@@ -87,28 +126,39 @@ class Driver:
         Returns:
             int: total count of cards left in deck.
         """
-        return self.dealer.decksize
+        return len(self.dealer.deck)
 
     @property
     def players(self):
-        """Get count of players actively playing."""
+        """Get count of players actively playing.
+
+        Returns:
+            int: Number of active players.
+        """
         return self.dealer.player_count
 
     @property
     def decks(self):
-        """Get number of decks used to make current deck."""
+        """Get number of decks used to make current deck.
+
+        Returns:
+            int: Number of 52 card decks used in game.
+        """
         return self.dealer.deck_count
 
-    def draw(self, card):
-        """
-        Collect cards that have already been drawn and discarded.
+    # def draw(self, card):
+    #     """
+    #     Collect cards that have already been drawn and discarded.
 
-        Args:
-            card (obj): the card most recently pulled from the deck.
-        """
-        self.update_count()
-        self.drawn.append(card)
+    #     Args:
+    #         card (obj): the card most recently pulled from the deck.
+    #     """
+    #     self.drawn.append(card)
+    # def output(self, s):
+    #     """
+    #     Output textual information to TextBrowser GUI Widget.
 
-    def update_count(self):
-        """Update the GUI label with current deck size."""
-        self.window.cards_val.setText(str(self.decksize))
+    #     Args:
+    #         s (str): text to be written to TextBrowser Widget.
+    #     """
+    #     self.dealer.output(s)

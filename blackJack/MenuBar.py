@@ -86,23 +86,18 @@ class MenuBar(QMenuBar):
 
     def maxamizeWindow(self):
         """Set Window to fill screen."""
-        width = self.window.maximumWidth()
-        height = self.window.maximumHeight()
-        self.window.resize(width, height)
-        return
+        self.window.showMaximized()
 
     def minimizeWindow(self):
         """Set window to hide."""
-        width = self.window.minimumWidth()
-        height = self.window.minimumHeight()
-        self.window.resize(width, height)
-        return
+        self.showMinimized()
 
     def newGame(self):
         """Start New Game.
 
         Same as pressing NewGameButton.
         """
+        self.window.resetGame()
         self.window.dealer.setPreferences()
 
     def open_settings(self):

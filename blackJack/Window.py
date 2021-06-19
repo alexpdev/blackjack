@@ -1,3 +1,23 @@
+# # information labels
+# # self.decks_label = QLabel("Number of Decks: ")
+# # self.decks_val = QLabel("0")
+# # self.nplayers_label = QLabel("Number of Players: ")
+# # self.nplayers_val = QLabel("0")
+# labelSheet = """QLabel {
+#                 font-size: 12pt;
+#                 font-weight: bold;
+#                 padding-right: 5px;
+#                 color: #9eeeee;}"""
+# valSheet = """QLabel {
+#                 font-size: 12pt;
+#                 font-weight: bold;
+#                 color: #eece9e;}"""
+# self.cards_label = QLabel("Cards in Deck: ")
+# self.cards_val = QLabel("0")
+# self.cards_label.setStyleSheet(labelSheet)
+# self.cards_val.setStyleSheet(valSheet)
+# self.cards_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+# self.cards_val.setAlignment(Qt.AlignmentFlag.AlignLeft)
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 
@@ -27,13 +47,14 @@ from PyQt6.QtWidgets import (QHBoxLayout, QLabel, QMainWindow, QMessageBox,
                              QPushButton, QTextBrowser, QVBoxLayout, QWidget)
 
 from blackJack.MenuBar import MenuBar
+from blackJack.statsFrame import StatsFrame
 from blackJack.PlayerBox import PlayerBox
 
 
 class Window(QMainWindow):
     """Window MainWindow for Blackjack UI.
 
-    Args:
+    Parent:
         QMainWindow (Qt Widget Window): MainWindow
     """
 
@@ -41,22 +62,20 @@ class Window(QMainWindow):
                     margin: 8px;
                     padding: 6px;
                     background-color: #151a1e;
-                    color: #d3dae3;
-                }
+                    color: #d3dae3;}
                 """
 
-    def __init__(self, parent=None, app=None):
+    def __init__(self, parent=None, app=None, driver=None):
         """Window Constructor.
 
         Args:
             parent (QWidget, optional): parent widget. Defaults to None.
-            players (list, optional): list of players. Defaults to None.
-            decks (number of decks): this number * 52 Cards. Defaults to None.
             app (QApplication, optional): Main Application. Defaults to None.
         """
         super().__init__(parent=parent)
-        self.players = []
         self.app = app
+        self.dealer = None
+        self.driver = driver
         self.setStyleSheet(self.ssheet)
         self.setWindowTitle("BlackJack")
         self.setObjectName("MainWindow")
@@ -80,33 +99,10 @@ class Window(QMainWindow):
         self.horiz2 = QHBoxLayout()
 
         # buttons and textbox
-        self.button1 = HitButton(window=self, parent=self)
-        self.button2 = StandButton(window=self, parent=self)
-        self.button3 = NewGameButton(window=self, parent=self)
-        self.textBrowser = QTextBrowser(self)
-
-        # information labels
-        # self.decks_label = QLabel("Number of Decks: ")
-        # self.decks_val = QLabel("0")
-        # self.nplayers_label = QLabel("Number of Players: ")
-        # self.nplayers_val = QLabel("0")
-        labelSheet = """QLabel {
-                        font-size: 12pt;
-                        font-weight: bold;
-                        padding-right: 5px;
-                        color: #9eeeee;}"""
-        valSheet = """QLabel {
-                        font-size: 12pt;
-                        font-weight: bold;
-                        color: #eece9e;}"""
-        self.cards_label = QLabel("Cards in Deck: ")
-        self.cards_val = QLabel("0")
-        self.cards_label.setStyleSheet(labelSheet)
-        self.cards_val.setStyleSheet(valSheet)
-        self.cards_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.cards_val.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        self.horiztop.addWidget(self.cards_label)
-        self.horiztop.addWidget(self.cards_val)
+        self.button1 = HitButton(window=self, parent=self.central)
+        self.button2 = StandButton(window=self, parent=self.central)
+        self.button3 = NewGameButton(window=self, parent=self.central)
+        self.statsFrame = StatsFrame(window=self,parent=self.central)
 
         # layout configuration for window
         self.horiz2.addWidget(self.button3)
@@ -115,7 +111,7 @@ class Window(QMainWindow):
         self.centLayout.addLayout(self.horiztop)
         self.centLayout.addLayout(self.horiz1)
         self.centLayout.addLayout(self.horiz2)
-        self.centLayout.addWidget(self.textBrowser)
+        self.centLayout.addWidget(self.statsFrame)
 
         # adding a MenuBar
         self.mainMenuBar = MenuBar(parent=self, window=self)
@@ -124,13 +120,18 @@ class Window(QMainWindow):
         # list of groupboxes. one for each player
         self.boxes = []
 
+    @property
+    def players(self):
+        if self.dealer:
+            return self.dealer.players
+        return []
+
     def addPlayer(self, player):
         """Add Player construct groupbox for each player.
 
         Args:
             Player (Player): One of the Dealers challengers.
         """
-        self.players.append(player)
         groupbox = PlayerBox(player.title, parent=self, player=player)
         self.horiz1.addWidget(groupbox)
         self.boxes.append(groupbox)
