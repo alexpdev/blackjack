@@ -65,17 +65,9 @@ class Player:
         return self.title
 
     def reset(self):
-        if self.isturn():
-            self.turn()
-        print("Before box reset")
-        self.box.dumpObjectInfo()
-        self.box.dumpObjectTree()
         self.box.reset()
-        print("after box reset")
-        self.box.dumpObjectInfo()
-        self.box.dumpObjectTree()
-        self.hand = []
         self.cards = []
+        self.hand = []
 
     def __repr__(self):
         return self.title
@@ -95,20 +87,6 @@ class Player:
         self._turn = not self._turn
         self.box.turn()
 
-    def output(self, line):
-        """Write output to QTextBrowserWidgit.
-
-        Simple way to keep track of previous hands and cards
-        already dealt by dealer.
-
-        Args:
-            line (str): Content to print to window.
-        """
-        self.window.textBrowser.append(line)
-        scrollbar = self.window.textBrowser.verticalScrollBar()
-        distance = scrollbar.maximum() - scrollbar.value()
-        self.window.textBrowser.scroll(0, distance)
-
     def add_card(self, card):
         """Add a Card object to Players hand.
 
@@ -118,13 +96,12 @@ class Player:
             card (Card): Card object popped off deck
         """
         self.hand.append(card)
-        for widg in self.cards:
-            if widg.cover:
-                return widg.setCard(card)
-
         self.box.addWidget(card)
         self.window.repaint()
         self.window.update()
+
+    def set_box(self, box):
+        self.box = box
 
     def show_score(self, score):
         """Write players score to the QTextBrowser Widgit.
@@ -158,27 +135,16 @@ class Dealer(Player):
         self.title = "Dealer"
         self.deck_count = decks
         self.player_count = players
+        self.deck = Deck.times(self.deck_count)
         self.current = 0
         self.players = []
-        self.deck = Deck.times(self.deck_count)
         self.driver = driver
+        self.decksize = lambda: len(self.deck)
 
-    def resetGame(self, decks=2, players=2):
-        """
-        Set preferences for the next game.
-
-        Args:
-            decks (int, optional): Number of decks. Defaults to None.
-            players (int, optional): Number of players. Defaults to None.
-        """
+    def resetDeck(self):
+        """Delete deck and Shuffle new deck."""
         del self.deck
-        self.deck_count = decks
-        self.player_count = players
-        self.players = []
-        self.add_players()
         self.deck = Deck.times(self.deck_count)
-        self.driver.update_prefs()
-        self.new_game()
 
     @property
     def limit(self):
@@ -193,24 +159,18 @@ class Dealer(Player):
         return 50
 
     @property
-    def decksize(self):
-        """Count of cards in the current deck.
-
-        Returns:
-            int: Total number of cards in the deck.
-        """
-        return len(self.deck)
-
-    @property
     def score(self):
-        """Score overloaded function from Player Class.
+        """Overloaded method from Player Class.
 
         Returns:
             int: Dealers score
         """
         if self.isturn():
             return super().score
-        return self.hand[0].value
+        else:
+            print(self.hand)
+            score = super().score - self.hand[0].value
+            return score
 
     def add_card(self, card):
         """Overload method from player class.
@@ -220,14 +180,19 @@ class Dealer(Player):
         """
         super().add_card(card)
         if len(self.cards) == 2:
-            self.cards[-1].faceDown()
+            self.cards[0].faceDown()
 
-    def start_deal(self):
-        """Initialize deal sequence of 2 cards to each player."""
+    def start_initial_deal(self):
+        """Initialize deal sequence of 2 cards to each player.
+
+        Returns:
+            bool: True upon completion.
+        """
         for _ in range(2):
             for player in self.players:
                 self.deal_card(player)
             self.deal_card(self)
+        return True
 
     def deal_card(self, player):
         """Retreive card from top of deck and deals to player.
@@ -238,17 +203,10 @@ class Dealer(Player):
         card = self.deck.pop()
         player.add_card(card)
         player.show_score(player.score)
+        print(player.score)
         self.driver.update_decksize()
         self.window.update()
         self.window.repaint()
-
-    def round(self):
-        """Begin new players turn for betting, hitting or staying."""
-        player = self.players[self.current]
-        self.driver.chances_of_exactly(player)
-        self.driver.chances_of_breaking(player)
-        self.driver.chances_of_under(player)
-        player.turn()
 
     def dealer_round(self):
         """Call when all other players have had their turn betting."""
@@ -261,7 +219,6 @@ class Dealer(Player):
             self.deal_card(self)
             sleep(0.4)
         self.turn()
-        # if self.score > 21:
 
     def player_hit(self, player):
         """Call when Player asks dealer to "hit".
@@ -287,12 +244,19 @@ class Dealer(Player):
             self.current = 0
             self.dealer_round()
 
+    def round(self):
+        """Begin new players turn for betting, hitting or staying."""
+        player = self.players[self.current]
+        self.driver.chances_of_exactly(player)
+        self.driver.chances_of_breaking(player)
+        self.driver.chances_of_under(player)
+        player.turn()
+
     def new_game(self):
         """Call after dealer has played their turn."""
         if len(self.deck) <= self.limit:
-            self.output("Starting Fresh Deck")
-            self.resetGame()
-        self.start_deal()
+            self.resetDeck()
+        self.start_initial_deal()
         self.current = 0
         self.round()
 
@@ -303,7 +267,7 @@ class Dealer(Player):
         and creates their GUI representation.
         """
         for num in range(1, self.player_count + 1):
-            args = {"pos": num, "window": self.window}
-            player = Player(**args)
+            kwargs = {"pos": num, "window": self.window}
+            player = Player(**kwargs)
             self.window.addPlayer(player)
             self.players.append(player)

@@ -41,16 +41,6 @@
 			]
 		},
 		{
-			"path": "blackJack/Players.py",
-			"bookmarks": [
-				{
-					"line": 162,
-					"column": 25,
-					"label": "4th build deck"
-				}
-			]
-		},
-		{
 			"path": "main.py",
 			"bookmarks": [
 				{

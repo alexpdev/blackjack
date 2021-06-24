@@ -37,6 +37,10 @@ from blackJack.statsFrame import StatsFrame
 from blackJack.PlayerBox import PlayerBox
 
 
+class DealerNotSet(Exception):
+    pass
+
+
 class Window(QMainWindow):
     """QMainWindow subclass.
 
@@ -68,7 +72,6 @@ class Window(QMainWindow):
         self.setWindowTitle("BlackJack")
         self.setObjectName("MainWindow")
         icon = QIcon(os.path.join(os.environ["IMG_DIR"], "blackjackicon.png"))
-        # icon.setObjectName("WindowIcon")
         self.setWindowIcon(icon)
         self._setupUi()
 
@@ -85,9 +88,9 @@ class Window(QMainWindow):
         self.horiztop = QHBoxLayout()
         self.horiztop.setObjectName("TopLayout")
         self.horiz1 = QHBoxLayout()
-        self.horiz1.setObjectName("HorizontalLayout1")
+        self.horiz1.setObjectName("PlayerBoxesLayout")
         self.horiz2 = QHBoxLayout()
-        self.horiz2.setObjectName("HorizontalLayout2")
+        self.horiz2.setObjectName("ButtonsLayout")
 
         # buttons and textbox
         self.button1 = HitButton(window=self, parent=self.central)
@@ -113,14 +116,11 @@ class Window(QMainWindow):
         self.mainMenuBar.setObjectName("MainMenuBar")
         self.setMenuBar(self.mainMenuBar)
 
-        # list of groupboxes. one for each player
-        self.boxes = []
-
     @property
     def players(self):
-        if self.dealer:
-            return self.dealer.players
-        return []
+        if self.dealer is None:
+            raise DealerNotSet
+        return self.dealer.players
 
     def addPlayer(self, player):
         """Add Player construct groupbox for each player.
@@ -129,9 +129,8 @@ class Window(QMainWindow):
             Player (Player): One of the Dealers challengers.
         """
         groupbox = PlayerBox(player.title, parent=self, player=player)
-        groupbox.setObjectName(player.title + "Box")
+        groupbox.setObjectName(player.title + " Box")
         self.horiz1.addWidget(groupbox)
-        self.boxes.append(groupbox)
 
     def setDealer(self, dealer):
         """Set Dealer Assign a dealer to the window.
@@ -142,35 +141,8 @@ class Window(QMainWindow):
         """
         self.dealer = dealer
         for button in [self.button1, self.button2, self.button3]:
-            button.dealer = self.dealer
+            button.set_dealer(dealer)
         self.addPlayer(dealer)
-
-    def clearPlayers(self):
-        """Clear Players Clear out old players groupbox for new players."""
-        for player in self.players:
-            # self.horiz1.removeWidget(player.box)
-            player.box.reset()
-            # player.box.destroy()
-            # player.box.setVisible(False)
-            # player.box.hide()
-            # del player.box
-            # self.players.remove(player)
-            # self.dealer.players.remove(player)
-            # del player
-            self.update()
-            self.repaint()
-        # self.players = self.players[:1]
-
-    def playerBroke(self, player, score):
-        """
-        Show and alert box to user when they break 21.
-
-        Args:
-            player (Player): The player who broke 21
-            score (int): The score. Will be over 21
-        """
-        self.brokeDialog = BrokeDialog(parent=self, player=player, score=score)
-        self.brokeDialog.exec()
 
 
 class HitButton(QPushButton):
@@ -198,14 +170,16 @@ class HitButton(QPushButton):
         """
         super().__init__(parent=parent)
         self.window = window
-        self.dealer = None
         self.setText("Hit")
         self.setStyleSheet(self.ssheet)
         self.pressed.connect(self.hit)
 
+    def set_dealer(self, dealer):
+        self.dealer = dealer
+
     def hit(self):
         """Ask dealer for another card."""
-        for player in self.window.players:
+        for player in self.dealer.players:
             if player.isturn():
                 return self.dealer.player_hit(player)
 
@@ -236,14 +210,16 @@ class StandButton(QPushButton):
         """
         super().__init__(parent=parent)
         self.window = window
-        self.dealer = None
         self.setText("Stand")
         self.setStyleSheet(self.ssheet)
         self.pressed.connect(self.stay)
 
+    def set_dealer(self, dealer):
+        self.dealer = dealer
+
     def stay(self):
         """Stay function."""
-        for player in self.window.players:
+        for player in self.dealer.players:
             if player.isturn():
                 player.turn()
                 break
@@ -270,20 +246,23 @@ class NewGameButton(QPushButton):
         """
         super().__init__(parent=parent)
         self.window = window
-        self.dealer = None
         self.setText("New Game")
         self.pressed.connect(self.start_new_game)
         self.setStyleSheet(self.ssheet)
+
+    def set_dealer(self, dealer):
+        self.dealer = dealer
 
     def start_new_game(self):
         """Start new game function.
 
         Sets score to zero, and starts a new game.
         """
-        for player in self.window.players:
+        self.dealer.reset()
+        for player in self.dealer.players:
             player.reset()
-        self.window.adjustSize()
-        self.window.dealer.new_game()
+            player.box.reset()
+        self.dealer.new_game()
 
 
 class BrokeDialog(QMessageBox):
