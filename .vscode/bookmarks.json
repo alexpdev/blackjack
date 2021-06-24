@@ -39,6 +39,51 @@
 					"label": "next_player"
 				}
 			]
+		},
+		{
+			"path": "blackJack/Players.py",
+			"bookmarks": [
+				{
+					"line": 165,
+					"column": 25,
+					"label": "4th build deck"
+				}
+			]
+		},
+		{
+			"path": "main.py",
+			"bookmarks": [
+				{
+					"line": 33,
+					"column": 4,
+					"label": "1st"
+				},
+				{
+					"line": 34,
+					"column": 5,
+					"label": "5th driver play"
+				}
+			]
+		},
+		{
+			"path": "blackJack/Driver.py",
+			"bookmarks": [
+				{
+					"line": 49,
+					"column": 11,
+					"label": "2nd"
+				},
+				{
+					"line": 51,
+					"column": 18,
+					"label": "3rd create dealer"
+				},
+				{
+					"line": 63,
+					"column": 11,
+					"label": "6th add players"
+				}
+			]
 		}
 	]
 }

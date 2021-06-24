@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /env/Scripts/python
 # -*- coding: utf-8 -*-
 
 #######################################################################
@@ -20,10 +20,12 @@
 #########################################################################
 from PyQt6.QtWidgets import QApplication
 
-from blackJack.Game import Driver
+from blackJack.Driver import Driver
+from blackJack.Window import Window
+from blackJack.Players import Dealer, Player
 
 Application = QApplication
 
 __version__ = "0.3.1"
 
-__all__ = [Driver, Application]
+__all__ = [Driver, Application, Window, Dealer, Player]

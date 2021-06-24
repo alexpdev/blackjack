@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /env/Scripts/python
 # -*- coding: utf-8 -*-
 
 #######################################################################
@@ -91,6 +91,7 @@ class Window(QMainWindow):
         self.button3 = NewGameButton(window=self, parent=self.central)
         self.button3.setObjectName("NewGameButton")
         self.statsFrame = StatsFrame(window=self,parent=self.central)
+        self.statsFrame.setObjectName("StatsFrame")
 
         # layout configuration for window
         self.horiz2.addWidget(self.button3)
