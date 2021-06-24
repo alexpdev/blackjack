@@ -23,8 +23,8 @@ import os
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import (QHBoxLayout, QLabel, QMainWindow, QMessageBox,
-                             QPushButton, QTextBrowser, QVBoxLayout, QWidget)
+from PyQt6.QtWidgets import (QHBoxLayout, QMainWindow, QMessageBox,
+                             QPushButton, QVBoxLayout, QWidget)
 
 from blackJack.MenuBar import MenuBar
 from blackJack.statsFrame import StatsFrame
@@ -62,25 +62,34 @@ class Window(QMainWindow):
         self.setWindowTitle("BlackJack")
         self.setObjectName("MainWindow")
         icon = QIcon(os.path.join(os.environ["IMG_DIR"], "blackjackicon.png"))
+        # icon.setObjectName("WindowIcon")
         self.setWindowIcon(icon)
         self._setupUi()
 
     def _setupUi(self):
         """Construct the general layout of Window."""
         self.central = QWidget(parent=self)
+        self.central.setObjectName("CentralWidget")
         self.centLayout = QVBoxLayout()
+        self.centLayout.setObjectName("CentralLayout")
         self.central.setLayout(self.centLayout)
         self.setCentralWidget(self.central)
 
         # layouts
         self.horiztop = QHBoxLayout()
+        self.horiztop.setObjectName("TopLayout")
         self.horiz1 = QHBoxLayout()
+        self.horiz1.setObjectName("HorizontalLayout1")
         self.horiz2 = QHBoxLayout()
+        self.horiz2.setObjectName("HorizontalLayout2")
 
         # buttons and textbox
         self.button1 = HitButton(window=self, parent=self.central)
+        self.button1.setObjectName("HitButton")
         self.button2 = StandButton(window=self, parent=self.central)
+        self.button2.setObjectName("StandButton")
         self.button3 = NewGameButton(window=self, parent=self.central)
+        self.button3.setObjectName("NewGameButton")
         self.statsFrame = StatsFrame(window=self,parent=self.central)
 
         # layout configuration for window
@@ -94,6 +103,7 @@ class Window(QMainWindow):
 
         # adding a MenuBar
         self.mainMenuBar = MenuBar(parent=self, window=self)
+        self.mainMenuBar.setObjectName("MainMenuBar")
         self.setMenuBar(self.mainMenuBar)
 
         # list of groupboxes. one for each player
@@ -112,6 +122,7 @@ class Window(QMainWindow):
             Player (Player): One of the Dealers challengers.
         """
         groupbox = PlayerBox(player.title, parent=self, player=player)
+        groupbox.setObjectName(player.title + "Box")
         self.horiz1.addWidget(groupbox)
         self.boxes.append(groupbox)
 
@@ -129,16 +140,16 @@ class Window(QMainWindow):
 
     def clearPlayers(self):
         """Clear Players Clear out old players groupbox for new players."""
-        for player in self.players[1:]:
-            self.horiz1.removeWidget(player.box)
+        for player in self.players:
+            # self.horiz1.removeWidget(player.box)
             player.box.reset()
-            player.box.destroy()
-            player.box.setVisible(False)
-            player.box.hide()
-            del player.box
-            self.players.remove(player)
+            # player.box.destroy()
+            # player.box.setVisible(False)
+            # player.box.hide()
+            # del player.box
+            # self.players.remove(player)
             # self.dealer.players.remove(player)
-            del player
+            # del player
             self.update()
             self.repaint()
         # self.players = self.players[:1]
@@ -262,16 +273,8 @@ class NewGameButton(QPushButton):
 
         Sets score to zero, and starts a new game.
         """
-        # if len(self.window.players) < self.dealer.player_count + 1:
-            # self.window.clearPlayers()
-            # self.dealer.add_players()
-        # else:
         for player in self.window.players:
-            if player.isturn():
-                player.turn()
-            player.box.reset()
-            player.hand = []
-            player.cards = []
+            player.reset()
         self.window.adjustSize()
         self.window.dealer.new_game()
 

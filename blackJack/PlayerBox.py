@@ -81,10 +81,12 @@ class PlayerBox(QGroupBox):
         expolicy = QSizePolicy.Policy.MinimumExpanding
         minpolicy = QSizePolicy.Policy.Minimum
         self.label = QLabel("Score: ")
+        self.label.setObjectName(self.player.title + "Score")
         self.label.setStyleSheet(self.labelsheet)
         self.hbox.addWidget(self.label)
         self.hbox.addSpacerItem(QSpacerItem(10, 0, minpolicy, minpolicy))
         self.scorelabel = QLabel("0")
+        self.scorelabel.setObjectName(self.player.title + "ScoreValue")
         self.scorelabel.setStyleSheet(self.scoresheet)
         self.hbox.addWidget(self.scorelabel)
         self.hbox.addSpacerItem(QSpacerItem(50, 0, expolicy, minpolicy))
@@ -92,17 +94,22 @@ class PlayerBox(QGroupBox):
     def _setupCards(self):
         """Create card covers."""
         card = CardWidget(parent=self)
+        card.setObjectName(self.player.title + "Card1")
         self.addCard(card)
         self.grid.addWidget(card, 0, 0, -1, -1)
         card2 = CardWidget(parent=self)
+        card2.setObjectName(self.player.title + "Card2")
         self.addCard(card2)
         self.grid.addWidget(card2, 0, 1, -1, -1)
 
     def _setupUi(self):
         """Create UI elements."""
         self.vbox = QVBoxLayout()
+        self.vbox.setObjectName(self.player.title + "BoxVertLayout")
         self.grid = QGridLayout()
+        self.grid.setObjectName(self.player.title + "BoxCardPicsLayout")
         self.hbox = QHBoxLayout()
+        self.hbox.setObjectName(self.player.title + "BoxHorizLayout")
         self.vbox.addLayout(self.hbox)
         self.vbox.addLayout(self.grid)
         self.setLayout(self.vbox)
@@ -131,9 +138,11 @@ class PlayerBox(QGroupBox):
         """Shortcut for adding card widget to players list of cards."""
         self.player.cards.append(card)
 
-    def deleteCard(self):
+    def deleteCard(self, card):
         """Remove card from Players list of cards property."""
-        self.player.cards = self.player.cards[1:]
+        if card in self.player.cards:
+            self.player.cards.remove(card)
+        # self.player.cards = self.player.cards[1:]
 
     def reset(self):
         """Clear PlayerBox of all widgets.
@@ -142,15 +151,23 @@ class PlayerBox(QGroupBox):
         """
         while len(self.cards) > 0:
             card = self.cards[0]
-            card.destroy(True, True)
             self.grid.removeWidget(card)
-            self.deleteCard()
+            card.setVisible(False)
+            card.hide()
+            card.destroy(True, True)
+            self.deleteCard(card)
             del card
+            self.repaint()
+            self.update()
+        while widget := self.grid.widget():
+            widget.hide()
+            widget.destroy(True,True)
 
     def addWidget(self, card):
         """Add another card to Window."""
         pos = self.cardCount
         widget = CardWidget(cover=False, card=card, path=card.path)
+        widget.setObjectName(self.player.title + "HitCard")
         if pos:
             self.grid.addWidget(widget, 0, pos, -1, -1)
         else:

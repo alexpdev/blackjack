@@ -39,16 +39,6 @@
 					"label": "next_player"
 				}
 			]
-		},
-		{
-			"path": "blackJack/Window.py",
-			"bookmarks": [
-				{
-					"line": 266,
-					"column": 12,
-					"label": ""
-				}
-			]
 		}
 	]
 }

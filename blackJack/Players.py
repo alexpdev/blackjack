@@ -64,6 +64,22 @@ class Player:
         """
         return self.title
 
+
+    def reset(self):
+        if self.isturn():
+            self.turn()
+        print("Before box reset")
+        self.box.dumpObjectInfo()
+        self.box.dumpObjectTree()
+        self.box.reset()
+        print("after box reset")
+        self.box.dumpObjectInfo()
+        self.box.dumpObjectTree()
+        self.hand = []
+        self.cards = []
+
+
+
     def __repr__(self):
         return self.title
 
@@ -240,17 +256,15 @@ class Dealer(Player):
     def dealer_round(self):
         """Call when all other players have had their turn betting."""
         self.turn()
-        sleep(0.3)
+        sleep(0.2)
         for card in self.cards:
             card.faceUp()
-            sleep(0.3)
+            sleep(0.2)
         while self.score < 16:
             self.deal_card(self)
-            sleep(0.3)
-        if self.score > 21:
-            sleep(0.3)
-            # self.output("Dealer Broke")
+            sleep(0.4)
         self.turn()
+        # if self.score > 21:
 
     def player_hit(self, player):
         """Call when Player asks dealer to "hit".
