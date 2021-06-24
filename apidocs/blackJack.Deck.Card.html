@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>blackJack.Deck.Card : API documentation</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header navbar-brand">
+          blackJack
+          <a href="index.html">API Documentation</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="class"><code><code><a href="blackJack.html">blackJack</a></code>.<code><a href="blackJack.Deck.html">Deck</a></code>.<code><a href="blackJack.Deck.Card.html">Card</a></code></code></h1>
+        <div id="showPrivate">
+          <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+        </div>
+      </div>
+
+      <div class="categoryHeader">
+        class documentation
+      </div>
+
+      <div class="extrasDocstring">
+        <p><code><span class="py-keyword">class</span> <span class="py-defname">Card</span>:</code></p>
+        <p><a href="classIndex.html#blackJack.Deck.Card">View In Hierarchy</a></p>
+      </div>
+
+      <div class="moduleDocstring">
+        <div><p>Card Object == contents of Deck Object.</p></div>
+      </div>
+
+      <div id="splitTables">
+        <table class="children sortable" id="id6">
+  
+  <tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__init__">__init__</a></code></td>
+    <td><span>Construct instance of Card Objects.</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#suit">suit</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#name">name</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#value">value</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#path">path</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#getPath">getPath</a></code></td>
+    <td><span>Get path retreives filesystem location for card.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__str__">__str__</a></code></td>
+    <td><span>Representation of an object as a string.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__repr__">__repr__</a></code></td>
+    <td><span>Act same as string function.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__lt__">__lt__</a></code></td>
+    <td><span>Less than &lt; other.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__ne__">__ne__</a></code></td>
+    <td><span>Not equal != other.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__gt__">__gt__</a></code></td>
+    <td><span>Greater than &gt; other.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__eq__">__eq__</a></code></td>
+    <td><span>Equal == other.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__le__">__le__</a></code></td>
+    <td><span>Less than or equel &lt;= other.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__ge__">__ge__</a></code></td>
+    <td><span>Greater than or equal &gt;= other.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#ismatch">ismatch</a></code></td>
+    <td><span>Suit matches other suit.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__typecheck__">__typecheck__</a></code></td>
+    <td><span>Check object type to see if it is a card.</span></td>
+  </tr>
+</table>
+        
+
+          
+      </div>
+
+      <div id="childList">
+
+        <div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span>(self, suit, name, value):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Construct instance of Card Objects.</p><p>suit (str): name of suit e.g. Diamonds Hearts name (str): name of card e.g. King 7 Ace value (int): Point value in blackjackicon</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Deck.Card.suit">
+    
+  </a>
+  <a name="suit">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">suit</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Deck.Card.name">
+    
+  </a>
+  <a name="name">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">name</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Deck.Card.value">
+    
+  </a>
+  <a name="value">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">value</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Deck.Card.path">
+    
+  </a>
+  <a name="path">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">path</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.getPath">
+    
+  </a>
+  <a name="getPath">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">getPath</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Get path retreives filesystem location for card.</p><p>str: absolute path to image file</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__str__">
+    
+  </a>
+  <a name="__str__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__str__</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Representation of an object as a string.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__repr__">
+    
+  </a>
+  <a name="__repr__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__repr__</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Act same as string function.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__lt__">
+    
+  </a>
+  <a name="__lt__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__lt__</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Less than &lt; other.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__ne__">
+    
+  </a>
+  <a name="__ne__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__ne__</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Not equal != other.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__gt__">
+    
+  </a>
+  <a name="__gt__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__gt__</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Greater than &gt; other.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__eq__">
+    
+  </a>
+  <a name="__eq__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__eq__</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Equal == other.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__le__">
+    
+  </a>
+  <a name="__le__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__le__</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Less than or equel &lt;= other.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__ge__">
+    
+  </a>
+  <a name="__ge__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__ge__</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Greater than or equal &gt;= other.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.ismatch">
+    
+  </a>
+  <a name="ismatch">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">ismatch</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Suit matches other suit.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Deck.Card.__typecheck__">
+    
+  </a>
+  <a name="__typecheck__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__typecheck__</span>(self, other):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Check object type to see if it is a card.</p></div>
+  </div>
+</div>
+
+      </div>
+      <address>
+        <a href="index.html">API Documentation</a> for blackJack, generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a> 21.2.2 at 2021-06-23 22:17:43.
+      </address>
+
+    </div>
+
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>

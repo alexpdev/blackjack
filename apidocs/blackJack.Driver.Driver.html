@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>blackJack.Driver.Driver : API documentation</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header navbar-brand">
+          blackJack
+          <a href="index.html">API Documentation</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="class"><code><code><a href="blackJack.html">blackJack</a></code>.<code><a href="blackJack.Driver.html">Driver</a></code>.<code><a href="blackJack.Driver.Driver.html">Driver</a></code></code></h1>
+        <div id="showPrivate">
+          <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+        </div>
+      </div>
+
+      <div class="categoryHeader">
+        class documentation
+      </div>
+
+      <div class="extrasDocstring">
+        <p><code><span class="py-keyword">class</span> <span class="py-defname">Driver</span>:</code></p>
+        <p><a href="classIndex.html#blackJack.Driver.Driver">View In Hierarchy</a></p>
+      </div>
+
+      <div class="moduleDocstring">
+        <div><p>Responsible for putting pieces together and driving them forward. --------------------------------------------------</p><p>Starts the application, creates the window, creates the dealer and allows dealer to perform the rest of game setup. Calculates probabilities and statistics for the active game.</p></div>
+      </div>
+
+      <div id="splitTables">
+        <table class="children sortable" id="id8">
+  
+  <tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__init__">__init__</a></code></td>
+    <td><span>Construct the Driver class for the new game.</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#app">app</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#labels">labels</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#drawn">drawn</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#window">window</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#dealer">dealer</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#play">play</a></code></td>
+    <td><span>Start the game.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#hook">hook</a></code></td>
+    <td><span>Hook labels to the driver.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#chances_of_under">chances_of_under</a></code></td>
+    <td><span>Calculate the odds of breaking if player hits.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#update_prefs">update_prefs</a></code></td>
+    <td><span>Update deck count, player count window labels</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#update_decksize">update_decksize</a></code></td>
+    <td><span>Update the window with the current card count</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#chances_of_exactly">chances_of_exactly</a></code></td>
+    <td><span>Calculate the odds of breaking if player hits.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#chances_of_blackjack">chances_of_blackjack</a></code></td>
+    <td><span>Calculate the odds of being dealt a blackJack.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#chances_of_breaking">chances_of_breaking</a></code></td>
+    <td><span>Calculate the odds of breaking if player hits.</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#tens_in_deck">tens_in_deck</a></code></td>
+    <td><span>Count number of cards left in the Deck with a value of 10.</span></td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#deck">deck</a></code></td>
+    <td><span>Get the dealer's deck.</span></td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#decksize">decksize</a></code></td>
+    <td><span>Get total cards in the deck.</span></td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#players">players</a></code></td>
+    <td><span>Get count of players actively playing.</span></td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#decks">decks</a></code></td>
+    <td><span>Get number of decks used to make current deck.</span></td>
+  </tr>
+</table>
+        
+
+          
+      </div>
+
+      <div id="childList">
+
+        <div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span>(self, app, players=2, decks=2):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Driver.Driver.app">
+    
+  </a>
+  <a name="app">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">app</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Driver.Driver.labels">
+    
+  </a>
+  <a name="labels">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">labels</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Driver.Driver.drawn">
+    
+  </a>
+  <a name="drawn">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">drawn</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div> (type: <code>list</code>)
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Driver.Driver.window">
+    
+  </a>
+  <a name="window">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">window</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  <a name="blackJack.Driver.Driver.dealer">
+    
+  </a>
+  <a name="dealer">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">dealer</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.play">
+    
+  </a>
+  <a name="play">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">play</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Start the game.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.hook">
+    
+  </a>
+  <a name="hook">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">hook</span>(self, labels):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Hook labels to the driver.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.chances_of_under">
+    
+  </a>
+  <a name="chances_of_under">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chances_of_under</span>(self, player):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.update_prefs">
+    
+  </a>
+  <a name="update_prefs">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">update_prefs</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Update deck count, player count window labels</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.update_decksize">
+    
+  </a>
+  <a name="update_decksize">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">update_decksize</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Update the window with the current card count</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.chances_of_exactly">
+    
+  </a>
+  <a name="chances_of_exactly">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chances_of_exactly</span>(self, player):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.chances_of_blackjack">
+    
+  </a>
+  <a name="chances_of_blackjack">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chances_of_blackjack</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Calculate the odds of being dealt a blackJack.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.chances_of_breaking">
+    
+  </a>
+  <a name="chances_of_breaking">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chances_of_breaking</span>(self, player):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="basemethod">
+  
+  <a name="blackJack.Driver.Driver.tens_in_deck">
+    
+  </a>
+  <a name="tens_in_deck">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">tens_in_deck</span>(self):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="baseproperty">
+  
+  <a name="blackJack.Driver.Driver.deck">
+    
+  </a>
+  <a name="deck">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">deck</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="baseproperty">
+  
+  <a name="blackJack.Driver.Driver.decksize">
+    
+  </a>
+  <a name="decksize">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">decksize</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="baseproperty">
+  
+  <a name="blackJack.Driver.Driver.players">
+    
+  </a>
+  <a name="players">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">players</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div></div>
+  </div>
+</div><div class="baseproperty">
+  
+  <a name="blackJack.Driver.Driver.decks">
+    
+  </a>
+  <a name="decks">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">decks</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div></div>
+  </div>
+</div>
+
+      </div>
+      <address>
+        <a href="index.html">API Documentation</a> for blackJack, generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a> 21.2.2 at 2021-06-23 22:17:43.
+      </address>
+
+    </div>
+
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
