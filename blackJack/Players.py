@@ -64,7 +64,6 @@ class Player:
         """
         return self.title
 
-
     def reset(self):
         if self.isturn():
             self.turn()
@@ -77,8 +76,6 @@ class Player:
         self.box.dumpObjectTree()
         self.hand = []
         self.cards = []
-
-
 
     def __repr__(self):
         return self.title

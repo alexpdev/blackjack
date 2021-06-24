@@ -22,8 +22,15 @@
 import os
 
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import (QGridLayout, QGroupBox, QHBoxLayout, QLabel,
-                             QSizePolicy, QSpacerItem, QVBoxLayout)
+from PyQt6.QtWidgets import (
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+)
 
 
 class PlayerBox(QGroupBox):
@@ -161,7 +168,7 @@ class PlayerBox(QGroupBox):
             self.update()
         while widget := self.grid.widget():
             widget.hide()
-            widget.destroy(True,True)
+            widget.destroy(True, True)
 
     def addWidget(self, card):
         """Add another card to Window."""

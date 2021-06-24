@@ -23,8 +23,14 @@ import os
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import (QHBoxLayout, QMainWindow, QMessageBox,
-                             QPushButton, QVBoxLayout, QWidget)
+from PyQt6.QtWidgets import (
+    QHBoxLayout,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 
 from blackJack.MenuBar import MenuBar
 from blackJack.statsFrame import StatsFrame
@@ -90,7 +96,7 @@ class Window(QMainWindow):
         self.button2.setObjectName("StandButton")
         self.button3 = NewGameButton(window=self, parent=self.central)
         self.button3.setObjectName("NewGameButton")
-        self.statsFrame = StatsFrame(window=self,parent=self.central)
+        self.statsFrame = StatsFrame(window=self, parent=self.central)
         self.statsFrame.setObjectName("StatsFrame")
 
         # layout configuration for window

@@ -23,8 +23,17 @@ import sys
 
 from PyQt6.QtCore import QRect
 from PyQt6.QtGui import QAction, QFont
-from PyQt6.QtWidgets import (QDialog, QHBoxLayout, QLabel, QMenu, QMenuBar,
-                             QPushButton, QSizePolicy, QSpinBox, QVBoxLayout)
+from PyQt6.QtWidgets import (
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QMenu,
+    QMenuBar,
+    QPushButton,
+    QSizePolicy,
+    QSpinBox,
+    QVBoxLayout,
+)
 
 
 class MenuBar(QMenuBar):

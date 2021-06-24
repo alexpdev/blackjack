@@ -64,11 +64,11 @@ class Driver:
         self.dealer.add_players()
         self.dealer.new_game()
 
-    def hook(self,labels):
+    def hook(self, labels):
         """Hook labels to the driver."""
         self.labels = labels
 
-    def chances_of_under(self,player):
+    def chances_of_under(self, player):
         """
         Calculate the odds of breaking if player hits.
 
@@ -90,7 +90,7 @@ class Driver:
         """Update the window with the current card count"""
         self.labels["cards"].update_value(self.decksize)
 
-    def chances_of_exactly(self,player):
+    def chances_of_exactly(self, player):
         """
         Calculate the odds of breaking if player hits.
 

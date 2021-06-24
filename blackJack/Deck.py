@@ -107,7 +107,7 @@ class Deck(list):
         except IndexError:
             raise DeckEmpty
 
-    def move(self,position):
+    def move(self, position):
         """
         Move card to another position in the deck.
 
