@@ -167,20 +167,3 @@ class Driver:
             int: Number of 52 card decks used in game.
         """
         return self.dealer.deck_count
-
-    # def draw(self, card):
-    #     """
-    #     Collect cards that have already been drawn and discarded.
-
-    #     Args:
-    #         card (obj): the card most recently pulled from the deck.
-    #     """
-    #     self.drawn.append(card)
-    # def output(self, s):
-    #     """
-    #     Output textual information to TextBrowser GUI Widget.
-
-    #     Args:
-    #         s (str): text to be written to TextBrowser Widget.
-    #     """
-    #     self.dealer.output(s)

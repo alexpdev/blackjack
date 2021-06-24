@@ -7,7 +7,7 @@
 
 BlackJack is a small graphical tool that I built to help me improve at counting cards.
 
-It is essentially a GUI BlackJack game with a window that prints out probabilities,
+It is essentially a GUI BlackJack game with a window that displays probabilities,
 statistics, and combinatorial information about the active game. Features include
 specifying the number of players, and number of decks the dealer will use.
 

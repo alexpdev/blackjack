@@ -65,17 +65,21 @@ class Player:
         return self.title
 
     def reset(self):
+        """Reset player for new game."""
         self.box.reset()
         self.cards = []
         self.hand = []
 
     def __repr__(self):
+        """Return players title.
+
+        Returns:
+            str: players title
+        """
         return self.title
 
     def isturn(self):
-        """Return True or False.
-
-        Called by dealer and Window Buttons to check who's turn it is.
+        """Return True if it is player's turn else False
 
         Returns:
             bool: true if it is players turn else false.
@@ -101,6 +105,11 @@ class Player:
         self.window.update()
 
     def set_box(self, box):
+        """Set box to PlayerBox widget.
+
+        Args:
+            box (PlayerBox): QGroupBox containing each players cards.
+        """
         self.box = box
 
     def show_score(self, score):
@@ -110,12 +119,6 @@ class Player:
             score (int): self.score
         """
         self.box.scorelabel.setText(str(score))
-
-    def show_hand(self):
-        """Wtites logs details about the score and cards in players hand."""
-        score = str(self.score)
-        output = "".join([str(self), " ", str(self.hand), " ", score, "\n"])
-        self.output(output)
 
 
 class Dealer(Player):
@@ -141,6 +144,24 @@ class Dealer(Player):
         self.driver = driver
         self.decksize = lambda: len(self.deck)
 
+    def set_prefs(self, players, decks):
+        """Set game preferences.
+
+        Args:
+            players (int): number of players
+            decks (int): number of decks
+        """
+        self.deck_count = decks
+        if self.player_count < players:
+            for _ in range(players - self.player_count):
+                pos = len(self.players) + 1
+                player = Player(pos=pos, window=self.window)
+                self.window.add_player(player)
+                self.players.append(player)
+        self.player_count = players
+        self.resetDeck()
+        self.driver.update_prefs()
+
     def resetDeck(self):
         """Delete deck and Shuffle new deck."""
         del self.deck
@@ -148,8 +169,7 @@ class Dealer(Player):
 
     @property
     def limit(self):
-        """
-        Return the size of the deck needed before deck is reset.
+        """Return the size of the deck needed before deck is reset.
 
         Returns:
             int: minimum deck size before reset.
@@ -168,7 +188,6 @@ class Dealer(Player):
         if self.isturn():
             return super().score
         else:
-            print(self.hand)
             score = super().score - self.hand[0].value
             return score
 
@@ -203,7 +222,6 @@ class Dealer(Player):
         card = self.deck.pop()
         player.add_card(card)
         player.show_score(player.score)
-        print(player.score)
         self.driver.update_decksize()
         self.window.update()
         self.window.repaint()
@@ -211,13 +229,12 @@ class Dealer(Player):
     def dealer_round(self):
         """Call when all other players have had their turn betting."""
         self.turn()
-        sleep(0.2)
         for card in self.cards:
             card.faceUp()
-            sleep(0.2)
+            sleep(0.3)
         while self.score < 16:
             self.deal_card(self)
-            sleep(0.4)
+            sleep(0.3)
         self.turn()
 
     def player_hit(self, player):
@@ -231,7 +248,6 @@ class Dealer(Player):
         self.driver.chances_of_breaking(player)
         self.driver.chances_of_under(player)
         if player.score > 21:
-            self.window.playerBroke(player, player.score)
             player.turn()
             self.next_player()
 
