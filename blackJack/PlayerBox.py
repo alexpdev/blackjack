@@ -232,14 +232,20 @@ class CardWidget(QLabel):
         super().__init__(parent=parent)
         self.setStyleSheet(self.stylesheet)
         self.card = card
+        self._down = False
         self.setImage()
+
+    def isdown(self):
+        return self._down
 
     def faceDown(self):
         pixmap = QPixmap(CARDBACK)
         self.setPixmap(pixmap)
+        self._down = True
         return True
 
     def faceUp(self):
+        self._down = False
         self.setImage()
 
     def path(self):

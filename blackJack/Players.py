@@ -185,11 +185,15 @@ class Dealer(Player):
         Returns:
             int: Dealers score
         """
-        if self.isturn() or self.current == 0:
-            return super().score
-        else:
+        down = False
+        for card in self.cards:
+            if card.isdown():
+                down = True
+                break
+        if down:
             score = super().score - self.hand[0].value
             return score
+        return super().score
 
     def add_card(self, card):
         """Overload method from player class.
@@ -231,6 +235,7 @@ class Dealer(Player):
         self.turn()
         for card in self.cards:
             card.faceUp()
+            self.show_score(self.score)
             sleep(0.3)
         while self.score < 16:
             self.deal_card(self)
@@ -248,6 +253,13 @@ class Dealer(Player):
         self.driver.chances_of_breaking(player)
         self.driver.chances_of_under(player)
         if player.score > 21:
+            for card in player.hand:
+                if card.name == "ace":
+                    card.value = 1
+                    self.driver.chances_of_exactly(player)
+                    self.driver.chances_of_breaking(player)
+                    self.driver.chances_of_under(player)
+                    return player.show_score(player.score)
             player.turn()
             self.next_player()
 
