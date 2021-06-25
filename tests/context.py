@@ -22,7 +22,6 @@
 import os
 import sys
 from pathlib import Path
-from PyQt6.QtWidgets import QApplication
 
 TOP = Path(__file__).parent.parent
 IMGS = os.path.join(TOP,"img")
@@ -30,4 +29,9 @@ IMGS = os.path.join(TOP,"img")
 sys.path.insert(0,str(TOP))
 os.environ["IMG_DIR"] = IMGS
 
-app = QApplication(sys.argv)
+from blackJack import Driver, Application
+
+
+app = Application(sys.argv)
+driver = Driver(app)
+sys.exit(app.exec())

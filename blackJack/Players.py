@@ -142,7 +142,7 @@ class Dealer(Player):
         self.current = 0
         self.players = []
         self.driver = driver
-        self.decksize = lambda: len(self.deck)
+
 
     def set_prefs(self, players, decks):
         """Set game preferences.
@@ -185,7 +185,7 @@ class Dealer(Player):
         Returns:
             int: Dealers score
         """
-        if self.isturn():
+        if self.isturn() or self.current == 0:
             return super().score
         else:
             score = super().score - self.hand[0].value

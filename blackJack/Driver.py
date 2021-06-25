@@ -61,6 +61,7 @@ class Driver:
 
     def play(self):
         """Start the game."""
+        self.update_prefs()
         self.dealer.add_players()
         self.dealer.new_game()
 

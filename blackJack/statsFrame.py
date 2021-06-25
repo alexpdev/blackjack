@@ -26,6 +26,12 @@ from PyQt6.QtCore import Qt
 class StatsFrame(QWidget):
     """Calculate statistics for each turn of the players."""
 
+    label_ssheet = """QLabel {
+                    font-size: 15pt;
+                    font-weight: bold;
+                    padding-right: 5px;
+                    color: #fca018;}"""
+
     def __init__(self, parent=None, window=None):
         super().__init__(parent=parent)
         self.window = window
@@ -36,35 +42,31 @@ class StatsFrame(QWidget):
         self.cardCount = HLabels("Cards in Deck: ", "0")
         self.deckCount = HLabels("Number of Decks: ", "0")
         self.playerCount = HLabels("Number of Players: ", "0")
-        self.breaking21 = HLabels("Breaking 21: ", "0")
-        self.exactly = HLabels("Exactly 21: ", "0")
-        self.under21 = HLabels("Under 21: ", "0")
-        self.blackjack = HLabels("BlackJack", "0")
+        self.breaking21 = HLabels("Breaking 21: ", " 0")
+        self.exactly = HLabels("Exactly 21: ", " 0")
+        self.under21 = HLabels("Under 21: ", " 0")
         self.probabilities = QLabel("Probabilities", parent=self)
+        self.quantities = QLabel("Quantities", parent=self)
+        self.vbox2.addWidget(self.quantities)
         self.vbox2.addLayout(self.cardCount)
         self.vbox2.addLayout(self.deckCount)
         self.vbox2.addLayout(self.playerCount)
         self.vbox1.addWidget(self.probabilities)
         self.vbox1.addLayout(self.breaking21)
         self.vbox1.addLayout(self.exactly)
-        self.vbox1.addLayout(self.blackjack)
         self.vbox1.addLayout(self.under21)
         self.hlayout.addLayout(self.vbox1)
         self.hlayout.addLayout(self.vbox2)
-        self.probabilities.setStyleSheet(
-            """QLabel {font-size: 13pt;
-                                                    font-weight: bold;
-                                                    padding-right: 5px;
-                                                    color: #fca018;
-                                                    alignment: center;}"""
-        )
+        self.quantities.setStyleSheet(self.label_ssheet)
+        self.probabilities.setStyleSheet(self.label_ssheet)
+        self.probabilities.setAlignment(Qt.AlignmentFlag(4))
+        self.quantities.setAlignment(Qt.AlignmentFlag(4))
         self.labels = {
             "cards": self.cardCount,
             "decks": self.deckCount,
             "players": self.playerCount,
             "breaking": self.breaking21,
             "exactly": self.exactly,
-            "blackjack": self.blackjack,
             "under": self.under21,
         }
         self.window.driver.hook(self.labels)
