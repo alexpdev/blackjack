@@ -18,10 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
-
 import os
 import random
 
+"""Deck of Cards and Card classes."""
 
 class InvalidType(Exception):
     """Exception Class for Invalid type comparison."""
@@ -78,13 +78,19 @@ class Deck(list):
 
     @property
     def range(self):
+        """Get range of deck.
+
+        Returns:
+            iterator: range of deck.
+        """
         return range(len(self))
 
     @classmethod
     def times(cls, num):
         """Class method constructor for creating multiple decks.
 
-        Returns: Deck object * number of decks.
+        - Arg: num (int): number of decks.
+        - Returns: Deck: 52 card deck times the input arguement.
         """
         deck = []
         for _ in range(num):
@@ -108,11 +114,9 @@ class Deck(list):
             raise DeckEmpty
 
     def move(self, position):
-        """
-        Move card to another position in the deck.
+        """Move card to another position in the deck.
 
-        Args:
-            position (int): index location for moving the card.
+        - Args: position (int): index location for moving the card.
         """
         count = 0
         while count < len(self):
@@ -124,8 +128,8 @@ class Deck(list):
         """Swap utility for shuffling deck.
 
         Args:
-            i1 (Card): first card for swapping
-            i2 (Card): next card to be swapped with first
+            - i1 (Card): first card for swapping
+            - i2 (Card): next card to be swapped with first
         """
         val = self[i1]
         self[i1] = self[i2]
@@ -134,7 +138,7 @@ class Deck(list):
     def shuffle(self, t=3):
         """Shuffle Cards in deck.
 
-        Args: t (int, optional): number of times to shuffle the deck
+        - Args: t (int, optional): number of times to shuffle the deck
         """
         while t > 0:
             t -= 1
@@ -150,14 +154,13 @@ IMG_DIR = os.environ["IMG_DIR"]
 
 
 def get_image_fd(card):
-    """
-    get_image_fd Get the absolute path to the cards image file.
+    """Get the absolute path to the cards image file.
 
-    Args:
-        card (Card): The card object the image will belong to.
+    - Args:
+        - card (Card): The card object the image will belong to.
 
-    Returns:
-        str: Absolute path to image file.
+    - Returns:
+        - str: Absolute path to image file.
     """
     faces = {"ace": "1", "jack": "11", "queen": "12", "king": "13"}
     val = card.name if card.name not in faces else faces[card.name]
@@ -172,9 +175,10 @@ class Card:
     def __init__(self, suit, name, value):
         """Construct instance of Card Objects.
 
-        suit (str): name of suit e.g. Diamonds Hearts
-        name (str): name of card e.g. King 7 Ace
-        value (int): Point value in blackjackicon
+        - Args:
+            - suit (str): name of suit e.g. Diamonds Hearts
+            - name (str): name of card e.g. King 7 Ace
+            - value (int): Point value in blackjackicon
         """
         self.suit = suit
         self.name = name
@@ -184,7 +188,8 @@ class Card:
     def getPath(self):
         """Get path retreives filesystem location for card.
 
-        str: absolute path to image file
+        - Returns:
+            - str: absolute path to image file
         """
         return get_image_fd(self)
 

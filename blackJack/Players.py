@@ -143,7 +143,6 @@ class Dealer(Player):
         self.players = []
         self.driver = driver
 
-
     def set_prefs(self, players, decks):
         """Set game preferences.
 

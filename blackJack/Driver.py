@@ -24,6 +24,7 @@ import math
 from blackJack.Players import Dealer
 from blackJack.Window import Window
 
+"""Driver class for creating game and dealer and updating stats."""
 
 class Driver:
     """
@@ -39,10 +40,10 @@ class Driver:
         """
         Construct the Driver class for the new game.
 
-        Args:
-            app (QApp): Application base for program.
-            players (int, optional): Number of players. Defaults to None
-            decks (int, optional): Number of decks. Defaults tp None.
+        - Args:
+            - app (QApp): Application base for program.
+            - players (int): Number of players. Defaults to None
+            - decks (int): Number of decks. Defaults tp None.
         """
         self.app = app
         self.labels = None
@@ -73,8 +74,8 @@ class Driver:
         """
         Calculate the odds of breaking if player hits.
 
-        Args:
-            player (obj): The player who's turn it currently is
+        - Args:
+            - player (obj): The player who's turn it currently is
         """
         x = 21 - player.score
         count = sum([1 for i in self.dealer.deck if i.value < x])
@@ -92,11 +93,10 @@ class Driver:
         self.labels["cards"].update_value(self.decksize)
 
     def chances_of_exactly(self, player):
-        """
-        Calculate the odds of breaking if player hits.
+        """Calculate the odds of breaking if player hits.
 
-        Args:
-            player (obj): The player who's turn it currently is
+        - Args:
+            - player (obj): The player who's turn it currently is
         """
         needed = 21 - player.score
         count = sum([1 for i in self.deck if i.value == needed])
@@ -112,11 +112,10 @@ class Driver:
         self.labels["blackjack"].update_percent(percentage)
 
     def chances_of_breaking(self, player):
-        """
-        Calculate the odds of breaking if player hits.
+        """Calculate the odds of breaking if player hits.
 
-        Args:
-            player (obj): The player who's turn it currently is
+        - Args:
+            - player (obj): The player who's turn it currently is
         """
         x = 21 - player.score
         count = sum([1 for i in self.deck if i.value > x])
@@ -124,11 +123,10 @@ class Driver:
         self.labels["breaking"].update_percent(breaking)
 
     def tens_in_deck(self):
-        """
-        Count number of cards left in the Deck with a value of 10.
+        """Count number of cards left in the Deck with a value of 10.
 
-        Returns:
-            int: Total number of cards with the value of 10
+        - Returns:
+            - int: Total number of cards with the value of 10
         """
         return sum([1 for i in self.deck if i.value == 10])
 
@@ -136,8 +134,8 @@ class Driver:
     def deck(self):
         """Get the dealer's deck.
 
-        Returns:
-            obj: The deck actively used by the dealer.
+        - Returns:
+            - obj: The deck actively used by the dealer.
         """
         return self.dealer.deck
 
@@ -146,8 +144,8 @@ class Driver:
         """
         Get total cards in the deck.
 
-        Returns:
-            int: total count of cards left in deck.
+        - Returns:
+            - int: total count of cards left in deck.
         """
         return len(self.dealer.deck)
 
@@ -155,8 +153,8 @@ class Driver:
     def players(self):
         """Get count of players actively playing.
 
-        Returns:
-            int: Number of active players.
+        - Returns:
+            - int: Number of active players.
         """
         return self.dealer.player_count
 
@@ -164,7 +162,7 @@ class Driver:
     def decks(self):
         """Get number of decks used to make current deck.
 
-        Returns:
-            int: Number of 52 card decks used in game.
+        - Returns:
+            - int: Number of 52 card decks used in game.
         """
         return self.dealer.deck_count

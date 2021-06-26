@@ -285,7 +285,6 @@ class CardWidget(QLabel):
     def setImage(self):
         """Assign image path as pixmap.
 
-
         Returns:
             bool: True if succeeded
         """
