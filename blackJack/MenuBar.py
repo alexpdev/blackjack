@@ -218,9 +218,8 @@ class Settings(QDialog):
 
     def accept(self):
         """Close Window."""
-        dealer = self.window.dealer
-        dealer.setPreferences(self.decksSpin.value(), self.playersSpin.value())
-        super().accept()
+        return self.window.driver.reset_prefs(
+            self.decksSpin.value(),self.playersSpin.value())
 
     def finishedSignal(self):
         """When Settings Window returns accept or reject signals."""

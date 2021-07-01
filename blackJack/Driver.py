@@ -166,3 +166,18 @@ class Driver:
             - int: Number of 52 card decks used in game.
         """
         return self.dealer.deck_count
+
+
+    def reset_prefs(self, decks, players):
+        self.window.destroy()
+        self.window = Window(parent=None, app=self.app, driver=self)
+        self.dealer = Dealer(
+            window=self.window,
+            decks=decks,
+            players=players,
+            pos=0,
+            driver=self,
+        )
+        self.window.setDealer(self.dealer)
+        self.window.show()
+        return self.play()
