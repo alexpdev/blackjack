@@ -48,7 +48,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 activate.bat
-
+.vscode/
 node_modules/
 
 # C extensions
