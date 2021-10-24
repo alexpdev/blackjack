@@ -68,27 +68,28 @@ test: ## run tests quickly with the default Python
 	pytest tests --pylint
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run -m pytest tests --cov --pylint
+	coverage run -m pytest tests --cov
 	coverage xml -o coverage.xml
 
-push: lint docs clean test coverage
+push: lint clean test coverage
 	git add .
 	git commit -m "Updates to testing suit, style linting, bug fixes."
 	git push
 	bash codacy.sh report -r coverage.xml
 
-docs: ## generate Sphinx HTML documentation, including API docs
-	rm -rf docs
-	mkdocs build
+play: ## Play game
 
-release: dist ## package and upload a release
-	twine upload dist/*
 
-dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
-	python setup.py bdist_egg
-	ls -l dist
-
-install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+build: clean ## Create executable
+	python setup.py sdist bdist_wheel bdist_egg
+	pip install dist/*.whl --force-reinstall
+	rm -rfv ../runner
+	mkdir ../runner
+	cp -rv ./blackjack/assets ../runner
+	touch ../runner/exe
+	@echo "#! /usr/sbin/python3" >> ../runner/exe
+	@echo "import blackjack" >> ../runner/exe
+	@echo "blackjack.Driver.main()" >> ../runner/exe
+	pyinstaller ../runner/exe --distpath ../runner/dist --workpath ../runner/build -F -n blackjack -w -i ../runner/assets/blackjackicon.ico --collect-all blackjack --specpath ../runner
+	mv -fv ../runner/dist/blackjack.exe .
+	rm blackjack.spec

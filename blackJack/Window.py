@@ -20,8 +20,9 @@
 #########################################################################
 
 import os
+import sys
+from pathlib import Path
 
-from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
     QHBoxLayout,
@@ -29,12 +30,12 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QVBoxLayout,
-    QWidget,
+    QWidget
 )
 
-from blackJack.MenuBar import MenuBar
-from blackJack.statsFrame import StatsFrame
-from blackJack.PlayerBox import PlayerBox
+from blackjack.MenuBar import MenuBar
+from blackjack.statsFrame import StatsFrame
+from blackjack.PlayerBox import PlayerBox
 
 
 class DealerNotSet(Exception):
@@ -56,7 +57,7 @@ class Window(QMainWindow):
             color: #d3dae3;}
         """
 
-    def __init__(self, parent=None, app=None, driver=None):
+    def __init__(self, parent=None, driver=None):
         """Window Constructor.
 
         Args:
@@ -65,7 +66,6 @@ class Window(QMainWindow):
             driver (Driver, optional):
         """
         super().__init__(parent=parent)
-        self.app = app
         self.dealer = None
         self.driver = driver
         self.setStyleSheet(self.ssheet)

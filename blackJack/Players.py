@@ -21,7 +21,7 @@
 
 from time import sleep
 
-from blackJack.Deck import Deck
+from blackjack.Deck import Deck
 
 
 class Player:

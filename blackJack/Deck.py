@@ -150,7 +150,6 @@ class Deck(list):
                 self.move(i3)
 
 
-IMG_DIR = os.environ["IMG_DIR"]
 
 
 def get_image_fd(card):
@@ -165,9 +164,8 @@ def get_image_fd(card):
     faces = {"ace": "1", "jack": "11", "queen": "12", "king": "13"}
     val = card.name if card.name not in faces else faces[card.name]
     fd = "".join([card.suit, "_", val, ".png"])
-    path = os.path.join(IMG_DIR, fd)
+    path = os.path.join(os.environ["IMG_DIR"], fd)
     return path
-
 
 class Card:
     """Card Object == contents of Deck Object."""

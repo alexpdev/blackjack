@@ -18,13 +18,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
+"""Driver class for creating game and dealer and updating stats."""
 
 import math
+import os
+import sys
+from pathlib import Path
 
-from blackJack.Players import Dealer
-from blackJack.Window import Window
+from blackjack.Players import Dealer
+from blackjack.Window import Window
+from PyQt6.QtWidgets import QApplication
 
-"""Driver class for creating game and dealer and updating stats."""
 
 class Driver:
     """
@@ -48,7 +52,7 @@ class Driver:
         self.app = app
         self.labels = None
         self.drawn = []
-        self.window = Window(parent=None, app=self.app, driver=self)
+        self.window = Window(parent=None, driver=self)
         # Dealer instance has most power and constrol over gameplay.
         self.dealer = Dealer(
             window=self.window,
@@ -181,3 +185,15 @@ class Driver:
         self.window.setDealer(self.dealer)
         self.window.show()
         return self.play()
+
+
+def main():
+    app = QApplication(sys.argv)
+    driver = Driver(app)
+    driver.play()
+    sys.exit(app.exec())
+
+def testMain():
+    app = QApplication(sys.argv)
+    driver = Driver(app)
+    return app, driver

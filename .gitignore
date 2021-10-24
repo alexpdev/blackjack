@@ -48,9 +48,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 activate.bat
-.vscode/
+*.vscode/
 node_modules/
-
+blackjack.exe
 # C extensions
 *.so
 

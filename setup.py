@@ -29,11 +29,10 @@ setup(
     url="https://github.com/alexpdev/blackjack",
     project_urls={"Source Code": "https://github.com/alexpdev/blackjack"},
     license="GNU GPLv3",
-    packages=find_packages(exclude=["env", "docs", "node_modules", ".vscode"]),
+    packages=find_packages(exclude=["env"]),
     include_package_data=True,
-    install_requires=["PyQt6"],
+    install_requires=["PyQt6","pytest", "wheel", "setuptools"],
     tests_require=["pytest"],
-    setup_requires=["setuptools"],
     zip_safe=False,
     test_suite="tests",
 )

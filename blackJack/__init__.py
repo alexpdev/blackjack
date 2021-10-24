@@ -18,14 +18,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
-from PyQt6.QtWidgets import QApplication
+"""Imports for the package."""
 
-from blackJack.Driver import Driver
-from blackJack.Window import Window
-from blackJack.Players import Dealer, Player
+import os
+from pathlib import Path
 
-Application = QApplication
+PKG = (Path(__file__).resolve()).parent
+os.environ["IMG_DIR"] = os.path.join(PKG, "assets")
 
-__version__ = "0.3.1"
+from blackjack.Driver import Driver, main, testMain
+from blackjack.Window import Window
+from blackjack.Players import Dealer, Player
 
-__all__ = [Driver, Application, Window, Dealer, Player]
+__version__ = "0.3.2"
+
+__all__ = ["Driver", "Window", "Dealer", "Player", "main", "testMain"]

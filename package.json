@@ -1,12 +1,9 @@
 {
   "name": "blackjack",
   "displayName": "BlackJack",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "BlackJack GUI application using Qt for GUI",
   "main": "blackJack/__init__.py",
-  "scripts": {
-    "start": "python blackJack/Game.py"
-  },
   "keywords": [
     "GUI",
     "Game",

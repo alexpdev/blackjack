@@ -19,4 +19,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses
 #########################################################################
 
-"""Testing context functions."""
+import pytest
+from PyQt6.QtWidgets import QApplication
+from blackjack import testMain
+
+
+@pytest.fixture(scope="module")
+def window():
+    app, driver = testMain()
+    yield app, driver
+    driver.window.destroy()
+
+def test_main_function():
+    _, driver = testMain()
+    assert driver is not None
+
+def test_app():
+    app, _ = testMain()
+    assert isinstance(app, QApplication)
